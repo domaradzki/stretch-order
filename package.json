@@ -5,21 +5,20 @@
   "dependencies": {
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.8",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "2.1.5",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.86.0"
   },
   "devDependencies": {
-    "react-scripts": "2.1.8",
-    "yeoman-generator": "3.2.0",
-    "yo": "2.0.5"
+    "react-scripts": "2.1.5"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "generate:component": "yo ./generators/component/index.js"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
