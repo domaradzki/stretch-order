@@ -14,6 +14,11 @@ class Login extends Component {
       [id]: value
     });
   }
+  handleSubmit = event => {
+    event.preventDefault();
+    console.log(this.state.user)
+  }
+
   render() {
     return (
       <div className="login-form">
@@ -61,7 +66,7 @@ class Login extends Component {
                   value={this.state.password}
                   onChange={this.handleInputChange}
                 />
-                <Button color="blue" fluid size="large">
+                <Button color="blue" fluid size="large" onClick={this.handleSubmit}>
                   Login
                 </Button>
               </Segment>
