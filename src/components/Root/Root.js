@@ -6,7 +6,8 @@ import Login from '../Login'
 class Root extends Component {
   render() {
     return (
-      <div><Login />
+      <div>
+        <Login />
       <Router>
         <Route exact path="/dashboard" component={Dashboard} />
       </Router>
