@@ -1,5 +1,3 @@
-import uuid from "uuid";
-import * as todoUtils from "../utils/todos";
 
 // Action types
 const CHANGE_INPUT = "CHANGE_INPUT";
@@ -37,7 +35,6 @@ const initialState = {
 export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_INPUT:
-        const name
       return {
         ...state,
         [action.name]:action.value
