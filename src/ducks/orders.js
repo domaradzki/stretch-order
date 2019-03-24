@@ -1,11 +1,9 @@
-
 // Action types
 const CHANGE_INPUT = "CHANGE_INPUT";
 
 // Initial Value
 const initialState = {
   orders: [
-    ...orders,
     {
       id: 1,
       client: "Dynamit",
@@ -37,7 +35,7 @@ export default function orderReducer(state = initialState, action) {
     case CHANGE_INPUT:
       return {
         ...state,
-        [action.name]:action.value
+        [action.name]: action.value
       };
 
     default:
@@ -46,7 +44,7 @@ export default function orderReducer(state = initialState, action) {
 }
 
 // Action creators
-export const changeInput = (name,value) => {
+export const changeInput = (name, value) => {
   return {
     type: CHANGE_INPUT,
     name,
@@ -54,7 +52,4 @@ export const changeInput = (name,value) => {
   };
 };
 
-
-
 // Selectors
-
