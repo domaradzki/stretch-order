@@ -4,19 +4,19 @@ import { Form } from 'semantic-ui-react'
 const FormOrder = () => (
   <Form>
     <Form.Group>
-      <Form.Input label='First name' placeholder='First Name' width={6} />
-      <Form.Input label='Middle Name' placeholder='Middle Name' width={4} />
-      <Form.Input label='Last Name' placeholder='Last Name' width={6} />
+      <Form.Input label='Klient' placeholder='Klient' width={6} />
+      <Form.Input label='Towar' placeholder='Towar' width={3} />
+      <Form.Input label='Faktura' placeholder='Faktura' width={3} />
+      <Form.Input label='Data płatności' placeholder='Data płatności' width={4} />
     </Form.Group>
     <Form.Group>
-      <Form.Input placeholder='2 Wide' width={2} />
-      <Form.Input placeholder='12 Wide' width={12} />
-      <Form.Input placeholder='2 Wide' width={2} />
+    <Form.Input label='Ilość' placeholder='Ilość' width={4} />
+      <Form.Input label='Cena' placeholder='Cena' width={4} />
+      <Form.Input label='Wartość' placeholder='Wartość' width={4} />
+      <Form.Input label='Marża' placeholder='Marża' width={4} />
     </Form.Group>
     <Form.Group>
-      <Form.Input placeholder='8 Wide' width={8} />
-      <Form.Input placeholder='6 Wide' width={6} />
-      <Form.Input placeholder='2 Wide' width={2} />
+    <Form.Input label='Uwagi' placeholder='Uwagi' width={16} />
     </Form.Group>
   </Form>
 )
