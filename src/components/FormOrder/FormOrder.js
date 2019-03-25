@@ -6,7 +6,6 @@ import { changeInput } from "../../ducks/orders";
 
 class FormOrder extends Component {
   handleChangeInput = (event, data) => {
-    console.log(data.name);
     const name = data.name;
     const value = data.value;
     this.props.changeInput(name, value);
@@ -14,13 +13,11 @@ class FormOrder extends Component {
   render() {
     const {
       client,
-      kind,
       invoice,
       dateOfPay,
       quantity,
       price,
       netValue,
-      margin,
       comments
     } = this.props;
     return (
@@ -34,12 +31,17 @@ class FormOrder extends Component {
             width={6}
             onChange={this.handleChangeInput}
           />
-          <Form.Input
-            value={kind}
+          <Form.Select
             name="kind"
             label="Towar"
             placeholder="Towar"
             width={3}
+            options={[
+              { key: 1, value: "FS", text: "FS" },
+              { key: 2, value: "TPD", text: "TPD" },
+              { key: 3, value: "TP", text: "TP" },
+              { key: 4, value: "INNE", text: "INNE" }
+            ]}
             onChange={this.handleChangeInput}
           />
           <Form.Input
@@ -65,6 +67,7 @@ class FormOrder extends Component {
             name="quantity"
             label="Ilość"
             placeholder="Ilość"
+            type="number"
             width={4}
             onChange={this.handleChangeInput}
           />
@@ -73,6 +76,7 @@ class FormOrder extends Component {
             name="price"
             label="Cena"
             placeholder="Cena"
+            type="number"
             width={4}
             onChange={this.handleChangeInput}
           />
@@ -81,15 +85,23 @@ class FormOrder extends Component {
             name="netValue"
             label="Wartość"
             placeholder="Wartość"
+            type="number"
             width={4}
             onChange={this.handleChangeInput}
           />
-          <Form.Input
-            value={margin}
+          <Form.Select
             name="margin"
             label="Marża"
             placeholder="Marża"
             width={4}
+            options={[
+              { key: 1, value: "0", text: "0" },
+              { key: 2, value: "0.25", text: "0.25" },
+              { key: 3, value: "0.5", text: "0.5" },
+              { key: 4, value: "1", text: "1" },
+              { key: 5, value: "2", text: "2" },
+              { key: 6, value: "3", text: "3" }
+            ]}
             onChange={this.handleChangeInput}
           />
         </Form.Group>
