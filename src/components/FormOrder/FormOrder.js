@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form } from "semantic-ui-react";
+import { Form, Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import { changeInput } from "../../ducks/orders";
@@ -10,6 +10,10 @@ class FormOrder extends Component {
     const value = data.value;
     this.props.changeInput(name, value);
   };
+  handleAddOrder = event => {
+    event.preventDefault();
+    console.log('added')
+  }
   render() {
     const {
       client,
@@ -76,7 +80,9 @@ class FormOrder extends Component {
             name="price"
             label="Cena"
             placeholder="Cena"
-            type="number"
+            type="number" 
+            min="0.00" 
+            max="100000.00" step="0.01"
             width={4}
             onChange={this.handleChangeInput}
           />
@@ -85,7 +91,9 @@ class FormOrder extends Component {
             name="netValue"
             label="Wartość"
             placeholder="Wartość"
-            type="number"
+            type="number" 
+            min="0.00" 
+            max="100000.00" step="0.01"
             width={4}
             onChange={this.handleChangeInput}
           />
@@ -115,6 +123,7 @@ class FormOrder extends Component {
             onChange={this.handleChangeInput}
           />
         </Form.Group>
+        <Button onClick={this.handleAddOrder}>Dodaj zamówienie</Button>
       </Form>
     );
   }
