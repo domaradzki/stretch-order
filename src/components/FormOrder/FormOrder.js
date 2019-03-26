@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 
-import { changeInput } from "../../ducks/orders";
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import "react-day-picker/lib/style.css";
+import moment from "moment";
+
+import { changeInput, changeDate } from "../../ducks/orders";
 
 class FormOrder extends Component {
   handleChangeInput = (event, data) => {
@@ -10,6 +14,16 @@ class FormOrder extends Component {
     const value = data.value;
     this.props.changeInput(name, value);
   };
+  handleDayChange = (selectedDay, modifiers, dayPickerInput) => {
+    const input = dayPickerInput.getInput();
+    this.setState({
+      selectedDay: moment(selectedDay).format("YYYY-MM-DD"),
+     // isEmpty: !input.value.trim(),
+     // isValidDay: typeof selectedDay !== "undefined",
+     // isDisabled: modifiers.disabled === true
+    });
+  };
+
   handleAddOrder = event => {
     event.preventDefault();
     console.log('added')
@@ -24,6 +38,13 @@ class FormOrder extends Component {
       netValue,
       comments
     } = this.props;
+    const Day = () => (<DayPickerInput
+      label="Data płatności"
+      width={4}
+        placeholder={moment(new Date()).format("YYYY-MM-DD")}
+        onDayChange={this.handleDayChange}
+        selectedDay={this.props.dateOfPay}
+      />)
     return (
       <Form>
         <Form.Group>
@@ -62,8 +83,10 @@ class FormOrder extends Component {
             label="Data płatności"
             placeholder="Data płatności"
             width={4}
+            as={Day}
             onChange={this.handleChangeInput}
           />
+              
         </Form.Group>
         <Form.Group>
           <Form.Input
@@ -145,7 +168,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeInput: (name, value) => dispatch(changeInput(name, value))
+    changeInput: (name, value) => dispatch(changeInput(name, value)),
+    changeDate: (dateOfPay, value) => dispatch(changeDate(dateOfPay, value))
   };
 };
 
