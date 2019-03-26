@@ -17,17 +17,17 @@ class FormOrder extends Component {
   handleDayChange = (selectedDay, modifiers, dayPickerInput) => {
     const input = dayPickerInput.getInput();
     this.setState({
-      selectedDay: moment(selectedDay).format("YYYY-MM-DD"),
-     // isEmpty: !input.value.trim(),
-     // isValidDay: typeof selectedDay !== "undefined",
-     // isDisabled: modifiers.disabled === true
+      selectedDay: moment(selectedDay).format("YYYY-MM-DD")
+      // isEmpty: !input.value.trim(),
+      // isValidDay: typeof selectedDay !== "undefined",
+      // isDisabled: modifiers.disabled === true
     });
   };
 
   handleAddOrder = event => {
     event.preventDefault();
-    console.log('added')
-  }
+    console.log("added");
+  };
   render() {
     const {
       client,
@@ -38,13 +38,6 @@ class FormOrder extends Component {
       netValue,
       comments
     } = this.props;
-    const Day = () => (<DayPickerInput
-      label="Data płatności"
-      width={4}
-        placeholder={moment(new Date()).format("YYYY-MM-DD")}
-        onDayChange={this.handleDayChange}
-        selectedDay={this.props.dateOfPay}
-      />)
     return (
       <Form>
         <Form.Group>
@@ -77,16 +70,22 @@ class FormOrder extends Component {
             width={3}
             onChange={this.handleChangeInput}
           />
-          <Form.Input
+          {/* <Form.Input
             value={dateOfPay}
             name="dateOfPay"
             label="Data płatności"
             placeholder="Data płatności"
             width={4}
-            as={Day}
             onChange={this.handleChangeInput}
-          />
-              
+          /> */}
+          <div className="three wide field">
+            <label>Data płatności</label>
+            <DayPickerInput
+              placeholder={moment(new Date()).format("YYYY-MM-DD")}
+              onDayChange={this.handleDayChange}
+              selectedDay={this.props.dateOfPay}
+            />
+          </div>
         </Form.Group>
         <Form.Group>
           <Form.Input
@@ -103,9 +102,10 @@ class FormOrder extends Component {
             name="price"
             label="Cena"
             placeholder="Cena"
-            type="number" 
-            min="0.00" 
-            max="100000.00" step="0.01"
+            type="number"
+            min="0.00"
+            max="100000.00"
+            step="0.01"
             width={4}
             onChange={this.handleChangeInput}
           />
@@ -114,9 +114,10 @@ class FormOrder extends Component {
             name="netValue"
             label="Wartość"
             placeholder="Wartość"
-            type="number" 
-            min="0.00" 
-            max="100000.00" step="0.01"
+            type="number"
+            min="0.00"
+            max="100000.00"
+            step="0.01"
             width={4}
             onChange={this.handleChangeInput}
           />
