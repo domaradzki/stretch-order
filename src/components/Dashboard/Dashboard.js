@@ -6,7 +6,8 @@ class Dashboard extends Component {
         return (
             <div className="App">
             <h1>Dashboard</h1>
-            <FormOrder />
+            {/* <FormOrder /> */}
+            
           </div>
         )
     }

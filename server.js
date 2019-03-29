@@ -1,44 +1,18 @@
-const express = require('express');
-const app = express();
+var express = require('express');
+var app = express();
+var port = process.env.port || 5000;
 
-app.get('/', function (req, res) {
+var documentsController = require('./src/Controllers/DocumentsController')();
+
+app.use('/api',documentsController);
    
-    const sql = require("mssql");
-
-    // config for your database
-    const config = {
-        user: 'sa',
-        password: '',
-        server: '192.168.0.13', 
-        database: 'Nexo_Goodmarks',
-        port: '58857',
-        dialect: "mssql",
-        dialectOptions: {
-            instanceName: "SQLEXPRESS" 
-        }
-        
-    };
-
-    // connect to your database
-    sql.connect(config, function (err) {
-    
-        if (err) console.log(err);
-
-        // create Request object
-        const request = new sql.Request();
-           
-        // query to the database and get the records
-        request.query("SELECT * FROM ModelDanychContainer.Dokumenty WHERE [Symbol] = 'ZK'", function (err, recordset) {
-            
-            if (err) console.log(err)
-
-            // send records as a response
-            res.send(recordset);
-            
-        });
-    });
+app.get("/product",function(request,response)
+{
+    response.json({"Message":"Welcome to Node js"});
 });
 
-const server = app.listen(5000, function () {
-    console.log('Server is running..');
+app.listen(port, function () {
+    var dateTime = new Date();
+    var message = `Server is running on port ${port}. Start at date ${dateTime}`;
+    console.log(message);
 });

@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.14.0",
     "firebase": "^5.9.1",
+    "joi": "^14.3.1",
     "moment": "^2.24.0",
+    "mssql": "^5.0.5",
     "react": "^16.8.4",
     "react-day-picker": "^7.3.0",
     "react-dom": "^16.8.4",
@@ -16,10 +20,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.86.0",
-    "express": "^4.14.0",
-    "body-parser": "^1.15.2",
-    "mssql": "^ 3.3.0"
+    "semantic-ui-react": "^0.86.0"
   },
   "devDependencies": {
     "react-scripts": "2.1.5"
