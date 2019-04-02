@@ -12,7 +12,7 @@ const routes = function() {
       .then(function() {
         const sqlQuery = `SELECT d.id 
         ,d.DataWprowadzenia AS dateInsert
-        ,podmiot.Nazwa AS Client
+        ,podmiot.Nazwa AS client
         ,d.NumerWewnetrzny_PelnaSygnatura AS signature
         ,d.Symbol AS symbol
         ,asortyment.Symbol AS code
@@ -25,6 +25,7 @@ const routes = function() {
         ,d.StatusDokumentuId AS documentStatus
         ,adres.LiniaCalosc AS deliveryAddress
         ,uzytkownicy.Login AS trader
+        ,pozycje.Id AS itemId
           FROM [Nexo_Goodmarks].[ModelDanychContainer].[Dokumenty] d 
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[AdresHistorie] adres 
           ON d.MiejsceDostawyId = adres.Id 

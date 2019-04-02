@@ -1,0 +1,4 @@
+.mainview__div--container {
+    display: flex;
+    justify-content:center;
+}

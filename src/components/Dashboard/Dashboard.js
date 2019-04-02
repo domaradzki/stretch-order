@@ -1,11 +1,13 @@
 import React, {Component} from 'react'
 import FormOrder from '../FormOrder/FormOrder';
-import MainView from '../MainView/MainView';
+import MainView from '../MainView';
+
+import "./Dashboard.css";
 
 class Dashboard extends Component { 
     render() {
         return (
-            <div className="App">
+            <div className="dashboard__div--container">
             <h1>Dashboard</h1>
             {/* <FormOrder /> */}
             <MainView />
