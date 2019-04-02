@@ -1,68 +1,53 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Intro
 
-In the project directory, you can run:
+Aplikacja do zarzadania zamówieniami z programu Insert. 
+Przekazanie zamówień na produkcję i obliczanie prowizji handlowca.
 
-### `npm start`
+### Dashboard
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Aplikacja bazuje na zamówieniach od klienta wprowadzonych w programie Gestor/Subiekt firmy Insert.
+Pobiera zamówienia z MSSQL i wczytuje do aplikacji w sekcji Dashboard
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Każdy handlowiec posiada swój login i widok ze swoimi zamówieniami.
 
-### `npm test`
+Po wczytaniu danych, zamówienia zostaną wyświetlone w zakłądce nowe
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Każde zamówienie posiada 
+- niezbędne dane do dalszego procesu obróbki 
+- możliwość zlecenia produkcyjnego (TPD, FS)
+- mozliwość nadania priorytetu produkcyjnego i terminu
+- możliwość zlecenia wysyłki dla pakowacza
+- dodanie poziomu marży przy sprzedaży
 
-### `npm run build`
+Po wykonianiu działania produkcja/wysyłka zamówienie zmieni status i będzie widoczne w zakładce Zlecone/Wysyłka
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Widok Produkcja
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Pracownicy produkcyjni i magazynowi będą posiadać swój dostęp z widokiem na zamówienia zlecone TPD, zlecone FS i wysyłkowe.
+Zamówienia będą mieć :
+- możliwość potwierdzenia terminu realizacji
+- możliwość potwierdzenia zrealizowani zamówienia
+- możliwość przesunięcia do wysyłki
+- filtrowanie po terminach realizacji
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### Widok Prowizje (Handlowiec)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Handlowiec ma obiliczaną prowicje na podstawie zamówień i ustalonych pozimów marży. 
+Wypłata marży powiązana jest z ustawionym targetem. 
+Wyliczenie prowizji na m-c i kwartał.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Widok Administracja
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Dostęp dla kadry zarządzającej, widok wszystkich zamówień. Widok raportów sprzedaży m-c, kwartał, rok.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Przykładowy scenariusz
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+1. Logowanie handlowca i wejście w widok nowe zamówienia
+2. Ustawienie poziomu prowizji
+3. Zlecenie produkcyjne na TPD i ustawienie priorytetu 8dni.
+4. Produkcja potwierdza termin za 8 dni.
+5. Produkcja zaznacza zrealizowanie zlecenia i gotowe do wysyłki.
+6. Pakowacz w zakładce wysyłka widzi zlecenie do spakowania
+7. Po wysłaniu zmienia status na wysłane.

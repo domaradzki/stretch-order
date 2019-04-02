@@ -1,7 +1,7 @@
-var sql = require("mssql");
+const sql = require("mssql");
 
-var connect = function() {
-  var config = new sql.ConnectionPool({
+const connect = function() {
+  const config = new sql.ConnectionPool({
     user: "sa",
     password: "",
     server: "192.168.0.13",
