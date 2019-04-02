@@ -5,25 +5,26 @@ const config = require("../services/connect")();
 
 const routes = function() {
   router.route("/").get(function(req, res) {
-    debugger;
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     config
       .connect()
       .then(function() {
-        const sqlQuery = `SELECT d.Id 
-        ,d.DataWprowadzenia 
-        ,podmiot.Nazwa AS Klient
-        ,d.NumerWewnetrzny_PelnaSygnatura AS Sygnatura 
-        ,d.Symbol 
-        ,asortyment.Symbol AS Kod 
-        ,asortyment.Nazwa AS Towar
-        ,pozycje.Ilosc 
-        ,pozycje.Cena_NettoPoRabacie AS Cena 
-        ,pozycje.Wartosc_NettoPoRabacie AS Wartosc 
-        ,d.Uwagi 
-        ,d.Zamkniety 
-        ,d.StatusDokumentuId 
-        ,adres.LiniaCalosc AS AdresDostawy 
-        ,uzytkownicy.Login AS Opiekun 
+        const sqlQuery = `SELECT d.id 
+        ,d.DataWprowadzenia AS dateInsert
+        ,podmiot.Nazwa AS Client
+        ,d.NumerWewnetrzny_PelnaSygnatura AS signature
+        ,d.Symbol AS symbol
+        ,asortyment.Symbol AS code
+        ,asortyment.Nazwa AS assortment
+        ,pozycje.Ilosc AS quantity
+        ,pozycje.Cena_NettoPoRabacie AS price
+        ,pozycje.Wartosc_NettoPoRabacie AS netValue
+        ,d.Uwagi AS details
+        ,d.Zamkniety AS closed
+        ,d.StatusDokumentuId AS documentStatus
+        ,adres.LiniaCalosc AS deliveryAddress
+        ,uzytkownicy.Login AS trader
           FROM [Nexo_Goodmarks].[ModelDanychContainer].[Dokumenty] d 
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[AdresHistorie] adres 
           ON d.MiejsceDostawyId = adres.Id 
