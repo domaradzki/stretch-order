@@ -1,11 +1,13 @@
 // Action types
 const CHANGE_MENU = "CHANGE_MENU";
 const CHANGE_VIEW = "CHANGE_VIEW";
+const PAGINATION_MAINVIEW = "PAGINATION_MAINVIEW";
 
 // Initial Value
 const initialState = {
   activeItem: "oczekujące",
-  activeView: "dashboard"
+  activeView: "dashboard",
+  paginationMain: 0
 };
 
 // Reducer
@@ -20,6 +22,11 @@ export default function interfaceReducer(state = initialState, action) {
       return {
         ...state,
         activeView: action.name
+      };
+    case PAGINATION_MAINVIEW:
+      return {
+        ...state,
+        paginationMain: action.value * 10
       };
     default:
       return state;
@@ -37,6 +44,12 @@ export const changeView = name => {
   return {
     type: CHANGE_VIEW,
     name
+  };
+};
+export const changePaginationMainView = value => {
+  return {
+    type: PAGINATION_MAINVIEW,
+    value
   };
 };
 
