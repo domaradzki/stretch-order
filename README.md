@@ -11,7 +11,7 @@ Pobiera zamówienia z MSSQL i wczytuje do aplikacji w sekcji Dashboard
 
 Każdy handlowiec posiada swój login i widok ze swoimi zamówieniami.
 
-Po wczytaniu danych, zamówienia zostaną wyświetlone w zakłądce nowe
+Po wczytaniu danych, zamówienia zostaną wyświetlone w zakładce nowe
 
 Każde zamówienie posiada 
 - niezbędne dane do dalszego procesu obróbki 

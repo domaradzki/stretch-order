@@ -7,12 +7,12 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import * as serviceWorker from "./serviceWorker";
-//import Root from './components/Root/Root';
-import Dashboard from "./components/Dashboard";
+import Root from './components/Root/Root';
+
 
 ReactDOM.render(
   <Provider store={store}>
-    <Dashboard />
+    <Root />
   </Provider>,
   document.getElementById("root")
 );

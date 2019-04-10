@@ -13,7 +13,6 @@ class DashboardMenu extends Component {
     const activeItem  = this.props.activeItem;
 
     return (
-      <div>
         <Menu attached='top' tabular>
           <Menu.Item name='oczekujące' active={activeItem === 'oczekujące'} onClick={this.handleItemClick} />
           <Menu.Item
@@ -32,7 +31,6 @@ class DashboardMenu extends Component {
           </Menu.Menu>
         </Menu>
 
-      </div>
     )
   }
 }

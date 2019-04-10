@@ -13,8 +13,8 @@ class MainView extends Component {
 
   render() {
       //const {dateInsert, client, signature, code, quantity, price, netValue, details} = this.props.data;
-      const newOrders = this.props.data.slice()
-    return <div className="mainview__div--container">
+      const newOrders = this.props.data.slice(0,10)
+    return <div className="mainview__container">
         <Table celled>
     <Table.Header>
       <Table.Row>

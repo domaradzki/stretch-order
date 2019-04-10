@@ -1,9 +1,11 @@
 // Action types
 const CHANGE_MENU = "CHANGE_MENU";
+const CHANGE_VIEW = "CHANGE_VIEW";
 
 // Initial Value
 const initialState = {
-  activeItem:'oczekujące'
+  activeItem: "oczekujące",
+  activeView: "dashboard"
 };
 
 // Reducer
@@ -14,7 +16,12 @@ export default function interfaceReducer(state = initialState, action) {
         ...state,
         activeItem: action.name
       };
-          default:
+    case CHANGE_VIEW:
+      return {
+        ...state,
+        activeView: action.name
+      };
+    default:
       return state;
   }
 }
@@ -23,6 +30,12 @@ export default function interfaceReducer(state = initialState, action) {
 export const changeMenu = name => {
   return {
     type: CHANGE_MENU,
+    name
+  };
+};
+export const changeView = name => {
+  return {
+    type: CHANGE_VIEW,
     name
   };
 };
