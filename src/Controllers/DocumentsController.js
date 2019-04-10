@@ -4,12 +4,14 @@ const sql = require("mssql");
 const config = require("../services/connect")();
 
 const routes = function() {
-  router.route("/").get(function(req, res) {
+  router.route('/').get(function(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     config
       .connect()
       .then(function() {
+        //  const dateReq = req.params.id;
+        //  console.log(dateReq);
         const sqlQuery = `SELECT d.id 
         ,d.DataWprowadzenia AS dateInsert
         ,podmiot.Nazwa AS client
@@ -39,7 +41,7 @@ const routes = function() {
           ON d.PodmiotId = opiekunowie.PodmiotOpiekunaPodstawowego_Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[Uzytkownicy] uzytkownicy
           ON uzytkownicy.Id = opiekunowie.UzytkownikId
-          WHERE d.Symbol = 'ZK' or d.Symbol = 'FP'
+          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-04-01')
           ORDER BY d.Id DESC`;
         const req = new sql.Request(config);
         req
