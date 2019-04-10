@@ -28,7 +28,7 @@ const routes = function() {
         ,pozycje.NumerReferencyjny AS itemId
           FROM [Nexo_Goodmarks].[ModelDanychContainer].[Dokumenty] d 
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[AdresHistorie] adres 
-          ON d.MiejsceDostawyId = adres.Id 
+          ON d.MiejsceDostawyId = adres.Id or d.MiejsceDostawyZewnetrzneId = adres.Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[PodmiotHistorie] podmiot 
           ON d.PodmiotWybranyId = podmiot.Id 
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[PozycjeDokumentu] pozycje 
@@ -40,7 +40,7 @@ const routes = function() {
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[Uzytkownicy] uzytkownicy
           ON uzytkownicy.Id = opiekunowie.UzytkownikId
           WHERE d.Symbol = 'ZK' or d.Symbol = 'FP'
-          ORDER BY d.Id`;
+          ORDER BY d.Id DESC`;
         const req = new sql.Request(config);
         req
           .query(sqlQuery)

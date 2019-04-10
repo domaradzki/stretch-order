@@ -4,10 +4,12 @@ import thunk from "redux-thunk";
 
 import orders from './ducks/orders'
 import data from './ducks/data'
+import interfaceMenu from './ducks/interfaceMenu'
 
 const rootReducer = combineReducers({
     orders,
-    data
+    data,
+    interfaceMenu
 });
 
 const store = createStore(

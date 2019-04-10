@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { fetchData, getDataLoading } from "../../ducks/data";
-import {  Menu, Icon, Table, Label } from "semantic-ui-react";
+import {  Menu, Icon, Table} from "semantic-ui-react";
 
 import "./MainView.css";
 
