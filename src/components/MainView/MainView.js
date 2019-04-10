@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import moment from "moment";
 
 import { fetchData, getDataLoading } from "../../ducks/data";
 import {  Menu, Icon, Table} from "semantic-ui-react";
@@ -32,7 +33,7 @@ class MainView extends Component {
     <Table.Body>
         {newOrders.map(order=>(
             <Table.Row key={order.itemId}>
-            <Table.Cell>{order.dateInsert}</Table.Cell>
+            <Table.Cell>{moment(order.dateInsert).format("DD-MM-YYYY")}</Table.Cell>
             <Table.Cell>{order.client}</Table.Cell>
             <Table.Cell>{order.signature}</Table.Cell>
             <Table.Cell>{order.code}</Table.Cell>
