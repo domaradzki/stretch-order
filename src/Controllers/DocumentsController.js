@@ -25,7 +25,7 @@ const routes = function() {
         ,d.StatusDokumentuId AS documentStatus
         ,adres.LiniaCalosc AS deliveryAddress
         ,uzytkownicy.Login AS trader
-        ,pozycje.Id AS itemId
+        ,pozycje.NumerReferencyjny AS itemId
           FROM [Nexo_Goodmarks].[ModelDanychContainer].[Dokumenty] d 
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[AdresHistorie] adres 
           ON d.MiejsceDostawyId = adres.Id 
@@ -36,7 +36,7 @@ const routes = function() {
           INNER JOIN (Select * FROM [Nexo_Goodmarks].[ModelDanychContainer].[Asortymenty] WHERE Symbol <> 'TRANSPORT IN POST' and Symbol <> 'TRANSPORT') asortyment
           ON pozycje.AsortymentAktualnyId = asortyment.Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[OpiekunowiePodmiotu] opiekunowie
-          ON d.PodmiotId = opiekunowie.Podmiot_Id
+          ON d.PodmiotId = opiekunowie.PodmiotOpiekunaPodstawowego_Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[Uzytkownicy] uzytkownicy
           ON uzytkownicy.Id = opiekunowie.UzytkownikId
           WHERE d.Symbol = 'ZK' or d.Symbol = 'FP'

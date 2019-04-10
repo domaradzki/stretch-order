@@ -31,7 +31,7 @@ class MainView extends Component {
 
     <Table.Body>
         {newOrders.map(order=>(
-            <Table.Row key={order.id}>
+            <Table.Row key={order.itemId}>
             <Table.Cell>{order.dateInsert}</Table.Cell>
             <Table.Cell>{order.client}</Table.Cell>
             <Table.Cell>{order.signature}</Table.Cell>
