@@ -1,6 +1,7 @@
 .mainview__container {
     display: flex;
     justify-content:center;
+    position: relative;
 }
 .pagination {
     display: flex;

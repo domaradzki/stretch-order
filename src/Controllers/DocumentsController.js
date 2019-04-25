@@ -10,8 +10,6 @@ const routes = function() {
     config
       .connect()
       .then(function() {
-        //  const dateReq = req.params.id;
-        //  console.log(dateReq);
         const sqlQuery = `SELECT d.id 
         ,d.DataWprowadzenia AS dateInsert
         ,podmiot.Nazwa AS client

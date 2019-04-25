@@ -1,0 +1,11 @@
+.details__container--hidden {
+    display:none;
+}
+
+.details__container {
+    display:block;
+    position: absolute;
+    width: 50%;
+    top: 0%;
+    left: 30%;
+}
