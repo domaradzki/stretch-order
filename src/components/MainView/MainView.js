@@ -3,7 +3,10 @@ import { connect } from "react-redux";
 import moment from "moment";
 
 import { fetchData, getDataLoading } from "../../ducks/data";
-import { changePaginationMainView, activateDetails } from "../../ducks/interfaceMenu";
+import {
+  changePaginationMainView,
+  activateDetails
+} from "../../ducks/interfaceMenu";
 import { Table, Button } from "semantic-ui-react";
 
 import "./MainView.css";
@@ -20,8 +23,9 @@ class MainView extends Component {
     changePagination(paginationPage);
   };
 
-  handleClick = id =>{
+  handleClick = event=> {
     const { activateDetails } = this.props;
+    const id = event.target.id;
     activateDetails(id);
   };
 
@@ -32,7 +36,7 @@ class MainView extends Component {
     const newOrders = this.props.data;
     return (
       <div className="mainview__container">
-      <DetailsView />
+        <DetailsView />
         <Table celled>
           <Table.Header>
             <Table.Row>
@@ -50,8 +54,8 @@ class MainView extends Component {
 
           <Table.Body>
             {newOrders
-              .map(order => (
-                <Table.Row key={order.itemId}>
+              .map((order,index) => (
+                <Table.Row key={index}>
                   <Table.Cell>
                     {moment(order.dateInsert).format("DD-MM-YYYY")}
                   </Table.Cell>
@@ -62,9 +66,15 @@ class MainView extends Component {
                   <Table.Cell>{order.price}</Table.Cell>
                   <Table.Cell>{order.netValue}</Table.Cell>
                   <Table.Cell>{order.details}</Table.Cell>
-                  <Table.Cell><Button active={active} onClick={()=> this.handleClick(order.itemId)}>
-            Zadysponuj
-          </Button></Table.Cell>
+                  <Table.Cell>
+                    <Button
+                      active={active}
+                      id={order.itemId}
+                      onClick={this.handleClick}
+                    >
+                      Zadysponuj
+                    </Button>
+                  </Table.Cell>
                 </Table.Row>
               ))
               .slice(pagination, pagination + 10)}
@@ -107,7 +117,7 @@ const mapStateToProps = state => {
     data: state.data.data,
     isLoadingData: getDataLoading(state),
     pagination: state.interfaceMenu.paginationMain,
-    active: state.interfaceMenu.activeDetails,
+    active: state.interfaceMenu.activeDetails
   };
 };
 

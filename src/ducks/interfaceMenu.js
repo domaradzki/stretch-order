@@ -10,7 +10,7 @@ const initialState = {
   activeItem: "oczekujące",
   activeView: "dashboard",
   paginationMain: 0,
-  activeOrder: null,
+  activeOrder: '',
   activeDetails: false
 };
 

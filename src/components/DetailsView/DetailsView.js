@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { connect } from "react-redux";
-import { Segment, Form, Button } from "semantic-ui-react";
+import { Segment, Form } from "semantic-ui-react";
 
 import "./DetailsView.css";
 import { unactivateDetails } from "../../ducks/interfaceMenu";
@@ -10,8 +10,8 @@ class DetailsView extends Component {
   render() {
       const { order, data, active } = this.props;
       const orderDetails = data.filter((item)=>item.itemId=order);
-      const {dateInsert, client,signature,code,quantity,price,netValue,details} =orderDetails;
-      console.log(orderDetails)
+      const {dateInsert, client,signature,code,quantity,price,netValue,details} = orderDetails;
+      console.log(order)
     return (
       <div className={active ? "details__container" : "details__container--hidden"}>
         {active ? (
@@ -20,76 +20,68 @@ class DetailsView extends Component {
               <Form.Group widths="equal">
                 <Form.Input
                   fluid
-                  id="company_name"
-                  label="Company name"
-                  placeholder="Company name"
+                  id="dateInsert"
+                  label="Data zamówienia"
+                  placeholder="Data zamówienia"
+                  value={dateInsert}
+                  onChange={this.handleChange}
+                />
+                <Form.Input
+                  fluid
+                  id="client"
+                  label="Nazwa"
+                  placeholder="Nazwa"
                   value={client}
                   onChange={this.handleChange}
                 />
                 <Form.Input
                   fluid
-                  id="name"
-                  label="First name"
-                  placeholder="First name"
-                  value={client}
+                  id="signature"
+                  label="Symbol"
+                  placeholder="Symbol"
+                  value={signature}
                   onChange={this.handleChange}
                 />
                 <Form.Input
                   fluid
-                  id="surname"
-                  label="Last name"
-                  placeholder="Last name"
-                  value={client}
-                  onChange={this.handleChange}
-                />
-                <Form.Input
-                  fluid
-                  id="nip"
-                  label="NIP"
-                  placeholder="NIP"
-                  value={client}
+                  id="code"
+                  label="Code"
+                  placeholder="Code"
+                  value={code}
                   onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group widths="equal">
                 <Form.Input
                   fluid
-                  id="city"
-                  label="City"
-                  placeholder="City"
-                  value={client}
+                  id="quantity"
+                  label="Ilość"
+                  placeholder="Ilość"
+                  value={quantity}
                   onChange={this.handleChange}
                 />
                 <Form.Input
                   fluid
-                  id="postalcode"
-                  label="Postal Code"
-                  placeholder="Postal Code"
-                  value={client}
+                  id="price"
+                  label="Cena"
+                  placeholder="Cena"
+                  value={price}
                   onChange={this.handleChange}
                 />
                 <Form.Input
                   fluid
-                  id="street"
-                  label="Street"
-                  placeholder="Street"
-                  value={client}
+                  id="netValue"
+                  label="Wartość netto"
+                  placeholder="Wartość netto"
+                  value={netValue}
                   onChange={this.handleChange}
                 />
                 <Form.Input
                   fluid
-                  id="number"
-                  label="Number"
-                  placeholder="Number"
-                  value={client}
-                  onChange={this.handleChange}
-                />
-                <Form.Input
-                  fluid
-                  id="phone"
-                  label="Phone"
-                  placeholder="Phone"
-                  value={client}
+                  id="details"
+                  label="Uwagi"
+                  placeholder="Uwagi"
+                  value={details}
                   onChange={this.handleChange}
                 />
               </Form.Group>
@@ -100,43 +92,39 @@ class DetailsView extends Component {
             <Form>
               <Form.Group widths="equal">
                 <div className="field">
-                  <label>Company name</label>
-                  <div className="formBox">{client}</div>
+                  <label>Data zamówienia</label>
+                  <div className="formBox">{dateInsert}</div>
                 </div>
 
                 <div className="field">
-                  <label>First name</label>
+                  <label>Nazwa firmy</label>
                   <div className="formBox">{client}</div>
                 </div>
                 <div className="field">
-                  <label>Last name</label>
-                  <div className="formBox">{client}</div>
+                  <label>Sygnatura</label>
+                  <div className="formBox">{signature}</div>
                 </div>
                 <div className="field">
-                  <label>NIP</label>
-                  <div className="formBox">{client}</div>
+                  <label>Code</label>
+                  <div className="formBox">{code}</div>
                 </div>
               </Form.Group>
               <Form.Group widths="equal">
                 <div className="field">
-                  <label>City</label>
-                  <div className="formBox">{client}</div>
+                  <label>Ilość</label>
+                  <div className="formBox">{quantity}</div>
                 </div>
                 <div className="field">
-                  <label>Postal Code</label>
-                  <div className="formBox">{client}</div>
+                  <label>Cena</label>
+                  <div className="formBox">{price}</div>
                 </div>
                 <div className="field">
-                  <label>Street</label>
-                  <div className="formBox">{client}</div>
+                  <label>Wartość netto</label>
+                  <div className="formBox">{netValue}</div>
                 </div>
                 <div className="field">
-                  <label>Number</label>
-                  <div className="formBox">{client}</div>
-                </div>
-                <div className="field">
-                  <label>Phone</label>
-                  <div className="formBox">{client} </div>
+                  <label>Uwagi</label>
+                  <div className="formBox">{details}</div>
                 </div>
               </Form.Group>
             </Form>
