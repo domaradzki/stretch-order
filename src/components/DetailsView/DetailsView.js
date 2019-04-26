@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { connect } from "react-redux";
-import { Segment, Form } from "semantic-ui-react";
+import { Segment, Form, Button } from "semantic-ui-react";
 
 import "./DetailsView.css";
 import { unactivateDetails } from "../../ducks/interfaceMenu";
@@ -14,6 +14,7 @@ class DetailsView extends Component {
       console.log(order)
     return (
       <div className={active ? "details__container" : "details__container--hidden"}>
+        <Segment.Group piled>
         {active ? (
           <Segment color="blue">
             <Form>
@@ -130,6 +131,12 @@ class DetailsView extends Component {
             </Form>
           </Segment>
         )}
+        <Segment>
+          <Button>Zapisz</Button>
+          <Button>Wyjdź</Button>
+        </Segment>
+        
+        </Segment.Group>
       </div>
     );
   }

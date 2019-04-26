@@ -7,3 +7,7 @@
     display: flex;
     justify-content: center;
 }
+.empty__container {
+    width:85vw;
+    height:20vw;
+}

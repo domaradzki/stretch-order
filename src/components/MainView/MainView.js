@@ -7,7 +7,7 @@ import {
   changePaginationMainView,
   activateDetails
 } from "../../ducks/interfaceMenu";
-import { Table, Button } from "semantic-ui-react";
+import { Table, Button, Segment } from "semantic-ui-react";
 
 import "./MainView.css";
 import DetailsView from "../DetailsView/DetailsView";
@@ -37,6 +37,7 @@ class MainView extends Component {
     return (
       <div className="mainview__container">
         <DetailsView />
+        {this.props.isLoadingData ? <Segment loading><div className="empty__container"></div></Segment> :
         <Table celled>
           <Table.Header>
             <Table.Row>
@@ -102,7 +103,7 @@ class MainView extends Component {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
-        </Table>
+        </Table>}
       </div>
     );
   }
