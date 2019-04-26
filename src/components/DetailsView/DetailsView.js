@@ -131,7 +131,7 @@ class DetailsView extends Component {
             </Form>
           </Segment>
         )}
-        <Segment>
+        <Segment textAlign='center'>
           <Button>Zapisz</Button>
           <Button>Wyjdź</Button>
         </Segment>
