@@ -8,7 +8,7 @@ import moment from "moment";
 
 import { changeInput, changeDate } from "../../ducks/orders";
 
-class FormOrder extends Component {
+class FormOrderTPD extends Component {
   handleChangeInput = (event, data) => {
     const name = data.name;
     const value = data.value;
@@ -30,13 +30,25 @@ class FormOrder extends Component {
   };
   render() {
     const {
+      printName,
       client,
       invoice,
       dateOfPay,
       quantity,
-      price,
-      netValue,
-      comments
+      tapeLong,
+      tapeWidth,
+      tapeThickness,
+      numberOfColors,
+      color1,
+      color2,
+      color3,
+      glue,
+      roller,
+      dateOfAcceptation,
+      transport,
+      trader,
+      dateOfRealisation,
+      details
     } = this.props;
     return (
       <Form>
@@ -177,4 +189,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FormOrder);
+)(FormOrderTPD);

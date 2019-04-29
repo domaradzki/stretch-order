@@ -2,32 +2,36 @@
 const CHANGE_INPUT = "CHANGE_INPUT";
 const CHANGE_DATE = "CHANGE_DATE";
 
-// Initial Value
+// Initial Values
 const initialState = {
-  orders: [
-    {
-      id: 1,
-      client: "Dynamit",
-      kind: "Stretch",
-      invoice: "",
-      dateOfPay: "",
-      quantity: 100,
-      price: 10.0,
-      netValue: 1000.0,
-      margin: 2,
-      comments: "",
-      isDone: false
-    }
-  ],
-  client: "",
-  kind: "",
-  invoice: "",
-  dateOfPay: "",
-  quantity: "",
-  price: "",
-  netValue: "",
-  margin: "",
-  comments: ""
+  printName:'',
+  client: '',
+  invoice: '',
+  kindOfPay:'',
+  dateOfPay: '',
+  quantity: 0,
+  tapeLong:'',
+  tapeWidth:'',
+  tapeThickness:'',
+  numberOfColors:0,
+  color1:'',
+  color2:'',
+  color3:'',
+  glue:'',
+  roller:'',
+  dateOfAcceptation:'',
+  transport:'',
+  trader:'',
+  dateOfRealisation:'',
+  details:'',
+  sleeve:'',
+  stretchColor:'',
+  netWeight:'',
+  grossWeight:'',
+  price: '',
+  netValue: 0,
+  margin: '',
+  comments: ''
 };
 
 // Reducer
