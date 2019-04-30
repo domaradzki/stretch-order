@@ -4,6 +4,7 @@ const CHANGE_DATE = "CHANGE_DATE";
 
 // Initial Values
 const initialState = {
+  dateInsert:'',
   printName:'',
   client: '',
   invoice: '',
@@ -31,7 +32,6 @@ const initialState = {
   price: '',
   netValue: 0,
   margin: '',
-  comments: ''
 };
 
 // Reducer

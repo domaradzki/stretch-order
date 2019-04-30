@@ -2,11 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
 
-import { fetchData, getDataLoading } from "../../ducks/data";
-import {
-  changePaginationMainView,
-  activateDetails
-} from "../../ducks/interfaceMenu";
+import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
+import { changePaginationMainView } from "../../ducks/interfaceMenu";
 import { Table, Button, Segment } from "semantic-ui-react";
 
 import "./MainView.css";
@@ -23,7 +20,7 @@ class MainView extends Component {
     changePagination(paginationPage);
   };
 
-  handleClick = event=> {
+  handleClick = event => {
     const { activateDetails } = this.props;
     const id = event.target.id;
     activateDetails(id);
@@ -37,73 +34,78 @@ class MainView extends Component {
     return (
       <div className="mainview__container">
         <DetailsView />
-        {this.props.isLoadingData ? <Segment loading><div className="empty__container"></div></Segment> :
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Data zamówienia</Table.HeaderCell>
-              <Table.HeaderCell>Klient</Table.HeaderCell>
-              <Table.HeaderCell>Nr</Table.HeaderCell>
-              <Table.HeaderCell>Kod</Table.HeaderCell>
-              <Table.HeaderCell>Ilość</Table.HeaderCell>
-              <Table.HeaderCell>Cena</Table.HeaderCell>
-              <Table.HeaderCell>Wartość</Table.HeaderCell>
-              <Table.HeaderCell>Uwagi</Table.HeaderCell>
-              <Table.HeaderCell>Opcje</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+        {this.props.isLoadingData ? (
+          <Segment loading>
+            <div className="empty__container" />
+          </Segment>
+        ) : (
+          <Table celled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Data zamówienia</Table.HeaderCell>
+                <Table.HeaderCell>Klient</Table.HeaderCell>
+                <Table.HeaderCell>Nr</Table.HeaderCell>
+                <Table.HeaderCell>Kod</Table.HeaderCell>
+                <Table.HeaderCell>Ilość</Table.HeaderCell>
+                <Table.HeaderCell>Cena</Table.HeaderCell>
+                <Table.HeaderCell>Wartość</Table.HeaderCell>
+                <Table.HeaderCell>Uwagi</Table.HeaderCell>
+                <Table.HeaderCell>Opcje</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
 
-          <Table.Body>
-            {newOrders
-              .map((order,index) => (
-                <Table.Row key={index}>
-                  <Table.Cell>
-                    {moment(order.dateInsert).format("DD-MM-YYYY")}
-                  </Table.Cell>
-                  <Table.Cell>{order.client}</Table.Cell>
-                  <Table.Cell>{order.signature}</Table.Cell>
-                  <Table.Cell>{order.code}</Table.Cell>
-                  <Table.Cell>{order.quantity}</Table.Cell>
-                  <Table.Cell>{order.price}</Table.Cell>
-                  <Table.Cell>{order.netValue}</Table.Cell>
-                  <Table.Cell>{order.details}</Table.Cell>
-                  <Table.Cell>
-                    <Button
-                      active={active}
-                      id={order.itemId}
-                      onClick={this.handleClick}
-                    >
-                      Zadysponuj
-                    </Button>
-                  </Table.Cell>
-                </Table.Row>
-              ))
-              .slice(pagination, pagination + 10)}
-          </Table.Body>
-
-          <Table.Footer>
-            <Table.Row>
-              <Table.HeaderCell colSpan="8">
-                <div className="pagination">
-                  {Array.from({
-                    length: Math.ceil(newOrders.length / 10)
-                  })
-                    .map((button, index) => (
-                      <button
-                        className="ui button"
-                        key={index}
-                        value={index}
-                        onClick={this.handlePaginationChange}
+            <Table.Body>
+              {newOrders
+                .map((order, index) => (
+                  <Table.Row key={index}>
+                    <Table.Cell>
+                      {moment(order.dateInsert).format("DD-MM-YYYY")}
+                    </Table.Cell>
+                    <Table.Cell>{order.client}</Table.Cell>
+                    <Table.Cell>{order.signature}</Table.Cell>
+                    <Table.Cell>{order.code}</Table.Cell>
+                    <Table.Cell>{order.quantity}</Table.Cell>
+                    <Table.Cell>{order.price}</Table.Cell>
+                    <Table.Cell>{order.netValue}</Table.Cell>
+                    <Table.Cell>{order.details}</Table.Cell>
+                    <Table.Cell>
+                      <Button
+                        active={active}
+                        id={order.itemId}
+                        onClick={this.handleClick}
                       >
-                        {index + 1}
-                      </button>
-                    ))
-                    .slice(paginationButton, paginationButton + 5)}
-                </div>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-        </Table>}
+                        Zadysponuj
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))
+                .slice(pagination, pagination + 10)}
+            </Table.Body>
+
+            <Table.Footer>
+              <Table.Row>
+                <Table.HeaderCell colSpan="8">
+                  <div className="pagination">
+                    {Array.from({
+                      length: Math.ceil(newOrders.length / 10)
+                    })
+                      .map((button, index) => (
+                        <button
+                          className="ui button"
+                          key={index}
+                          value={index}
+                          onClick={this.handlePaginationChange}
+                        >
+                          {index + 1}
+                        </button>
+                      ))
+                      .slice(paginationButton, paginationButton + 5)}
+                  </div>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Footer>
+          </Table>
+        )}
       </div>
     );
   }
@@ -118,7 +120,7 @@ const mapStateToProps = state => {
     data: state.data.data,
     isLoadingData: getDataLoading(state),
     pagination: state.interfaceMenu.paginationMain,
-    active: state.interfaceMenu.activeDetails
+    active: state.data.activeDetails
   };
 };
 

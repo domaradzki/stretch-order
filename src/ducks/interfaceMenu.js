@@ -2,16 +2,13 @@
 const CHANGE_MENU = "CHANGE_MENU";
 const CHANGE_VIEW = "CHANGE_VIEW";
 const PAGINATION_MAINVIEW = "PAGINATION_MAINVIEW";
-const ACTIVATE_DETAILS = "ACTIVATE_DETAILS";
-const UNACTIVATE_DETAILS = "UNACTIVATE_DETAILS";
+
 
 // Initial Value
 const initialState = {
   activeItem: "oczekujące",
   activeView: "dashboard",
   paginationMain: 0,
-  activeOrder: '',
-  activeDetails: false
 };
 
 // Reducer
@@ -31,18 +28,6 @@ export default function interfaceReducer(state = initialState, action) {
       return {
         ...state,
         paginationMain: action.value * 10
-      };
-    case ACTIVATE_DETAILS:
-      return {
-        ...state,
-        activeDetails: true,
-        activeOrder: action.id
-      };
-    case UNACTIVATE_DETAILS:
-      return {
-        ...state,
-        activeDetails: false,
-        activeOrder: null
       };
     default:
       return state;
@@ -69,17 +54,6 @@ export const changePaginationMainView = value => {
   };
 };
 
-export const activateDetails = id => {
-  return {
-    type: ACTIVATE_DETAILS,
-    id
-  };
-};
 
-export const unactivateDetails = () => {
-  return {
-    type: UNACTIVATE_DETAILS
-  };
-};
 
 // Selectors

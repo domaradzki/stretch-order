@@ -4,11 +4,15 @@ import { getDataPromise } from "../services";
 const FETCH_DATA_REQUEST = "FETCH_DATA_REQUEST";
 const FETCH_DATA_SUCCESS = "FETCH_DATA_SUCCESS";
 const FETCH_DATA_FAILURE = "FETCH_DATA_FAILURE";
+const ACTIVATE_DETAILS = "ACTIVATE_DETAILS";
+const UNACTIVATE_DETAILS = "UNACTIVATE_DETAILS";
 
 // Initial Value
 const initialState = {
   isLoading: false,
   error: null,
+  activeOrder: "",
+  activeDetails: false,
   data: []
 };
 
@@ -34,6 +38,18 @@ export default function dataReducer(state = initialState, action) {
         error: null,
         data: action.data
       };
+    case ACTIVATE_DETAILS:
+      return {
+        ...state,
+        activeDetails: true,
+        activeOrder: action.id
+      };
+    case UNACTIVATE_DETAILS:
+      return {
+        ...state,
+        activeDetails: false,
+        activeOrder: null
+      };
     default:
       return state;
   }
@@ -53,18 +69,35 @@ const fetchDataFailure = error => ({
 export const fetchData = () => {
   return dispatch => {
     dispatch(fetchDataRequest());
-    console.log("fetchDataRequest");
+    // console.log("fetchDataRequest");
     getDataPromise()
       .then(data => {
-        console.log("fetchDataSuccess");
+        // console.log("fetchDataSuccess");
         dispatch(fetchDataSuccess(data));
       })
       .catch(error => {
-        console.log(error)
+        //  console.log(error)
         dispatch(fetchDataFailure(error));
       });
   };
 };
 
+export const activateDetails = id => {
+  return {
+    type: ACTIVATE_DETAILS,
+    id
+  };
+};
+
+export const unactivateDetails = () => {
+  return {
+    type: UNACTIVATE_DETAILS
+  };
+};
+
 // Selectors
 export const getDataLoading = state => state.data.isLoading;
+export const pickedOrder = state => {
+  const picked = state.data.data.filter(order => order.itemId === state.data.activeOrder)
+  return picked.length === 1 ? picked[0] : {};
+};
