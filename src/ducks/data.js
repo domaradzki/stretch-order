@@ -98,6 +98,18 @@ export const unactivateDetails = () => {
 // Selectors
 export const getDataLoading = state => state.data.isLoading;
 export const pickedOrder = state => {
-  const picked = state.data.data.filter(order => order.itemId === state.data.activeOrder)
-  return picked.length === 1 ? picked[0] : {};
+  const picked = state.data.data.filter(
+    order => order.itemId === state.data.activeOrder
+  );
+  const pickedOrder = picked.length === 1 ? picked[0] : {};
+  if (picked.kind === 'KT') {
+    const productArray = picked.code.split(" ");
+    const productCode = productArray[0];
+    if (productCode === "FSRG") {
+    } //"FSMG" "TPD" "TPD32"
+  }
+
+  
+
+  return pickedOrder;
 };

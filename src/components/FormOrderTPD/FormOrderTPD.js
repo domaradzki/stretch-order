@@ -82,7 +82,8 @@ class FormOrderTPD extends Component {
               <DayPickerInput
                 placeholder={moment(new Date()).format("YYYY-MM-DD")}
                 onDayChange={this.handleDayChange}
-                selectedDay={dateInsert}
+                selectedDay={moment(dateInsert).format("YYYY-MM-DD")}
+                value={moment(dateInsert).format("YYYY-MM-DD")}
               />
             </div>
             <div className="three wide field">

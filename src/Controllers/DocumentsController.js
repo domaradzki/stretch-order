@@ -17,6 +17,7 @@ const routes = function() {
         ,d.Symbol AS symbol
         ,asortyment.Symbol AS code
         ,asortyment.Nazwa AS assortment
+        ,rodzaj.Symbol AS kind
         ,pozycje.Ilosc AS quantity
         ,pozycje.Cena_NettoPoRabacie AS price
         ,pozycje.Wartosc_NettoPoRabacie AS netValue
@@ -35,6 +36,8 @@ const routes = function() {
           ON d.Id = pozycje.Dokument_Id 
           INNER JOIN (Select * FROM [Nexo_Goodmarks].[ModelDanychContainer].[Asortymenty] WHERE Symbol <> 'TRANSPORT IN POST' and Symbol <> 'TRANSPORT') asortyment
           ON pozycje.AsortymentAktualnyId = asortyment.Id
+          INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[RodzajeAsortymentu] rodzaj
+          ON asortyment.Rodzaj_Id = rodzaj.Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[OpiekunowiePodmiotu] opiekunowie
           ON d.PodmiotId = opiekunowie.PodmiotOpiekunaPodstawowego_Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[Uzytkownicy] uzytkownicy
