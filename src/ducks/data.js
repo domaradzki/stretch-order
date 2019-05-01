@@ -101,15 +101,64 @@ export const pickedOrder = state => {
   const picked = state.data.data.filter(
     order => order.itemId === state.data.activeOrder
   );
-  const pickedOrder = picked.length === 1 ? picked[0] : {};
-  if (picked.kind === 'KT') {
-    const productArray = picked.code.split(" ");
+  const pickedOrder = picked.length === 1 ? pickedOrder[0] : {};
+  const colors = {
+    CZ: "czarna",
+    CZARNA: "czarna",
+    RÓŻ: "różowa",
+    B: "biała",
+    BIAŁA: "biała",
+    NIEB: "niebieska",
+    ŻÓŁT: "żółta",
+    ZIELO: "zielona",
+    CZERW: "czerwona",
+    POM: "pomarańczowa",
+    _: "transparentna"
+  };
+  const order = {};
+  if (pickedOrder.kind === "KT") {
+    const code = picked.code.toUpperCase();
+    const productArray = code.split(" ");
     const productCode = productArray[0];
+    const productSize = productArray[1];
     if (productCode === "FSRG") {
-    } //"FSMG" "TPD" "TPD32"
+      const sleeve = "";
+      const stretchColor = "";
+      const netWeight = "";
+      const grossWeight = "";
+      if (productSize === "OCEANIC") {
+        order = { sleeve: productArray[2], postfix: productArray[1] };
+      } else {
+        const size = productSize.split("/");
+        order = {
+          sleeve:size[1],
+          stretchThickness:size[0].slice(3),
+          netWeight:size[0].slice(0,3),
+          grossWeight:function(){
+            return +this.sleeve + +this.netWeight;
+          },
+          stretchColor: function(){
+            if (colors.hasOwnProperty(productArray[2])) {
+              return colors[productArray[2]];
+            } else {
+              return colors._
+            }
+          },
+          postfix: function(){
+            const length = productArray.length;
+            const str = '';
+            for (let i=2;i<length;i++){
+              str+=productArray[i];
+              str+=' '
+            }
+            return str;
+          }
+        }
+      }
+      
+    }
   }
 
-  
-
-  return pickedOrder;
+  //"FSMG" "FSM" "TPD" "TPD32"
+  return Object.assign(pickedOrder,order);
 };
