@@ -8,6 +8,7 @@ import moment from "moment";
 
 import { changeInput, changeDate } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
+import { AST_UnaryPostfix } from "terser";
 
 class FormOrderTPD extends Component {
   handleChangeInput = (event, data) => {
@@ -50,7 +51,8 @@ class FormOrderTPD extends Component {
       tapeColor,
       numberOfColors,
       glue,
-      roller
+      roller,
+      postfix
     } = pickedOrder;
     console.log(pickedOrder);
     const {
@@ -275,7 +277,7 @@ class FormOrderTPD extends Component {
               onChange={this.handleChangeInput}
             />
             <Form.Input
-              value={details}
+              value={details+' '+postfix()}
               name="details"
               label="Uwagi"
               placeholder="Uwagi"
