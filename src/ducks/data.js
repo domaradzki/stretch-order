@@ -101,7 +101,7 @@ export const pickedOrder = state => {
   const picked = state.data.data.filter(
     order => order.itemId === state.data.activeOrder
   );
-  const pickedOrder = picked.length === 1 ? pickedOrder[0] : {};
+  const pickedOrder = picked.length === 1 ? picked[0] : {};
   const colors = {
     CZ: "czarna",
     CZARNA: "czarna",
@@ -115,50 +115,127 @@ export const pickedOrder = state => {
     POM: "pomarańczowa",
     _: "transparentna"
   };
-  const order = {};
+  let order = {};
   if (pickedOrder.kind === "KT") {
-    const code = picked.code.toUpperCase();
+    const code = picked[0].code.toUpperCase();
     const productArray = code.split(" ");
     const productCode = productArray[0];
     const productSize = productArray[1];
+    //reguła dla FSRG
     if (productCode === "FSRG") {
-      const sleeve = "";
-      const stretchColor = "";
-      const netWeight = "";
-      const grossWeight = "";
       if (productSize === "OCEANIC") {
         order = { sleeve: productArray[2], postfix: productArray[1] };
       } else {
         const size = productSize.split("/");
         order = {
-          sleeve:size[1],
-          stretchThickness:size[0].slice(3),
-          netWeight:size[0].slice(0,3),
-          grossWeight:function(){
-            return +this.sleeve + +this.netWeight;
+          sleeve: +size[1],
+          stretchThickness: +size[0].slice(3),
+          netWeight: +size[0].slice(0, 3),
+          grossWeight: function() {
+            return this.sleeve + this.netWeight;
           },
-          stretchColor: function(){
+          stretchColor: function() {
             if (colors.hasOwnProperty(productArray[2])) {
               return colors[productArray[2]];
             } else {
-              return colors._
+              return colors._;
             }
           },
-          postfix: function(){
+          postfix: function() {
             const length = productArray.length;
-            const str = '';
-            for (let i=2;i<length;i++){
-              str+=productArray[i];
-              str+=' '
+            let str = "";
+            for (let i = 2; i < length; i++) {
+              str += productArray[i];
+              str += " ";
             }
             return str;
           }
-        }
+        };
       }
-      
+    }
+    //reguła dla FSMG
+    if (productCode === "FSMG") {
+      order = {
+        stretchThickness: +productSize.slice(4),
+        sleeve: +productSize.slice(0, 4),
+        grossWeight: function() {
+          return +this.sleeve + +this.netWeight;
+        },
+        stretchColor: function() {
+          if (colors.hasOwnProperty(productArray[2])) {
+            return colors[productArray[2]];
+          } else {
+            return colors._;
+          }
+        },
+        postfix: function() {
+          const length = productArray.length;
+          let str = "";
+          for (let i = 2; i < length; i++) {
+            str += productArray[i];
+            str += " ";
+          }
+          return str;
+        }
+      };
+    }
+    //reguła dla FSM
+    if (productCode === "FSM") {
+      order = {
+        stretchThickness: +productSize.slice(3),
+        sleeve: +productSize.slice(0, 3),
+        grossWeight: function() {
+          return +this.sleeve + +this.netWeight;
+        },
+        stretchColor: function() {
+          if (colors.hasOwnProperty(productArray[2])) {
+            return colors[productArray[2]];
+          } else {
+            return colors._;
+          }
+        },
+        postfix: function() {
+          const length = productArray.length;
+          let str = "";
+          for (let i = 2; i < length; i++) {
+            str += productArray[i];
+            str += " ";
+          }
+          return str;
+        }
+      };
+    }
+    //reguła dla TPD
+    if (productCode === "TPD" || productCode === "TPD32") {
+      console.log(productSize);
+      console.log(productArray);
+      const ind = productSize.indexOf("F") !== -1 ? productSize.indexOf("F") : productSize.indexOf("H");
+      console.log(ind);
+      order = {
+        tapeLong: +productSize.slice(0, (ind-2)),
+        tapeWidth: +productSize.slice((ind-2), ind),
+        tapeThickness: (productCode === "TPD32") ? 32 : 28,
+        numberOfColors:productSize.slice(-1),
+        glue: productSize.slice(ind,(ind+1)),
+        tapeColor: function() {
+          if (colors.hasOwnProperty(productArray[2])) {
+            return colors[productArray[2]];
+          } else {
+            return colors._;
+          }
+        },
+        postfix: function() {
+          const length = productArray.length;
+          let str = "";
+          for (let i = 2; i < length; i++) {
+            str += productArray[i];
+            str += " ";
+          }
+          return str;
+        }
+      };
     }
   }
 
-  //"FSMG" "FSM" "TPD" "TPD32"
-  return Object.assign(pickedOrder,order);
+  return Object.assign(pickedOrder, order);
 };
