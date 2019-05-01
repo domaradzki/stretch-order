@@ -37,25 +37,33 @@ class FormOrderTPD extends Component {
   };
   render() {
     const { active, pickedOrder } = this.props;
-    const {client,quantity, price, netValue, details, dateInsert } = pickedOrder;
+    const {
+      client,
+      quantity,
+      price,
+      netValue,
+      details,
+      dateInsert,
+      tapeLong,
+      tapeWidth,
+      tapeThickness,
+      tapeColor,
+      numberOfColors,
+      glue,
+      roller
+    } = pickedOrder;
     console.log(pickedOrder);
     const {
       printName,
       invoice,
       dateOfPay,
-      tapeLong,
-      tapeWidth,
-      tapeThickness,
-      numberOfColors,
       color1,
       color2,
       color3,
-      glue,
-      roller,
       dateOfAcceptation,
       transport,
       trader,
-      dateOfRealisation,
+      dateOfRealisation
     } = this.props;
     return (
       <Form>
@@ -154,19 +162,23 @@ class FormOrderTPD extends Component {
               name="roller"
               label="Wałek"
               placeholder="Wałek"
-              width={3}
+              width={2}
               onChange={this.handleChangeInput}
             />
-            <Form.Select
+            <Form.Input
+              value={tapeColor()}
+              name="tapeColor"
+              label="Kolor taśmy"
+              placeholder="Kolor taśmy"
+              width={2}
+              onChange={this.handleChangeInput}
+            />
+            <Form.Input
+              value={numberOfColors}
               name="numberOfColors"
               label="Ilość kolorów"
               placeholder="Ilość kolorów"
-              width={4}
-              options={[
-                { key: 1, value: 1, text: 1 },
-                { key: 2, value: 2, text: 2 },
-                { key: 3, value: 3, text: 3 }
-              ]}
+              width={3}
               onChange={this.handleChangeInput}
             />
             <Form.Input
@@ -289,6 +301,7 @@ const mapStateToProps = state => {
     tapeWidth: state.orders.tapeWidth,
     tapeThickness: state.orders.tapeThickness,
     numberOfColors: state.orders.numberOfColors,
+    tapeColor: state.orders.tapeColor,
     color1: state.orders.color1,
     color2: state.orders.color2,
     color3: state.orders.color3,
@@ -309,8 +322,6 @@ const mapStateToProps = state => {
     pickedOrder: pickedOrder(state)
   };
 };
-
-
 
 const mapDispatchToProps = dispatch => {
   return {

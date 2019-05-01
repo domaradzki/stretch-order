@@ -113,7 +113,9 @@ export const pickedOrder = state => {
     ZIELO: "zielona",
     CZERW: "czerwona",
     POM: "pomarańczowa",
-    _: "transparentna"
+    _: "transparentna",
+    T: "transparentna",
+    BR:"brązowa"
   };
   let order = {};
   if (pickedOrder.kind === "KT") {
@@ -207,10 +209,7 @@ export const pickedOrder = state => {
     }
     //reguła dla TPD
     if (productCode === "TPD" || productCode === "TPD32") {
-      console.log(productSize);
-      console.log(productArray);
       const ind = productSize.indexOf("F") !== -1 ? productSize.indexOf("F") : productSize.indexOf("H");
-      console.log(ind);
       order = {
         tapeLong: +productSize.slice(0, (ind-2)),
         tapeWidth: +productSize.slice((ind-2), ind),
@@ -218,8 +217,10 @@ export const pickedOrder = state => {
         numberOfColors:productSize.slice(-1),
         glue: productSize.slice(ind,(ind+1)),
         tapeColor: function() {
-          if (colors.hasOwnProperty(productArray[2])) {
-            return colors[productArray[2]];
+          const indR = productSize.indexOf("R") !== -1 ? productSize.indexOf("R") : ind;
+          const colorSymbol = productSize.slice(ind,indR)
+          if (colors.hasOwnProperty(colorSymbol)) {
+            return colors[colorSymbol];
           } else {
             return colors._;
           }
