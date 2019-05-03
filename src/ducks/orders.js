@@ -48,7 +48,7 @@ export default function orderReducer(state = initialState, action) {
       case CHANGE_DATE:
       return {
         ...state,
-        dateOfPay: action.selectedDay
+        [action.name]: action.value
       };
 
     default:

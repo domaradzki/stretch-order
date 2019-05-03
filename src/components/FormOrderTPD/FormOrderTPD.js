@@ -32,13 +32,20 @@ class FormOrderTPD extends Component {
 
   handleDayChange = (selectedDay, modifiers, dayPickerInput) => {
     const input = dayPickerInput.getInput();
-    this.props.changeDate();
-    this.setState({
-      selectedDay: moment(selectedDay).format("YYYY-MM-DD")
-      // isEmpty: !input.value.trim(),
-      // isValidDay: typeof selectedDay !== "undefined",
-      // isDisabled: modifiers.disabled === true
-    });
+    const name = dayPickerInput.props.name;
+    selectedDay = moment(selectedDay).format("YYYY-MM-DD");
+    this.props.changeDate(name, selectedDay);
+    //  console.log(moment(selectedDay).format("YYYY-MM-DD"));
+    //  console.log(dayPickerInput);
+    //  console.log(input.value);
+    //  console.log(dayPickerInput.props.name);
+    //  console.log(this.props.dateInsert);
+    // this.setState({
+    //   selectedDay: moment(selectedDay).format("YYYY-MM-DD"),
+    //   isEmpty: !input.value.trim(),
+    //   isValidDay: typeof selectedDay !== "undefined",
+    //   isDisabled: modifiers.disabled === true
+    // });
   };
 
   handleCancel = event => {
@@ -49,6 +56,53 @@ class FormOrderTPD extends Component {
   handleAddOrder = event => {
     event.preventDefault();
     console.log("added");
+    const {
+      printName,
+      client,
+      quantity,
+      price,
+      netValue,
+      details,
+      dateInsert,
+      tapeLong,
+      tapeWidth,
+      tapeThickness,
+      tapeColor,
+      numberOfColors,
+      glue,
+      roller,
+      invoice,
+      dateOfPay,
+      color1,
+      color2,
+      color3,
+      dateOfAcceptation,
+      dateOfRealisation
+    } = this.props;
+    const order = {
+      printName,
+      client,
+      quantity,
+      price,
+      netValue,
+      details,
+      dateInsert:moment(dateInsert).format("YYYY-MM-DD"),
+      tapeLong,
+      tapeWidth,
+      tapeThickness,
+      tapeColor,
+      numberOfColors,
+      glue,
+      roller,
+      invoice,
+      dateOfPay,
+      color1,
+      color2,
+      color3,
+      dateOfAcceptation,
+      dateOfRealisation
+    } 
+    console.log(order);
   };
   render() {
     const {
@@ -66,7 +120,6 @@ class FormOrderTPD extends Component {
       numberOfColors,
       glue,
       roller,
-      postfix,
       invoice,
       dateOfPay,
       color1,
@@ -98,26 +151,28 @@ class FormOrderTPD extends Component {
             <div className="three wide field">
               <label>Data zamówienia</label>
               <DayPickerInput
-                placeholder={moment(new Date()).format("YYYY-MM-DD")}
                 onDayChange={this.handleDayChange}
                 selectedDay={moment(dateInsert).format("YYYY-MM-DD")}
                 value={moment(dateInsert).format("YYYY-MM-DD")}
+                name="dateInsert"
               />
             </div>
             <div className="three wide field">
               <label>Data akceptacji</label>
               <DayPickerInput
-                placeholder={moment(new Date()).format("YYYY-MM-DD")}
                 onDayChange={this.handleDayChange}
-                selectedDay={this.props.dateOfAcceptation}
+                selectedDay={dateOfAcceptation}
+                placeholder={moment(new Date()).format("YYYY-MM-DD")}
+                name="dateOfAcceptation"
               />
             </div>
             <div className="three wide field">
               <label>Termin realizacji</label>
               <DayPickerInput
-                placeholder={moment(new Date()).format("YYYY-MM-DD")}
                 onDayChange={this.handleDayChange}
-                selectedDay={this.props.dateOfRealisation}
+                selectedDay={dateOfRealisation}
+                placeholder={moment(new Date()).format("YYYY-MM-DD")}
+                name="dateOfRealisation"
               />
             </div>
           </Form.Group>
@@ -265,7 +320,8 @@ class FormOrderTPD extends Component {
               <DayPickerInput
                 placeholder={moment(new Date()).format("YYYY-MM-DD")}
                 onDayChange={this.handleDayChange}
-                selectedDay={this.props.dateOfPay}
+                selectedDay={dateOfPay}
+                name="dateOfRealisation"
               />
             </div>
           </Form.Group>
