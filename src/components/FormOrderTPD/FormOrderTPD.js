@@ -8,14 +8,28 @@ import moment from "moment";
 
 import { changeInput, changeDate } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
-import { AST_UnaryPostfix } from "terser";
 
 class FormOrderTPD extends Component {
+  componentDidMount() {
+    const { pickedOrder } = this.props;
+    const detail2 = pickedOrder.postfix();
+    for (let key in pickedOrder) {
+      if (pickedOrder.hasOwnProperty(key)) {
+        key === "details"
+          ? this.props.changeInput(key, (`${pickedOrder[key]} ${detail2}`))
+          : typeof pickedOrder[key] === "function"
+          ? this.props.changeInput(key, pickedOrder[key]())
+          : this.props.changeInput(key, pickedOrder[key]);
+      }
+    }
+  }
+
   handleChangeInput = (event, data) => {
     const name = data.name;
     const value = data.value;
     this.props.changeInput(name, value);
   };
+
   handleDayChange = (selectedDay, modifiers, dayPickerInput) => {
     const input = dayPickerInput.getInput();
     this.props.changeDate();
@@ -37,8 +51,8 @@ class FormOrderTPD extends Component {
     console.log("added");
   };
   render() {
-    const { active, pickedOrder } = this.props;
     const {
+      printName,
       client,
       quantity,
       price,
@@ -52,19 +66,13 @@ class FormOrderTPD extends Component {
       numberOfColors,
       glue,
       roller,
-      postfix
-    } = pickedOrder;
-    console.log(pickedOrder);
-    const {
-      printName,
+      postfix,
       invoice,
       dateOfPay,
       color1,
       color2,
       color3,
       dateOfAcceptation,
-      transport,
-      trader,
       dateOfRealisation
     } = this.props;
     return (
@@ -168,7 +176,7 @@ class FormOrderTPD extends Component {
               onChange={this.handleChangeInput}
             />
             <Form.Input
-              value={tapeColor()}
+              value={tapeColor}
               name="tapeColor"
               label="Kolor taśmy"
               placeholder="Kolor taśmy"
@@ -277,7 +285,7 @@ class FormOrderTPD extends Component {
               onChange={this.handleChangeInput}
             />
             <Form.Input
-              value={details+' '+postfix()}
+              value={details}
               name="details"
               label="Uwagi"
               placeholder="Uwagi"

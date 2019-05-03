@@ -34,6 +34,7 @@ const initialState = {
   price: '',
   netValue: 0,
   margin: '',
+  postfix:''
 };
 
 // Reducer
