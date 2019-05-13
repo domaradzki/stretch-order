@@ -16,7 +16,7 @@ class FormOrderTPD extends Component {
     for (let key in pickedOrder) {
       if (pickedOrder.hasOwnProperty(key)) {
         key === "details"
-          ? this.props.changeInput(key, (`${pickedOrder[key]} ${detail2}`))
+          ? this.props.changeInput(key, `${pickedOrder[key]} ${detail2}`)
           : typeof pickedOrder[key] === "function"
           ? this.props.changeInput(key, pickedOrder[key]())
           : this.props.changeInput(key, pickedOrder[key]);
@@ -35,11 +35,6 @@ class FormOrderTPD extends Component {
     const name = dayPickerInput.props.name;
     selectedDay = moment(selectedDay).format("YYYY-MM-DD");
     this.props.changeDate(name, selectedDay);
-    //  console.log(moment(selectedDay).format("YYYY-MM-DD"));
-    //  console.log(dayPickerInput);
-    //  console.log(input.value);
-    //  console.log(dayPickerInput.props.name);
-    //  console.log(this.props.dateInsert);
     // this.setState({
     //   selectedDay: moment(selectedDay).format("YYYY-MM-DD"),
     //   isEmpty: !input.value.trim(),
@@ -86,7 +81,7 @@ class FormOrderTPD extends Component {
       price,
       netValue,
       details,
-      dateInsert:moment(dateInsert).format("YYYY-MM-DD"),
+      dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
       tapeLong,
       tapeWidth,
       tapeThickness,
@@ -101,7 +96,7 @@ class FormOrderTPD extends Component {
       color3,
       dateOfAcceptation,
       dateOfRealisation
-    } 
+    };
     console.log(order);
   };
   render() {
@@ -128,6 +123,8 @@ class FormOrderTPD extends Component {
       dateOfAcceptation,
       dateOfRealisation
     } = this.props;
+    const dateOfAcceptOrOrder =
+      dateInsert > dateOfAcceptation ? dateInsert : dateOfAcceptation;
     return (
       <Form>
         <Segment color="blue">
@@ -171,6 +168,9 @@ class FormOrderTPD extends Component {
               <DayPickerInput
                 onDayChange={this.handleDayChange}
                 selectedDay={dateOfRealisation}
+                value={moment(dateOfAcceptOrOrder)
+                  .add(14, "days")
+                  .format("YYYY-MM-DD")}
                 placeholder={moment(new Date()).format("YYYY-MM-DD")}
                 name="dateOfRealisation"
               />
@@ -222,12 +222,19 @@ class FormOrderTPD extends Component {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Input
-              value={roller}
+            <Form.Select
+              fluid
               name="roller"
               label="Wałek"
               placeholder="Wałek"
-              width={2}
+              width={3}
+              options={[
+                { key: 1, value: "144", text: "144" },
+                { key: 2, value: "180", text: "180" },
+                { key: 3, value: "244", text: "244" },
+                { key: 4, value: "306", text: "306" },
+                { key: 5, value: "438", text: "438" }
+              ]}
               onChange={this.handleChangeInput}
             />
             <Form.Input
@@ -243,7 +250,7 @@ class FormOrderTPD extends Component {
               name="numberOfColors"
               label="Ilość kolorów"
               placeholder="Ilość kolorów"
-              width={3}
+              width={2}
               onChange={this.handleChangeInput}
             />
             <Form.Input
@@ -275,7 +282,6 @@ class FormOrderTPD extends Component {
         <Segment color="blue">
           <Form.Group>
             <Form.Input
-              //  value={price}
               name="price"
               value={price}
               label="Cena"
@@ -288,7 +294,6 @@ class FormOrderTPD extends Component {
               onChange={this.handleChangeInput}
             />
             <Form.Input
-              //   value={netValue}
               name="netValue"
               value={netValue}
               label="Wartość"
@@ -301,6 +306,7 @@ class FormOrderTPD extends Component {
               onChange={this.handleChangeInput}
             />
             <Form.Select
+              fluid
               name="margin"
               label="Marża"
               placeholder="Marża"
@@ -315,6 +321,24 @@ class FormOrderTPD extends Component {
               ]}
               onChange={this.handleChangeInput}
             />
+            <Form.Select
+              fluid
+              name="transport"
+              label="Transport"
+              placeholder="Transport"
+              width={4}
+              options={[
+                { key: 1, value: "Goodmark", text: "Goodmark" },
+                { key: 2, value: "Odbiór własny", text: "Odbiór własny" },
+                { key: 3, value: "Paczka", text: "Paczka" },
+                { key: 4, value: "Półpaleta", text: "Półpaleta" },
+                { key: 5, value: "Paleta euro", text: "Paleta euro" },
+                { key: 6, value: "Paleta max", text: "Paleta max" }
+              ]}
+              onChange={this.handleChangeInput}
+            />
+          </Form.Group>
+          <Form.Group>
             <div className="four wide field">
               <label>Data płatności</label>
               <DayPickerInput
@@ -324,22 +348,6 @@ class FormOrderTPD extends Component {
                 name="dateOfRealisation"
               />
             </div>
-          </Form.Group>
-          <Form.Group>
-            <Form.Select
-              name="transport"
-              label="Transport"
-              placeholder="Transport"
-              width={4}
-              options={[
-                { key: 1, value: "Goodmark", text: "Goodmark" },
-                { key: 2, value: "Odbiór własny", text: "Odbiór własny" },
-                { key: 3, value: "Paczka", text: "Paczka" },
-                { key: 4, value: "Paleta euro", text: "Paleta euro" },
-                { key: 5, value: "Paleta max", text: "Paleta max" }
-              ]}
-              onChange={this.handleChangeInput}
-            />
             <Form.Input
               value={details}
               name="details"
