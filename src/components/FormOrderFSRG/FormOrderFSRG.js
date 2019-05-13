@@ -9,7 +9,7 @@ import moment from "moment";
 import { changeInput, changeDate } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
 
-class FormOrderTPD extends Component {
+class FormOrderFSRG extends Component {
   componentDidMount() {
     const { pickedOrder } = this.props;
     const detail2 = pickedOrder.postfix();
@@ -31,9 +31,16 @@ class FormOrderTPD extends Component {
   };
 
   handleDayChange = (selectedDay, modifiers, dayPickerInput) => {
+    const input = dayPickerInput.getInput();
     const name = dayPickerInput.props.name;
     selectedDay = moment(selectedDay).format("YYYY-MM-DD");
     this.props.changeDate(name, selectedDay);
+    // this.setState({
+    //   selectedDay: moment(selectedDay).format("YYYY-MM-DD"),
+    //   isEmpty: !input.value.trim(),
+    //   isValidDay: typeof selectedDay !== "undefined",
+    //   isDisabled: modifiers.disabled === true
+    // });
   };
 
   handleCancel = event => {
@@ -45,77 +52,56 @@ class FormOrderTPD extends Component {
     event.preventDefault();
     console.log("added");
     const {
-      printName,
       client,
       quantity,
       price,
       netValue,
       details,
       dateInsert,
-      tapeLong,
-      tapeWidth,
-      tapeThickness,
-      tapeColor,
-      numberOfColors,
-      glue,
-      roller,
       invoice,
       dateOfPay,
-      color1,
-      color2,
-      color3,
-      dateOfAcceptation,
+      sleeve,
+      stretchColor,
+      stretchThickness,
+      netWeight,
+      grossWeight,
       dateOfRealisation
     } = this.props;
     const order = {
-      printName,
       client,
       quantity,
       price,
       netValue,
       details,
       dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
-      tapeLong,
-      tapeWidth,
-      tapeThickness,
-      tapeColor,
-      numberOfColors,
-      glue,
-      roller,
       invoice,
+      sleeve,
+      stretchColor,
+      stretchThickness,
+      netWeight,
+      grossWeight,
       dateOfPay,
-      color1,
-      color2,
-      color3,
-      dateOfAcceptation,
       dateOfRealisation
     };
     console.log(order);
   };
   render() {
     const {
-      printName,
       client,
       quantity,
       price,
       netValue,
       details,
       dateInsert,
-      tapeLong,
-      tapeWidth,
-      tapeThickness,
-      tapeColor,
-      numberOfColors,
-      glue,
+      invoice,
+      sleeve,
+      stretchColor,
+      stretchThickness,
+      netWeight,
+      grossWeight,
       dateOfPay,
-      color1,
-      color2,
-      color3,
-      dateOfAcceptation,
       dateOfRealisation
     } = this.props;
-    const dateOfAcceptOrOrder =
-      dateInsert > dateOfAcceptation ? dateInsert : dateOfAcceptation;
     return (
       <Form>
         <Segment color="blue">
@@ -128,16 +114,6 @@ class FormOrderTPD extends Component {
               width={8}
               onChange={this.handleChangeInput}
             />
-            <Form.Input
-              value={printName}
-              name="printName"
-              label="Nadruk"
-              placeholder="Nadruk"
-              width={8}
-              onChange={this.handleChangeInput}
-            />
-          </Form.Group>
-          <Form.Group>
             <div className="four wide field">
               <label>Zamówienie</label>
               <DayPickerInput
@@ -148,32 +124,14 @@ class FormOrderTPD extends Component {
               />
             </div>
             <div className="four wide field">
-              <label>Akceptacja</label>
-              <DayPickerInput
-                onDayChange={this.handleDayChange}
-                selectedDay={dateOfAcceptation}
-                placeholder={moment(new Date()).format("YYYY-MM-DD")}
-                name="dateOfAcceptation"
-              />
-            </div>
-            <div className="four wide field">
-              <label>Realizacja</label>
+              <label>Realizacjia</label>
               <DayPickerInput
                 onDayChange={this.handleDayChange}
                 selectedDay={dateOfRealisation}
-                value={moment(dateOfAcceptOrOrder)
-                  .add(14, "days")
+                value={moment(dateInsert)
+                  .add(3, "days")
                   .format("YYYY-MM-DD")}
                 placeholder={moment(new Date()).format("YYYY-MM-DD")}
-                name="dateOfRealisation"
-              />
-            </div>
-            <div className="four wide field">
-              <label>Płatność</label>
-              <DayPickerInput
-                placeholder={moment(new Date()).format("YYYY-MM-DD")}
-                onDayChange={this.handleDayChange}
-                selectedDay={dateOfPay}
                 name="dateOfRealisation"
               />
             </div>
@@ -187,95 +145,51 @@ class FormOrderTPD extends Component {
               label="Ilość"
               placeholder="Ilość"
               type="number"
-              width={4}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={tapeLong}
-              name="tapeLong"
-              label="Długość"
-              placeholder="Długość"
               width={3}
               onChange={this.handleChangeInput}
             />
             <Form.Input
-              value={tapeWidth}
-              name="tapeWidth"
-              label="Szerokość"
-              placeholder="Szerokość"
+              value={sleeve}
+              name="sleeve"
+              label="Tuleja"
+              placeholder="Tuleja"
+              type="number"
+              width={2}
+              onChange={this.handleChangeInput}
+            />
+            <Form.Input
+              value={stretchColor}
+              name="stretchColor"
+              label="Kolor"
+              placeholder="Kolor"
+              type="text"
               width={3}
               onChange={this.handleChangeInput}
             />
             <Form.Input
-              value={tapeThickness}
-              name="tapeThickness"
+              value={stretchThickness}
+              name="stretchThickness"
               label="Grubość"
               placeholder="Grubość"
-              width={3}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={tapeColor}
-              name="tapeColor"
-              label="Kolor taśmy"
-              placeholder="Kolor taśmy"
-              width={3}
-              onChange={this.handleChangeInput}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Select
-              fluid
-              name="roller"
-              label="Wałek"
-              placeholder="Wałek"
-              width={3}
-              options={[
-                { key: 1, value: "144", text: "144" },
-                { key: 2, value: "180", text: "180" },
-                { key: 3, value: "244", text: "244" },
-                { key: 4, value: "306", text: "306" },
-                { key: 5, value: "438", text: "438" }
-              ]}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={glue}
-              name="glue"
-              label="Klej"
-              placeholder="Klej"
+              type="text"
               width={2}
               onChange={this.handleChangeInput}
             />
             <Form.Input
-              value={numberOfColors}
-              name="numberOfColors"
-              label="Ilość kolorów"
-              placeholder="Ilość kolorów"
-              width={2}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={color1}
-              name="color1"
-              label="Color 1"
-              placeholder="Color 1"
+              value={netWeight}
+              name="netWeight"
+              label="Waga netto"
+              placeholder="Waga netto"
+              type="number"
               width={3}
               onChange={this.handleChangeInput}
             />
             <Form.Input
-              value={color2}
-              name="color2"
-              label="Color 2"
-              placeholder="Color 2"
-              width={3}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={color3}
-              name="color3"
-              label="Color 3"
-              placeholder="Color 3"
+              value={grossWeight}
+              name="grossWeight"
+              label="Waga brutto"
+              placeholder="Waga brutto"
+              type="number"
               width={3}
               onChange={this.handleChangeInput}
             />
@@ -341,12 +255,21 @@ class FormOrderTPD extends Component {
             />
           </Form.Group>
           <Form.Group>
+            <div className="four wide field">
+              <label>Data płatności</label>
+              <DayPickerInput
+                placeholder={moment(new Date()).format("YYYY-MM-DD")}
+                onDayChange={this.handleDayChange}
+                selectedDay={dateOfPay}
+                name="dateOfRealisation"
+              />
+            </div>
             <Form.Input
               value={details}
               name="details"
               label="Uwagi"
               placeholder="Uwagi"
-              width={16}
+              width={12}
               onChange={this.handleChangeInput}
             />
           </Form.Group>
@@ -363,18 +286,6 @@ class FormOrderTPD extends Component {
 const mapStateToProps = state => {
   return {
     client: state.orders.client,
-    printName: state.orders.printName,
-    tapeLong: state.orders.tapeLong,
-    tapeWidth: state.orders.tapeWidth,
-    tapeThickness: state.orders.tapeThickness,
-    numberOfColors: state.orders.numberOfColors,
-    tapeColor: state.orders.tapeColor,
-    color1: state.orders.color1,
-    color2: state.orders.color2,
-    color3: state.orders.color3,
-    glue: state.orders.glue,
-    roller: state.orders.roller,
-    dateOfAcceptation: state.orders.dateOfAcceptation,
     dateOfRealisation: state.orders.dateOfRealisation,
     transport: state.orders.transport,
     kindOfPay: state.orders.kindOfPay,
@@ -386,6 +297,11 @@ const mapStateToProps = state => {
     margin: state.orders.margin,
     details: state.orders.details,
     dateInsert: state.orders.dateInsert,
+    sleeve:state.orders.sleeve,
+    stretchColor:state.orders.stretchColor,
+    stretchThickness:state.orders.stretchThickness,
+    netWeight:state.orders.netWeight,
+    grossWeight:state.orders.grossWeight,
     pickedOrder: pickedOrder(state)
   };
 };
@@ -401,4 +317,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FormOrderTPD);
+)(FormOrderFSRG);
