@@ -23,7 +23,9 @@ class MainView extends Component {
   handleClick = event => {
     const { activateDetails } = this.props;
     const id = event.target.id;
-    activateDetails(id);
+    const name = event.target.name;
+    console.log(id,name)
+    activateDetails(id,name);
   };
 
   render() {
@@ -70,8 +72,8 @@ class MainView extends Component {
                     <Table.Cell>{order.details}</Table.Cell>
                     <Table.Cell>
                       <Button
-                        active={active}
                         id={order.itemId}
+                        name={order.type}
                         onClick={this.handleClick}
                       >
                         Zadysponuj
@@ -120,7 +122,7 @@ const mapStateToProps = state => {
     data: state.data.data,
     isLoadingData: getDataLoading(state),
     pagination: state.interfaceMenu.paginationMain,
-    active: state.data.activeDetails
+    //active: state.data.activeDetails
   };
 };
 
@@ -128,7 +130,7 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchData: () => dispatch(fetchData()),
     changePagination: value => dispatch(changePaginationMainView(value)),
-    activateDetails: id => dispatch(activateDetails(id))
+    activateDetails: (id,name) => dispatch(activateDetails(id,name))
   };
 };
 

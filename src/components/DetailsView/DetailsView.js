@@ -1,24 +1,25 @@
 import React, { Component } from "react";
 
 import { connect } from "react-redux";
-import { Segment  } from "semantic-ui-react";
 
 import "./DetailsView.css";
-import { unactivateDetails } from "../../ducks/data";
+import { unactivateDetails, pickedOrder } from "../../ducks/data";
 import FormOrderTPD from "../FormOrderTPD/FormOrderTPD";
+import FormOrderFSRG from "../FormOrderFSRG/FormOrderFSRG";
 
 class DetailsView extends Component {
   render() {
-    const { active } = this.props;
-    
+    const { active, activeType } = this.props;
     return (
       <div
         className={active ? "details__container" : "details__container--hidden"}
       >
-        {active && (
-          <Segment color="blue">
-            <FormOrderTPD />
-          </Segment>
+        {active && activeType === "TPD" ? (
+          <FormOrderTPD />
+        ) : active && activeType === "FS" ? (
+          <FormOrderFSRG />
+        ) : (
+          ""
         )}
       </div>
     );
@@ -27,7 +28,8 @@ class DetailsView extends Component {
 
 const mapStateToProps = state => {
   return {
-    active: state.data.activeDetails
+    active: state.data.activeDetails,
+    activeType: state.data.activeType
   };
 };
 

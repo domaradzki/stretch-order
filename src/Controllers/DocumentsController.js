@@ -17,6 +17,7 @@ const routes = function() {
         ,d.Symbol AS symbol
         ,asortyment.Symbol AS code
         ,asortyment.Nazwa AS assortment
+        ,grupa.Nazwa AS type
         ,rodzaj.Symbol AS kind
         ,pozycje.Ilosc AS quantity
         ,pozycje.Cena_NettoPoRabacie AS price
@@ -38,6 +39,8 @@ const routes = function() {
           ON pozycje.AsortymentAktualnyId = asortyment.Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[RodzajeAsortymentu] rodzaj
           ON asortyment.Rodzaj_Id = rodzaj.Id
+          INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[GrupyAsortymentu] grupa
+          ON asortyment.Grupa_Id = grupa.Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[OpiekunowiePodmiotu] opiekunowie
           ON d.PodmiotId = opiekunowie.PodmiotOpiekunaPodstawowego_Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[Uzytkownicy] uzytkownicy

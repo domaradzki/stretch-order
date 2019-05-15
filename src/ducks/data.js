@@ -12,6 +12,7 @@ const initialState = {
   isLoading: false,
   error: null,
   activeOrder: "",
+  activeType: "",
   activeDetails: false,
   data: []
 };
@@ -42,7 +43,8 @@ export default function dataReducer(state = initialState, action) {
       return {
         ...state,
         activeDetails: true,
-        activeOrder: action.id
+        activeOrder: action.id,
+        activeType: action.name
       };
     case UNACTIVATE_DETAILS:
       return {
@@ -82,10 +84,11 @@ export const fetchData = () => {
   };
 };
 
-export const activateDetails = id => {
+export const activateDetails = (id,name) => {
   return {
     type: ACTIVATE_DETAILS,
-    id
+    id,
+    name
   };
 };
 
@@ -115,7 +118,7 @@ export const pickedOrder = state => {
     POM: "pomarańczowa",
     _: "transparentna",
     T: "transparentna",
-    BR:"brązowa"
+    BR: "brązowa"
   };
   let order = {};
   if (pickedOrder.kind === "KT") {
@@ -209,16 +212,21 @@ export const pickedOrder = state => {
     }
     //reguła dla TPD
     if (productCode === "TPD" || productCode === "TPD32") {
-      const ind = productSize.indexOf("F") !== -1 ? productSize.indexOf("F") : productSize.indexOf("H");
+      const ind =
+        productSize.indexOf("F") !== -1
+          ? productSize.indexOf("F")
+          : productSize.indexOf("H");
       order = {
-        tapeLong: +productSize.slice(0, (ind-2)),
-        tapeWidth: +productSize.slice((ind-2), ind),
-        tapeThickness: (productCode === "TPD32") ? 32 : 28,
-        numberOfColors:productSize.slice(-1),
-        glue: productSize.slice(ind,(ind+1)),
+        productCode,
+        tapeLong: +productSize.slice(0, ind - 2),
+        tapeWidth: +productSize.slice(ind - 2, ind),
+        tapeThickness: productCode === "TPD32" ? 32 : 28,
+        numberOfColors: productSize.slice(-1),
+        glue: productSize.slice(ind, ind + 1),
         tapeColor: function() {
-          const indR = productSize.indexOf("R") !== -1 ? productSize.indexOf("R") : ind;
-          const colorSymbol = productSize.slice(ind,indR)
+          const indR =
+            productSize.indexOf("R") !== -1 ? productSize.indexOf("R")+1 : ind+2;
+          const colorSymbol = productSize.slice(ind+1, indR);
           if (colors.hasOwnProperty(colorSymbol)) {
             return colors[colorSymbol];
           } else {

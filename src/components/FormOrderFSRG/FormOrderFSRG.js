@@ -31,16 +31,9 @@ class FormOrderFSRG extends Component {
   };
 
   handleDayChange = (selectedDay, modifiers, dayPickerInput) => {
-    const input = dayPickerInput.getInput();
     const name = dayPickerInput.props.name;
     selectedDay = moment(selectedDay).format("YYYY-MM-DD");
     this.props.changeDate(name, selectedDay);
-    // this.setState({
-    //   selectedDay: moment(selectedDay).format("YYYY-MM-DD"),
-    //   isEmpty: !input.value.trim(),
-    //   isValidDay: typeof selectedDay !== "undefined",
-    //   isDisabled: modifiers.disabled === true
-    // });
   };
 
   handleCancel = event => {
@@ -93,7 +86,6 @@ class FormOrderFSRG extends Component {
       netValue,
       details,
       dateInsert,
-      invoice,
       sleeve,
       stretchColor,
       stretchThickness,
@@ -103,182 +95,184 @@ class FormOrderFSRG extends Component {
       dateOfRealisation
     } = this.props;
     return (
-      <Form>
-        <Segment color="blue">
-          <Form.Group>
-            <Form.Input
-              value={client}
-              name="client"
-              label="Klient"
-              placeholder="Klient"
-              width={8}
-              onChange={this.handleChangeInput}
-            />
-            <div className="four wide field">
-              <label>Zamówienie</label>
-              <DayPickerInput
-                onDayChange={this.handleDayChange}
-                selectedDay={moment(dateInsert).format("YYYY-MM-DD")}
-                value={moment(dateInsert).format("YYYY-MM-DD")}
-                name="dateInsert"
+      <Segment color="blue">
+        <Form>
+          <Segment color="blue">
+            <Form.Group>
+              <Form.Input
+                value={client}
+                name="client"
+                label="Klient"
+                placeholder="Klient"
+                width={8}
+                onChange={this.handleChangeInput}
               />
-            </div>
-            <div className="four wide field">
-              <label>Realizacjia</label>
-              <DayPickerInput
-                onDayChange={this.handleDayChange}
-                selectedDay={dateOfRealisation}
-                value={moment(dateInsert)
-                  .add(3, "days")
-                  .format("YYYY-MM-DD")}
-                placeholder={moment(new Date()).format("YYYY-MM-DD")}
-                name="dateOfRealisation"
+              <div className="four wide field">
+                <label>Zamówienie</label>
+                <DayPickerInput
+                  onDayChange={this.handleDayChange}
+                  selectedDay={moment(dateInsert).format("YYYY-MM-DD")}
+                  value={moment(dateInsert).format("YYYY-MM-DD")}
+                  name="dateInsert"
+                />
+              </div>
+              <div className="four wide field">
+                <label>Realizacjia</label>
+                <DayPickerInput
+                  onDayChange={this.handleDayChange}
+                  selectedDay={dateOfRealisation}
+                  value={moment(dateInsert)
+                    .add(3, "days")
+                    .format("YYYY-MM-DD")}
+                  placeholder={moment(new Date()).format("YYYY-MM-DD")}
+                  name="dateOfRealisation"
+                />
+              </div>
+            </Form.Group>
+          </Segment>
+          <Segment color="blue">
+            <Form.Group>
+              <Form.Input
+                value={quantity}
+                name="quantity"
+                label="Ilość"
+                placeholder="Ilość"
+                type="number"
+                width={3}
+                onChange={this.handleChangeInput}
               />
-            </div>
-          </Form.Group>
-        </Segment>
-        <Segment color="blue">
-          <Form.Group>
-            <Form.Input
-              value={quantity}
-              name="quantity"
-              label="Ilość"
-              placeholder="Ilość"
-              type="number"
-              width={3}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={sleeve}
-              name="sleeve"
-              label="Tuleja"
-              placeholder="Tuleja"
-              type="number"
-              width={2}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={stretchColor}
-              name="stretchColor"
-              label="Kolor"
-              placeholder="Kolor"
-              type="text"
-              width={3}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={stretchThickness}
-              name="stretchThickness"
-              label="Grubość"
-              placeholder="Grubość"
-              type="text"
-              width={2}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={netWeight}
-              name="netWeight"
-              label="Waga netto"
-              placeholder="Waga netto"
-              type="number"
-              width={3}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              value={grossWeight}
-              name="grossWeight"
-              label="Waga brutto"
-              placeholder="Waga brutto"
-              type="number"
-              width={3}
-              onChange={this.handleChangeInput}
-            />
-          </Form.Group>
-        </Segment>
-        <Segment color="blue">
-          <Form.Group>
-            <Form.Input
-              name="price"
-              value={price}
-              label="Cena"
-              placeholder="Cena"
-              type="number"
-              min="0.00"
-              max="100000.00"
-              step="0.01"
-              width={4}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Input
-              name="netValue"
-              value={netValue}
-              label="Wartość"
-              placeholder="Wartość"
-              type="number"
-              min="0.00"
-              max="100000.00"
-              step="0.01"
-              width={4}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Select
-              fluid
-              name="margin"
-              label="Marża"
-              placeholder="Marża"
-              width={4}
-              options={[
-                { key: 1, value: "0", text: "0" },
-                { key: 2, value: "0.25", text: "0.25" },
-                { key: 3, value: "0.5", text: "0.5" },
-                { key: 4, value: "1", text: "1" },
-                { key: 5, value: "2", text: "2" },
-                { key: 6, value: "3", text: "3" }
-              ]}
-              onChange={this.handleChangeInput}
-            />
-            <Form.Select
-              fluid
-              name="transport"
-              label="Transport"
-              placeholder="Transport"
-              width={4}
-              options={[
-                { key: 1, value: "Goodmark", text: "Goodmark" },
-                { key: 2, value: "Odbiór własny", text: "Odbiór własny" },
-                { key: 3, value: "Paczka", text: "Paczka" },
-                { key: 4, value: "Półpaleta", text: "Półpaleta" },
-                { key: 5, value: "Paleta euro", text: "Paleta euro" },
-                { key: 6, value: "Paleta max", text: "Paleta max" }
-              ]}
-              onChange={this.handleChangeInput}
-            />
-          </Form.Group>
-          <Form.Group>
-            <div className="four wide field">
-              <label>Data płatności</label>
-              <DayPickerInput
-                placeholder={moment(new Date()).format("YYYY-MM-DD")}
-                onDayChange={this.handleDayChange}
-                selectedDay={dateOfPay}
-                name="dateOfRealisation"
+              <Form.Input
+                value={sleeve}
+                name="sleeve"
+                label="Tuleja"
+                placeholder="Tuleja"
+                type="number"
+                width={2}
+                onChange={this.handleChangeInput}
               />
-            </div>
-            <Form.Input
-              value={details}
-              name="details"
-              label="Uwagi"
-              placeholder="Uwagi"
-              width={12}
-              onChange={this.handleChangeInput}
-            />
-          </Form.Group>
-        </Segment>
-        <Segment textAlign="center">
-          <Button onClick={this.handleAddOrder}>Potwierdź</Button>
-          <Button onClick={this.handleCancel}>Anuluj</Button>
-        </Segment>
-      </Form>
+              <Form.Input
+                value={stretchColor}
+                name="stretchColor"
+                label="Kolor"
+                placeholder="Kolor"
+                type="text"
+                width={3}
+                onChange={this.handleChangeInput}
+              />
+              <Form.Input
+                value={stretchThickness}
+                name="stretchThickness"
+                label="Grubość"
+                placeholder="Grubość"
+                type="text"
+                width={2}
+                onChange={this.handleChangeInput}
+              />
+              <Form.Input
+                value={netWeight}
+                name="netWeight"
+                label="Waga netto"
+                placeholder="Waga netto"
+                type="number"
+                width={3}
+                onChange={this.handleChangeInput}
+              />
+              <Form.Input
+                value={grossWeight}
+                name="grossWeight"
+                label="Waga brutto"
+                placeholder="Waga brutto"
+                type="number"
+                width={3}
+                onChange={this.handleChangeInput}
+              />
+            </Form.Group>
+          </Segment>
+          <Segment color="blue">
+            <Form.Group>
+              <Form.Input
+                name="price"
+                value={price}
+                label="Cena"
+                placeholder="Cena"
+                type="number"
+                min="0.00"
+                max="100000.00"
+                step="0.01"
+                width={4}
+                onChange={this.handleChangeInput}
+              />
+              <Form.Input
+                name="netValue"
+                value={netValue}
+                label="Wartość"
+                placeholder="Wartość"
+                type="number"
+                min="0.00"
+                max="100000.00"
+                step="0.01"
+                width={4}
+                onChange={this.handleChangeInput}
+              />
+              <Form.Select
+                fluid
+                name="margin"
+                label="Marża"
+                placeholder="Marża"
+                width={4}
+                options={[
+                  { key: 1, value: "0", text: "0" },
+                  { key: 2, value: "0.25", text: "0.25" },
+                  { key: 3, value: "0.5", text: "0.5" },
+                  { key: 4, value: "1", text: "1" },
+                  { key: 5, value: "2", text: "2" },
+                  { key: 6, value: "3", text: "3" }
+                ]}
+                onChange={this.handleChangeInput}
+              />
+              <Form.Select
+                fluid
+                name="transport"
+                label="Transport"
+                placeholder="Transport"
+                width={4}
+                options={[
+                  { key: 1, value: "Goodmark", text: "Goodmark" },
+                  { key: 2, value: "Odbiór własny", text: "Odbiór własny" },
+                  { key: 3, value: "Paczka", text: "Paczka" },
+                  { key: 4, value: "Półpaleta", text: "Półpaleta" },
+                  { key: 5, value: "Paleta euro", text: "Paleta euro" },
+                  { key: 6, value: "Paleta max", text: "Paleta max" }
+                ]}
+                onChange={this.handleChangeInput}
+              />
+            </Form.Group>
+            <Form.Group>
+              <div className="four wide field">
+                <label>Data płatności</label>
+                <DayPickerInput
+                  placeholder={moment(new Date()).format("YYYY-MM-DD")}
+                  onDayChange={this.handleDayChange}
+                  selectedDay={dateOfPay}
+                  name="dateOfRealisation"
+                />
+              </div>
+              <Form.Input
+                value={details}
+                name="details"
+                label="Uwagi"
+                placeholder="Uwagi"
+                width={12}
+                onChange={this.handleChangeInput}
+              />
+            </Form.Group>
+          </Segment>
+          <Segment textAlign="center">
+            <Button onClick={this.handleAddOrder}>Potwierdź</Button>
+            <Button onClick={this.handleCancel}>Anuluj</Button>
+          </Segment>
+        </Form>
+      </Segment>
     );
   }
 }
@@ -297,11 +291,11 @@ const mapStateToProps = state => {
     margin: state.orders.margin,
     details: state.orders.details,
     dateInsert: state.orders.dateInsert,
-    sleeve:state.orders.sleeve,
-    stretchColor:state.orders.stretchColor,
-    stretchThickness:state.orders.stretchThickness,
-    netWeight:state.orders.netWeight,
-    grossWeight:state.orders.grossWeight,
+    sleeve: state.orders.sleeve,
+    stretchColor: state.orders.stretchColor,
+    stretchThickness: state.orders.stretchThickness,
+    netWeight: state.orders.netWeight,
+    grossWeight: state.orders.grossWeight,
     pickedOrder: pickedOrder(state)
   };
 };
