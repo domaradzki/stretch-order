@@ -118,6 +118,7 @@ class FormOrderTPD extends Component {
       dateInsert > dateOfAcceptation ? dateInsert : dateOfAcceptation;
     return (
       <Segment color="blue">
+      <h3>Zlecenie produkcyjne taśmy pakowej z nadrukiem</h3>
         <Form>
           <Segment color="blue">
             <Form.Group>

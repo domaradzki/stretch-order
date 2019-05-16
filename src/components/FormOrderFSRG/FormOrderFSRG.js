@@ -96,6 +96,7 @@ class FormOrderFSRG extends Component {
     } = this.props;
     return (
       <Segment color="blue">
+        <h3>Zlecenie produkcyjne folii stretch</h3>
         <Form>
           <Segment color="blue">
             <Form.Group>

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import "./DetailsView.css";
-import { unactivateDetails, pickedOrder } from "../../ducks/data";
+import { unactivateDetails } from "../../ducks/data";
 import FormOrderTPD from "../FormOrderTPD/FormOrderTPD";
 import FormOrderFSRG from "../FormOrderFSRG/FormOrderFSRG";
 

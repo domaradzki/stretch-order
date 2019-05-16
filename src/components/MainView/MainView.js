@@ -24,12 +24,11 @@ class MainView extends Component {
     const { activateDetails } = this.props;
     const id = event.target.id;
     const name = event.target.name;
-    console.log(id,name)
     activateDetails(id,name);
   };
 
   render() {
-    const { pagination, active } = this.props;
+    const { pagination } = this.props;
     const paginationButton =
       pagination === 0 ? pagination : pagination / 10 - 1;
     const newOrders = this.props.data;
