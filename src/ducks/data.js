@@ -13,6 +13,7 @@ const initialState = {
   error: null,
   activeOrder: "",
   activeType: "",
+  activeKind:"",
   activeDetails: false,
   data: []
 };
@@ -44,13 +45,15 @@ export default function dataReducer(state = initialState, action) {
         ...state,
         activeDetails: true,
         activeOrder: action.id,
-        activeType: action.name
+        activeType: action.name,
+        activeKind:action.kind
       };
     case UNACTIVATE_DETAILS:
       return {
         ...state,
         activeDetails: false,
-        activeOrder: null
+        activeOrder: '',
+        activeType: ''
       };
     default:
       return state;
@@ -84,11 +87,12 @@ export const fetchData = () => {
   };
 };
 
-export const activateDetails = (id,name) => {
+export const activateDetails = (id,name,kind) => {
   return {
     type: ACTIVATE_DETAILS,
     id,
-    name
+    name,
+    kind
   };
 };
 
@@ -244,7 +248,11 @@ export const pickedOrder = state => {
         }
       };
     }
+    return Object.assign(pickedOrder, order);
+    
+  } else {
+    return pickedOrder;
   }
 
-  return Object.assign(pickedOrder, order);
+  
 };

@@ -24,6 +24,7 @@ const initialState = {
   dateOfAcceptation:'',
   transport:'',
   trader:'',
+  deliveryAddress:'',
   dateOfRealisation:'',
   details:'',
   sleeve:'',

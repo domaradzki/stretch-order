@@ -9,9 +9,13 @@ import moment from "moment";
 import { changeInput, changeDate } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
 
-class FormOrderTPD extends Component {
+class FormOrderPacking extends Component {
   componentDidMount() {
     const { pickedOrder } = this.props;
+    for (let key in pickedOrder) {
+      console.log(key,pickedOrder[key])
+    this.props.changeInput(key, pickedOrder[key]);
+    }
   }
 
   handleChangeInput = (event, data) => {
@@ -43,7 +47,9 @@ class FormOrderTPD extends Component {
       dateInsert,
       invoice,
       dateOfPay,
-      dateOfRealisation
+      dateOfRealisation,
+      deliveryAddress,
+      transport
     } = this.props;
     const order = {
       client,
@@ -52,32 +58,25 @@ class FormOrderTPD extends Component {
       netValue,
       details,
       dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
+      deliveryAddress,
+      transport,
       invoice,
       dateOfPay,
       dateOfRealisation
     };
     console.log(order);
+    this.props.unactivateDetails();
   };
   render() {
     const {
-      printName,
       client,
       quantity,
       price,
       netValue,
       details,
       dateInsert,
-      tapeLong,
-      tapeWidth,
-      tapeThickness,
-      tapeColor,
-      numberOfColors,
-      glue,
+      deliveryAddress,
       dateOfPay,
-      color1,
-      color2,
-      color3,
-      dateOfAcceptation,
       dateOfRealisation
     } = this.props;
     return (
@@ -86,7 +85,7 @@ class FormOrderTPD extends Component {
         <Form>
           <Segment color="blue">
             <Form.Group>
-              <Form.Input
+            <Form.Input
                 value={client}
                 name="client"
                 label="Klient"
@@ -94,8 +93,6 @@ class FormOrderTPD extends Component {
                 width={8}
                 onChange={this.handleChangeInput}
               />
-            </Form.Group>
-            <Form.Group>
               <div className="four wide field">
                 <label>Zamówienie</label>
                 <DayPickerInput
@@ -130,7 +127,7 @@ class FormOrderTPD extends Component {
           </Segment>
           <Segment color="blue">
             <Form.Group>
-              <Form.Input
+            <Form.Input
                 value={quantity}
                 name="quantity"
                 label="Ilość"
@@ -139,15 +136,6 @@ class FormOrderTPD extends Component {
                 width={4}
                 onChange={this.handleChangeInput}
               />
-             
-              
-            </Form.Group>
-            <Form.Group>
-              
-            </Form.Group>
-          </Segment>
-          <Segment color="blue">
-            <Form.Group>
               <Form.Input
                 name="price"
                 value={price}
@@ -188,7 +176,12 @@ class FormOrderTPD extends Component {
                 ]}
                 onChange={this.handleChangeInput}
               />
-              <Form.Select
+
+            </Form.Group>
+            </Segment>
+            <Segment color="blue">
+            <Form.Group>
+            <Form.Select
                 fluid
                 name="transport"
                 label="Transport"
@@ -204,8 +197,14 @@ class FormOrderTPD extends Component {
                 ]}
                 onChange={this.handleChangeInput}
               />
-            </Form.Group>
-            <Form.Group>
+              <Form.Input
+                value={deliveryAddress}
+                name="deliveryAddress"
+                label="Adres dostawy"
+                placeholder="Adres dostawy"
+                width={12}
+                onChange={this.handleChangeInput}
+              />
               <Form.Input
                 value={details}
                 name="details"
@@ -240,6 +239,7 @@ const mapStateToProps = state => {
     margin: state.orders.margin,
     details: state.orders.details,
     dateInsert: state.orders.dateInsert,
+    deliveryAddress:state.orders.deliveryAddress,
     pickedOrder: pickedOrder(state)
   };
 };
@@ -255,4 +255,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FormOrderTPD);
+)(FormOrderPacking);

@@ -91,6 +91,7 @@ class FormOrderTPD extends Component {
       dateOfRealisation
     };
     console.log(order);
+    this.props.unactivateDetails();
   };
   render() {
     const {

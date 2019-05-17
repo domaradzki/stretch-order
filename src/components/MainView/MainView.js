@@ -20,11 +20,12 @@ class MainView extends Component {
     changePagination(paginationPage);
   };
 
-  handleClick = event => {
+  handleClick = (event, data) => {
     const { activateDetails } = this.props;
-    const id = event.target.id;
-    const name = event.target.name;
-    activateDetails(id,name);
+    const id = data.id;
+    const name = data.name;
+    const kind = data.kind;
+    activateDetails(id, name, kind);
   };
 
   render() {
@@ -73,6 +74,7 @@ class MainView extends Component {
                       <Button
                         id={order.itemId}
                         name={order.type}
+                        kind={order.kind}
                         onClick={this.handleClick}
                       >
                         Zadysponuj
@@ -120,7 +122,7 @@ const mapStateToProps = state => {
   return {
     data: state.data.data,
     isLoadingData: getDataLoading(state),
-    pagination: state.interfaceMenu.paginationMain,
+    pagination: state.interfaceMenu.paginationMain
     //active: state.data.activeDetails
   };
 };
@@ -129,7 +131,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchData: () => dispatch(fetchData()),
     changePagination: value => dispatch(changePaginationMainView(value)),
-    activateDetails: (id,name) => dispatch(activateDetails(id,name))
+    activateDetails: (id, name, kind) =>
+      dispatch(activateDetails(id, name, kind))
   };
 };
 

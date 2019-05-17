@@ -6,20 +6,21 @@ import "./DetailsView.css";
 import { unactivateDetails } from "../../ducks/data";
 import FormOrderTPD from "../FormOrderTPD/FormOrderTPD";
 import FormOrderFSRG from "../FormOrderFSRG/FormOrderFSRG";
+import FormOrderPacking from "../FormOrderPacking/FormOrderPacking";
 
 class DetailsView extends Component {
   render() {
-    const { active, activeType } = this.props;
+    const { active, activeType, activeKind } = this.props;
     return (
       <div
         className={active ? "details__container" : "details__container--hidden"}
       >
-        {active && activeType === "TPD" ? (
+        {active && activeType === "TPD" && activeKind === "KT" ? (
           <FormOrderTPD />
-        ) : active && activeType === "FS" ? (
+        ) : active && activeType === "FS" && activeKind === "KT"  ? (
           <FormOrderFSRG />
         ) : (
-          ""
+          <FormOrderPacking />
         )}
       </div>
     );
@@ -29,7 +30,8 @@ class DetailsView extends Component {
 const mapStateToProps = state => {
   return {
     active: state.data.activeDetails,
-    activeType: state.data.activeType
+    activeType: state.data.activeType,
+    activeKind:state.data.activeKind
   };
 };
 
