@@ -1,4 +1,5 @@
 import { getDataPromise } from "../services";
+import moment from "moment";
 
 // Action types
 const FETCH_DATA_REQUEST = "FETCH_DATA_REQUEST";
@@ -150,6 +151,10 @@ export const pickedOrder = state => {
               return colors._;
             }
           },
+          dateOfRealisation: function() {return moment(pickedOrder.dateInsert)
+            .add(3, "days")
+            .format("YYYY-MM-DD")
+          },
           postfix: function() {
             const length = productArray.length;
             let str = "";
@@ -177,6 +182,10 @@ export const pickedOrder = state => {
             return colors._;
           }
         },
+        dateOfRealisation:function() {return moment(pickedOrder.dateInsert)
+          .add(3, "days")
+          .format("YYYY-MM-DD")
+        },
         postfix: function() {
           const length = productArray.length;
           let str = "";
@@ -202,6 +211,10 @@ export const pickedOrder = state => {
           } else {
             return colors._;
           }
+        },
+        dateOfRealisation: function() {return moment(pickedOrder.dateInsert)
+          .add(3, "days")
+          .format("YYYY-MM-DD")
         },
         postfix: function() {
           const length = productArray.length;
@@ -236,6 +249,10 @@ export const pickedOrder = state => {
           } else {
             return colors._;
           }
+        },
+        dateOfRealisation: function() {return moment(pickedOrder.dateInsert)
+          .add(14, "days")
+          .format("YYYY-MM-DD")
         },
         postfix: function() {
           const length = productArray.length;

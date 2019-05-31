@@ -14,6 +14,9 @@ class FormOrderTPD extends Component {
     const { pickedOrder } = this.props;
     const detail2 = pickedOrder.postfix();
     for (let key in pickedOrder) {
+      if (key === "dateOfRealisation") {
+        this.props.changeDate(key, pickedOrder[key]());
+      }
       if (pickedOrder.hasOwnProperty(key)) {
         key === "details"
           ? this.props.changeInput(key, `${pickedOrder[key]} ${detail2}`)
@@ -119,7 +122,7 @@ class FormOrderTPD extends Component {
       dateInsert > dateOfAcceptation ? dateInsert : dateOfAcceptation;
     return (
       <Segment color="blue">
-      <h3>Zlecenie produkcyjne taśmy pakowej z nadrukiem</h3>
+        <h3>Zlecenie produkcyjne taśmy pakowej z nadrukiem</h3>
         <Form>
           <Segment color="blue">
             <Form.Group>
@@ -167,7 +170,6 @@ class FormOrderTPD extends Component {
                   value={moment(dateOfAcceptOrOrder)
                     .add(14, "days")
                     .format("YYYY-MM-DD")}
-                  placeholder={moment(new Date()).format("YYYY-MM-DD")}
                   name="dateOfRealisation"
                 />
               </div>

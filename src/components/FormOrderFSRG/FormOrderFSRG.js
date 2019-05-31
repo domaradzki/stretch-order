@@ -14,6 +14,9 @@ class FormOrderFSRG extends Component {
     const { pickedOrder } = this.props;
     const detail2 = pickedOrder.postfix();
     for (let key in pickedOrder) {
+      if (key === 'dateOfRealisation'){
+        this.props.changeDate(key, pickedOrder[key]());
+      }
       if (pickedOrder.hasOwnProperty(key)) {
         key === "details"
           ? this.props.changeInput(key, `${pickedOrder[key]} ${detail2}`)
@@ -95,6 +98,7 @@ class FormOrderFSRG extends Component {
       dateOfPay,
       dateOfRealisation
     } = this.props;
+
     return (
       <Segment color="blue">
         <h3>Zlecenie produkcyjne folii stretch</h3>
@@ -122,11 +126,8 @@ class FormOrderFSRG extends Component {
                 <label>Realizacjia</label>
                 <DayPickerInput
                   onDayChange={this.handleDayChange}
-                  selectedDay={dateOfRealisation}
-                  value={moment(dateInsert)
-                    .add(3, "days")
-                    .format("YYYY-MM-DD")}
-                  placeholder={moment(new Date()).format("YYYY-MM-DD")}
+                  selectedDay={moment(dateOfRealisation).format("YYYY-MM-DD")}
+                  value={moment(dateOfRealisation).format("YYYY-MM-DD")}
                   name="dateOfRealisation"
                 />
               </div>
