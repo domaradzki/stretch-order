@@ -1,6 +1,7 @@
 // Action types
 const CHANGE_INPUT = "CHANGE_INPUT";
 const CHANGE_DATE = "CHANGE_DATE";
+const CLEAR_INPUT = "CLEAR_INPUT";
 
 // Initial Values
 const initialState = {
@@ -46,6 +47,11 @@ export default function orderReducer(state = initialState, action) {
         ...state,
         [action.name]: action.value
       };
+      case CLEAR_INPUT:
+      return {
+        ...state,
+        initialState
+      };
       case CHANGE_DATE:
       return {
         ...state,
@@ -63,6 +69,11 @@ export const changeInput = (name, value) => {
     type: CHANGE_INPUT,
     name,
     value
+  };
+};
+export const clearInput = () => {
+  return {
+    type: CLEAR_INPUT
   };
 };
 export const changeDate = (name, value) => {

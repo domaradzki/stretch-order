@@ -6,7 +6,7 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import moment from "moment";
 
-import { changeInput, changeDate } from "../../ducks/orders";
+import { changeInput, changeDate, clearInput } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
 
 class FormOrderTPD extends Component {
@@ -68,7 +68,9 @@ class FormOrderTPD extends Component {
       color2,
       color3,
       dateOfAcceptation,
-      dateOfRealisation
+      dateOfRealisation,
+      deliveryAddress,
+      
     } = this.props;
     const order = {
       printName,
@@ -91,10 +93,12 @@ class FormOrderTPD extends Component {
       color2,
       color3,
       dateOfAcceptation,
-      dateOfRealisation
+      dateOfRealisation,
+      deliveryAddress
     };
     console.log(order);
     this.props.unactivateDetails();
+    this.props.clearInput();
   };
   render() {
     const {
@@ -392,6 +396,8 @@ const mapStateToProps = state => {
     margin: state.orders.margin,
     details: state.orders.details,
     dateInsert: state.orders.dateInsert,
+    trader: state.orders.trader,
+    deliveryAddress : state.orders.deliveryAddress,
     pickedOrder: pickedOrder(state)
   };
 };
@@ -400,6 +406,7 @@ const mapDispatchToProps = dispatch => {
   return {
     changeInput: (name, value) => dispatch(changeInput(name, value)),
     changeDate: (_date, value) => dispatch(changeDate(_date, value)),
+    clearInput: () => dispatch(clearInput()),
     unactivateDetails: () => dispatch(unactivateDetails())
   };
 };

@@ -6,7 +6,7 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import moment from "moment";
 
-import { changeInput, changeDate } from "../../ducks/orders";
+import { changeInput, changeDate, clearInput } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
 
 class FormOrderFSRG extends Component {
@@ -61,7 +61,9 @@ class FormOrderFSRG extends Component {
       stretchThickness,
       netWeight,
       grossWeight,
-      dateOfRealisation
+      dateOfRealisation,
+      deliveryAddress,
+      trader
     } = this.props;
     const order = {
       client,
@@ -77,10 +79,13 @@ class FormOrderFSRG extends Component {
       netWeight,
       grossWeight,
       dateOfPay,
-      dateOfRealisation
+      dateOfRealisation,
+      deliveryAddress,
+      trader
     };
     console.log(order);
     this.props.unactivateDetails();
+    this.props.clearInput();
   };
   render() {
     const {
@@ -299,6 +304,8 @@ const mapStateToProps = state => {
     stretchThickness: state.orders.stretchThickness,
     netWeight: state.orders.netWeight,
     grossWeight: state.orders.grossWeight,
+    trader: state.orders.trader,
+    deliveryAddress : state.orders.deliveryAddress,
     pickedOrder: pickedOrder(state)
   };
 };
@@ -307,6 +314,7 @@ const mapDispatchToProps = dispatch => {
   return {
     changeInput: (name, value) => dispatch(changeInput(name, value)),
     changeDate: (_date, value) => dispatch(changeDate(_date, value)),
+    clearInput: () => dispatch(clearInput()),
     unactivateDetails: () => dispatch(unactivateDetails())
   };
 };

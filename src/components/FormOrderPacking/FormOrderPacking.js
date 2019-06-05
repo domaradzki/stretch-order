@@ -6,15 +6,21 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import moment from "moment";
 
-import { changeInput, changeDate } from "../../ducks/orders";
+import { changeInput, changeDate, clearInput } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
 
 class FormOrderPacking extends Component {
   componentDidMount() {
+    
     const { pickedOrder } = this.props;
+    pickedOrder.dateOfRealisation = moment(pickedOrder.dateInsert)
+    .add(1, "days")
+    .format("YYYY-MM-DD")
+
     for (let key in pickedOrder) {
-      console.log(key,pickedOrder[key])
-    this.props.changeInput(key, pickedOrder[key]);
+      if (pickedOrder.hasOwnProperty(key)) {
+        this.props.changeInput(key, pickedOrder[key]);
+      }
     }
   }
 
@@ -24,7 +30,7 @@ class FormOrderPacking extends Component {
     this.props.changeInput(name, value);
   };
 
-  handleDayChange = (selectedDay, dayPickerInput) => {
+  handleDayChange = (selectedDay, modifiers, dayPickerInput) => {
     const name = dayPickerInput.props.name;
     selectedDay = moment(selectedDay).format("YYYY-MM-DD");
     this.props.changeDate(name, selectedDay);
@@ -49,6 +55,7 @@ class FormOrderPacking extends Component {
       dateOfPay,
       dateOfRealisation,
       deliveryAddress,
+      trader,
       transport
     } = this.props;
     const order = {
@@ -59,6 +66,7 @@ class FormOrderPacking extends Component {
       details,
       dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
       deliveryAddress,
+      trader,
       transport,
       invoice,
       dateOfPay,
@@ -66,6 +74,7 @@ class FormOrderPacking extends Component {
     };
     console.log(order);
     this.props.unactivateDetails();
+    this.props.clearInput();
   };
   render() {
     const {
@@ -81,7 +90,7 @@ class FormOrderPacking extends Component {
     } = this.props;
     return (
       <Segment color="blue">
-      <h3>Zlecenie pakowania i wysyłki towaru z magazynu</h3>
+        <h3>Zlecenie pakowania i wysyłki towaru z magazynu</h3>
         <Form>
           <Segment color="blue">
             <Form.Group>
@@ -106,11 +115,8 @@ class FormOrderPacking extends Component {
                 <label>Realizacja</label>
                 <DayPickerInput
                   onDayChange={this.handleDayChange}
-                  selectedDay={dateOfRealisation}
-                  value={moment(dateInsert)
-                    .add(1, "days")
-                    .format("YYYY-MM-DD")}
-                  placeholder={moment(new Date()).format("YYYY-MM-DD")}
+                  selectedDay={moment(dateOfRealisation).format("YYYY-MM-DD")}
+                  value={moment(dateOfRealisation).format("YYYY-MM-DD")}
                   name="dateOfRealisation"
                 />
               </div>
@@ -176,12 +182,11 @@ class FormOrderPacking extends Component {
                 ]}
                 onChange={this.handleChangeInput}
               />
-
             </Form.Group>
-            </Segment>
-            <Segment color="blue">
+          </Segment>
+          <Segment color="blue">
             <Form.Group>
-            <Form.Select
+              <Form.Select
                 fluid
                 name="transport"
                 label="Transport"
@@ -228,7 +233,6 @@ class FormOrderPacking extends Component {
 const mapStateToProps = state => {
   return {
     client: state.orders.client,
-    dateOfRealisation: state.orders.dateOfRealisation,
     transport: state.orders.transport,
     kindOfPay: state.orders.kindOfPay,
     invoice: state.orders.invoice,
@@ -239,7 +243,9 @@ const mapStateToProps = state => {
     margin: state.orders.margin,
     details: state.orders.details,
     dateInsert: state.orders.dateInsert,
-    deliveryAddress:state.orders.deliveryAddress,
+    dateOfRealisation : state.orders.dateOfRealisation,
+    deliveryAddress: state.orders.deliveryAddress,
+    trader: state.orders.trader,
     pickedOrder: pickedOrder(state)
   };
 };
@@ -248,6 +254,7 @@ const mapDispatchToProps = dispatch => {
   return {
     changeInput: (name, value) => dispatch(changeInput(name, value)),
     changeDate: (_date, value) => dispatch(changeDate(_date, value)),
+    clearInput: () => dispatch(clearInput()),
     unactivateDetails: () => dispatch(unactivateDetails())
   };
 };

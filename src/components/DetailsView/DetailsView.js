@@ -15,12 +15,12 @@ class DetailsView extends Component {
       <div
         className={active ? "details__container" : "details__container--hidden"}
       >
-        {active && activeType === "TPD" && activeKind === "KT" ? (
+        {active && (activeType === "TPD" && activeKind === "KT" ? (
           <FormOrderTPD />
-        ) : active && activeType === "FS" && activeKind === "KT"  ? (
+        ) : activeType === "FS" && activeKind === "KT"  ? (
           <FormOrderFSRG />
         ) : (
-          <FormOrderPacking />
+          <FormOrderPacking />)
         )}
       </div>
     );
