@@ -28,6 +28,7 @@ const routes = function() {
         ,adres.LiniaCalosc AS deliveryAddress
         ,uzytkownicy.Login AS trader
         ,pozycje.NumerReferencyjny AS itemId
+		,dokument_realizujacy.DokumentyRealizujace_Id AS numberOfDocumentInvoice
           FROM [Nexo_Goodmarks].[ModelDanychContainer].[Dokumenty] d 
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[AdresHistorie] adres 
           ON d.MiejsceDostawyId = adres.Id or d.MiejsceDostawyZewnetrzneId = adres.Id
@@ -45,7 +46,9 @@ const routes = function() {
           ON d.PodmiotId = opiekunowie.PodmiotOpiekunaPodstawowego_Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[Uzytkownicy] uzytkownicy
           ON uzytkownicy.Id = opiekunowie.UzytkownikId
-          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-04-01')
+		  LEFT OUTER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[DokumentDokument] dokument_realizujacy
+          ON dokument_realizujacy.[DokumentyRealizowane_Id] = d.Id
+          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-06-01')
           ORDER BY d.Id DESC`;
         const req = new sql.Request(config);
         req

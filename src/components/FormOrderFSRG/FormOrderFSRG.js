@@ -63,9 +63,11 @@ class FormOrderFSRG extends Component {
       grossWeight,
       dateOfRealisation,
       deliveryAddress,
-      trader
+      trader,
+      pickedOrder
     } = this.props;
     const order = {
+      ...pickedOrder,
       client,
       quantity,
       price,

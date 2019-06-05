@@ -70,9 +70,10 @@ class FormOrderTPD extends Component {
       dateOfAcceptation,
       dateOfRealisation,
       deliveryAddress,
-      
+      pickedOrder
     } = this.props;
     const order = {
+      ...pickedOrder,
       printName,
       client,
       quantity,

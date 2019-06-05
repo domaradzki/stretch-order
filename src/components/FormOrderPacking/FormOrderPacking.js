@@ -56,9 +56,11 @@ class FormOrderPacking extends Component {
       dateOfRealisation,
       deliveryAddress,
       trader,
-      transport
+      transport,
+      pickedOrder
     } = this.props;
     const order = {
+      ...pickedOrder,
       client,
       quantity,
       price,
