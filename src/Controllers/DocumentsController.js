@@ -4,9 +4,9 @@ const sql = require("mssql");
 const config = require("../services/connect")();
 
 const routes = function() {
-  router.route('/').get(function(req, res) {
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  router.route("/").get(function(req, res) {
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     config
       .connect()
       .then(function() {
@@ -28,7 +28,7 @@ const routes = function() {
         ,adres.LiniaCalosc AS deliveryAddress
         ,uzytkownicy.Login AS trader
         ,pozycje.NumerReferencyjny AS itemId
-		,dokument_realizujacy.DokumentyRealizujace_Id AS numberOfDocumentInvoice
+		    ,dokument_realizujacy.DokumentyRealizujace_Id AS numberOfDocumentInvoice
           FROM [Nexo_Goodmarks].[ModelDanychContainer].[Dokumenty] d 
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[AdresHistorie] adres 
           ON d.MiejsceDostawyId = adres.Id or d.MiejsceDostawyZewnetrzneId = adres.Id
