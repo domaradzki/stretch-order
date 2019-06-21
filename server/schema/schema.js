@@ -1,5 +1,7 @@
 const graphql = require("graphql");
-const _ = require('lodash');
+const Order = require("../models/order");
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 const {
   GraphQLObjectType,
@@ -7,55 +9,97 @@ const {
   GraphQLInt,
   GraphQLBoolean,
   GraphQLFloat,
-  GraphQLSchema
+  GraphQLSchema,
+  GraphQLID,
+  GraphQLList
 } = graphql;
-
-//dummy data for checking if everything working
-const orders = [
-    {client: 'Name of the Wind', type: 'Fantasy', id: '1'},
-    {client: 'The Final Empire', type: 'Fantasy', id: '2'},
-    {client: 'The Long Earth', type: 'Sci-Fi', id: '3'}
-  ]
 
 const OrderType = new GraphQLObjectType({
   name: "Order",
   fields: () => ({
-    id: { type: GraphQLInt },
+    id: { type: GraphQLID },
     dateInsert: { type: GraphQLString },
-    client: { type: GraphQLString },
     signature: { type: GraphQLString },
     symbol: { type: GraphQLString },
-    code: { type: GraphQLString },
-    assortment: { type: GraphQLString },
-    type: { type: GraphQLString },
-    kind: { type: GraphQLString },
-    quantity: { type: GraphQLInt },
-    price: { type: GraphQLFloat },
-    netValue: { type: GraphQLFloat },
     details: { type: GraphQLString },
-    closed: { type: GraphQLBoolean},
+    closed: { type: GraphQLBoolean },
     documentStatus: { type: GraphQLInt },
-    deliveryAddress: { type: GraphQLString },
-    trader: { type: GraphQLString },
-    itemId: { type: GraphQLString },
-    numberOfDocumentInvoice: { type: GraphQLInt }
+    clientId: {
+      type: ClientType,
+      resolve(parent, args) {
+        return console.log(parent);
+      }
+    }
+    // client: { type: GraphQLString },
+    // code: { type: GraphQLString },
+    // assortment: { type: GraphQLString },
+    // type: { type: GraphQLString },
+    // kind: { type: GraphQLString },
+    // quantity: { type: GraphQLInt },
+    // price: { type: GraphQLFloat },
+    // netValue: { type: GraphQLFloat },
+    // deliveryAddress: { type: GraphQLString },
+    // trader: { type: GraphQLString },
+    // itemId: { type: GraphQLString },
+    // numberOfDocumentInvoice: { type: GraphQLInt }
+  })
+});
+
+const ClientType = new GraphQLObjectType({
+  name: "Client",
+  fields: () => ({
+    id: { type: GraphQLID },
+    client: { type: GraphQLString },
+    orders: {
+      type: new GraphQLList(OrderType),
+      resolve(parent, args) {
+        return [];
+      }
+    }
   })
 });
 
 const RootQuery = new GraphQLObjectType({
-    name:'RootQueryType',
-    fields:{
-        order:{
-            type:OrderType,
-            args:{id: { type: GraphQLString }},
-            resolve(parent,args){
-                //code to get data from db
-                return _.find(orders,{id: args.id})
-            }
-        }
+  name: "RootQueryType",
+  fields: {
+    order: {
+      type: OrderType,
+      args: { id: { type: GraphQLID } },
+      resolve(parent, args) {
+        //code to get data from db
+        return _.find(orders, { id: args.id });
+      }
+    },
+    client: {
+      type: ClientType,
+      args: { id: { type: GraphQLID } },
+      resolve(parent, args) {
+        //return code
+        return;
+      }
+    },
+    orders: {
+      type: new GraphQLList(OrderType),
+      resolve(parent, args) {
+        return Order.findAll({
+          where: {
+            symbol: {
+              [Op.or]: ["ZK", "FP"]
+            },
+            dateInsert: { [Op.gte]: "2019-06-01" }
+          }
+        });
+      }
+    },
+    clients: {
+      type: new GraphQLList(ClientType),
+      resolve(parent, args) {
+        return clients;
+      }
     }
+  }
 });
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+  query: RootQuery
 });
