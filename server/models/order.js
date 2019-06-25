@@ -1,47 +1,47 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config');
 
-const Model = Sequelize.Model;
+const {Model, INTEGER, DATE, STRING, BOOLEAN} = Sequelize;
 
 class Order extends Model {}
 Order.init({
   id: {
-      type:Sequelize.INTEGER,
+      type:INTEGER,
       primaryKey: true,
       allowNull: false
   },
   dateInsert: {
-    type: Sequelize.DATE,
+    type: DATE,
     allowNull: false,
     field:'DataWprowadzenia'
   },
   signature: {
-    type: Sequelize.STRING,
+    type: STRING,
     allowNull: false,
     field:'NumerWewnetrzny_PelnaSygnatura'
   },
   symbol: {
-    type: Sequelize.STRING,
+    type: STRING,
     allowNull: false,
     field:'Symbol'
   },
   details: {
-    type: Sequelize.STRING,
+    type: STRING,
     allowNull: false,
     field:'Uwagi'
   },
   closed: {
-    type: Sequelize.BOOLEAN,
+    type: BOOLEAN,
     allowNull: false,
     field:'Zamkniety'
   },
   documentStatus: {
-    type: Sequelize.INTEGER,
+    type: INTEGER,
     allowNull: false,
     field:'StatusDokumentuId'
   },
   clientId: {
-    type: Sequelize.INTEGER,
+    type: INTEGER,
     allowNull: false,
     field:'PodmiotWybranyId'
   }
@@ -53,7 +53,6 @@ Order.init({
   schema:'[ModelDanychContainer]',
   tableName: '[Dokumenty]'
 
-  // options
 });
 
 module.exports = Order;

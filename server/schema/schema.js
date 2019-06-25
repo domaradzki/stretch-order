@@ -1,7 +1,8 @@
 const graphql = require("graphql");
 const Order = require("../models/order");
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op
+const Client = require("../models/client");
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 const {
   GraphQLObjectType,
@@ -24,10 +25,15 @@ const OrderType = new GraphQLObjectType({
     details: { type: GraphQLString },
     closed: { type: GraphQLBoolean },
     documentStatus: { type: GraphQLInt },
-    clientId: {
+    clientId: { type: GraphQLInt },
+    client: {
       type: ClientType,
       resolve(parent, args) {
-        return console.log(parent);
+        return Client.findOne({
+          where: {
+            id: parent.clientId
+          }
+        });
       }
     }
     // client: { type: GraphQLString },
@@ -49,11 +55,11 @@ const ClientType = new GraphQLObjectType({
   name: "Client",
   fields: () => ({
     id: { type: GraphQLID },
-    client: { type: GraphQLString },
+    name: { type: GraphQLString },
     orders: {
       type: new GraphQLList(OrderType),
       resolve(parent, args) {
-        return [];
+        return Order.findAll({where:{clientId:parent.id}})
       }
     }
   })
@@ -66,8 +72,11 @@ const RootQuery = new GraphQLObjectType({
       type: OrderType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        //code to get data from db
-        return _.find(orders, { id: args.id });
+        return Order.findOne({
+          where: {
+            id: args.id
+          }
+        });
       }
     },
     client: {
@@ -75,13 +84,19 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         //return code
-        return;
+        return Client.findOne({
+          where: {
+            id: args.id
+          }
+        });
       }
     },
     orders: {
       type: new GraphQLList(OrderType),
       resolve(parent, args) {
-        return Order.findAll({
+        Order.belongsTo(Client, {foreignKey:'clientId'})
+        //Client.hMany(Order, {foreignKey: 'clientId'})
+        return Order.findAll({ include:[{model: Client, required: true }],
           where: {
             symbol: {
               [Op.or]: ["ZK", "FP"]
@@ -94,7 +109,7 @@ const RootQuery = new GraphQLObjectType({
     clients: {
       type: new GraphQLList(ClientType),
       resolve(parent, args) {
-        return clients;
+        return Client.findAll();
       }
     }
   }
