@@ -8,7 +8,8 @@ Order.init({
   id: {
       type:INTEGER,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      field:'Id'
   },
   dateInsert: {
     type: DATE,
@@ -44,6 +45,21 @@ Order.init({
     type: INTEGER,
     allowNull: false,
     field:'PodmiotWybranyId'
+  },
+  traderId: {
+    type: INTEGER,
+    allowNull: false,
+    field:'PodmiotId'
+  },
+  addressId: {
+    type: INTEGER,
+    allowNull: true,
+    field:'MiejsceDostawyId'
+  },
+  addressOutId: {
+    type: INTEGER,
+    allowNull: true,
+    field:'MiejsceDostawyZewnetrzneId'
   }
 }, {
   sequelize,
