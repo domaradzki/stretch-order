@@ -1,6 +1,5 @@
 const graphql = require("graphql");
 const Sequelize = require("sequelize");
-const sequelize = require('../config');
 const Op = Sequelize.Op;
 
 const Order = require("../models/order");
@@ -8,6 +7,9 @@ const Client = require("../models/client");
 const Trader = require("../models/trader");
 const User = require("../models/user");
 const Item = require("../models/item");
+const Assortment = require("../models/assortment");
+const Kind = require("../models/kind");
+const Type = require("../models/type");
 const Address = require("../models/address");
 
 const {
@@ -72,21 +74,12 @@ const OrderType = new GraphQLObjectType({
       resolve(parent, args) {
         return Item.findAll({
           where: {
-            id: parent.id
+            itemId: parent.id
           }
         });
       }
     }
 
-    // code: { type: GraphQLString },
-    // assortment: { type: GraphQLString },
-    // type: { type: GraphQLString },
-    // kind: { type: GraphQLString },
-    // quantity: { type: GraphQLInt },
-    // price: { type: GraphQLFloat },
-    // netValue: { type: GraphQLFloat },
-
-    // itemId: { type: GraphQLString },
     // numberOfDocumentInvoice: { type: GraphQLInt }
   })
 });
@@ -142,12 +135,70 @@ const AddressType = new GraphQLObjectType({
 const ItemType = new GraphQLObjectType({
   name: "Item",
   fields: () => ({
-    id: { type: GraphQLID },
+    id: { type: GraphQLString },
     quantity: { type: GraphQLFloat },
     price: { type: GraphQLFloat },
     netValue: { type: GraphQLFloat },
-    itemId: { type: GraphQLString },
-    assortmentId: { type: GraphQLID }
+    itemId: { type: GraphQLID },
+    assortmentId: { type: GraphQLID },
+    assortment: {
+      type: AssortmentType,
+      resolve(parent, args) {
+        return Assortment.findOne({
+          where: {
+            id: parent.assortmentId,
+            code: { [Op.notIn]: ["TRANSPORT IN POST", "TRANSPORT"] }
+          }
+        });
+      }
+    }
+  })
+});
+
+const AssortmentType = new GraphQLObjectType({
+  name: "Assortment",
+  fields: () => ({
+    id: { type: GraphQLID },
+    code: { type: GraphQLString },
+    name: { type: GraphQLString },
+    kindId: { type: GraphQLID },
+    typeId: { type: GraphQLID },
+    kind: {
+      type: KindType,
+      resolve(parent, args) {
+        return Kind.findOne({
+          where: {
+            id: parent.kindId
+          }
+        });
+      }
+    },
+    type: {
+      type: TypeType,
+      resolve(parent, args) {
+        return Type.findOne({
+          where: {
+            id: parent.typeId
+          }
+        });
+      }
+    }
+  })
+});
+
+const KindType = new GraphQLObjectType({
+  name: "Kind",
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString }
+  })
+});
+
+const TypeType = new GraphQLObjectType({
+  name: "Type",
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString }
   })
 });
 
@@ -169,7 +220,6 @@ const RootQuery = new GraphQLObjectType({
       type: ClientType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        //return code
         return Client.findOne({
           where: {
             id: args.id
@@ -181,19 +231,48 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(OrderType),
       resolve(parent, args) {
         Order.belongsTo(Client, { foreignKey: "clientId" });
+        Client.hasOne(Order, { foreignKey: "clientId" });
         Order.belongsTo(Trader, { foreignKey: "traderId" });
-        Order.hasMany(Item, { foreignKey: "id" });
+        Trader.hasOne(Order, { foreignKey: "traderId" });
+        Order.belongsTo(Address, {
+          foreignKey: { [Op.or]: ["addressId", "addressOutId"] }
+        });
+        Address.hasOne(Order, {
+          foreignKey: { [Op.or]: ["addressId", "addressOutId"] }
+        });
+        Order.hasOne(Item, { foreignKey: "itemId" });
+        Item.belongsTo(Order, { foreignKey: "itemId" });
+        Assortment.hasOne(Item, { foreignKey: "assortmentId" });
+        Item.belongsTo(Assortment, { foreignKey: "assortmentId" });
+        User.hasOne(Trader, { foreignKey: "userId" });
+        Trader.belongsTo(User, { foreignKey: "userId" });
+        Kind.hasOne(Assortment, { foreignKey: "kindId" });
+        Assortment.belongsTo(Kind, { foreignKey: "kindId" });
+        Type.hasOne(Assortment, { foreignKey: "typeId" });
+        Assortment.belongsTo(Type, { foreignKey: "typeId" });
         return Order.findAll({
           include: [
             { model: Client, required: true },
-            { model: Item, required: true }
+            { model: Address },
+            { model: Trader, required: true, include: [{ model: User }] },
+            {
+              model: Item,
+              include: [
+                {
+                  model: Assortment,
+                  required: true,
+                  include: [{ model: Kind }, { model: Type }]
+                }
+              ]
+            }
           ],
           where: {
             symbol: {
               [Op.or]: ["ZK", "FP"]
             },
-            dateInsert: { [Op.gte]: "2019-06-01" }
-          }
+            dateInsert: { [Op.gte]: "2019-06-25" }
+          },
+          order: [["id", "DESC"]]
         });
       }
     },

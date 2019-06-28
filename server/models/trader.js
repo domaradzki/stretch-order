@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config');
+const User = require("../models/user");
 
 const {Model, INTEGER} = Sequelize;
 
@@ -14,7 +15,10 @@ Trader.init({
   userId: {
     type: INTEGER,
     allowNull: false,
-    field:'UzytkownikId'
+    field:'UzytkownikId',
+    references: {
+      model: User,
+      key: 'id'}
   }
 }, {
   sequelize,
@@ -25,5 +29,8 @@ Trader.init({
   tableName: '[OpiekunowiePodmiotu]'
   // options
 });
+Trader.associate = function () {
+  Trader.hasOne(User);
+};
 
 module.exports = Trader;

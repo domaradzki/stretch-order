@@ -3,6 +3,8 @@ const sequelize = require('../config');
 
 const {Model, INTEGER, STRING} = Sequelize;
 
+const Trader = require("../models/trader");
+
 class User extends Model {}
 User.init({
   id: {
@@ -25,5 +27,10 @@ User.init({
   tableName: '[Uzytkownicy]'
   // options
 });
+
+//Trader.hasOne(User);
+User.associate = function () {
+  User.belongsTo(Trader);
+};
 
 module.exports = User;
