@@ -254,7 +254,7 @@ const RootQuery = new GraphQLObjectType({
             symbol: {
               [Op.or]: ["ZK", "FP"]
             },
-            dateInsert: { [Op.gte]: "2019-06-28" }
+            dateInsert: { [Op.gte]: "2019-07-01" }
           },
           order: [["id", "DESC"]]
         });
