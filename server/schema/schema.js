@@ -146,8 +146,7 @@ const ItemType = new GraphQLObjectType({
       resolve(parent, args) {
         return Assortment.findOne({
           where: {
-            id: parent.assortmentId,
-            code: { [Op.notIn]: ["TRANSPORT IN POST", "TRANSPORT"] }
+            id: parent.assortmentId
           }
         });
       }
@@ -230,26 +229,7 @@ const RootQuery = new GraphQLObjectType({
     orders: {
       type: new GraphQLList(OrderType),
       resolve(parent, args) {
-        Order.belongsTo(Client, { foreignKey: "clientId" });
-        Client.hasOne(Order, { foreignKey: "clientId" });
-        Order.belongsTo(Trader, { foreignKey: "traderId" });
-        Trader.hasOne(Order, { foreignKey: "traderId" });
-        Order.belongsTo(Address, {
-          foreignKey: { [Op.or]: ["addressId", "addressOutId"] }
-        });
-        Address.hasOne(Order, {
-          foreignKey: { [Op.or]: ["addressId", "addressOutId"] }
-        });
-        Order.hasOne(Item, { foreignKey: "itemId" });
-        Item.belongsTo(Order, { foreignKey: "itemId" });
-        Assortment.hasOne(Item, { foreignKey: "assortmentId" });
-        Item.belongsTo(Assortment, { foreignKey: "assortmentId" });
-        User.hasOne(Trader, { foreignKey: "userId" });
-        Trader.belongsTo(User, { foreignKey: "userId" });
-        Kind.hasOne(Assortment, { foreignKey: "kindId" });
-        Assortment.belongsTo(Kind, { foreignKey: "kindId" });
-        Type.hasOne(Assortment, { foreignKey: "typeId" });
-        Assortment.belongsTo(Type, { foreignKey: "typeId" });
+
         return Order.findAll({
           include: [
             { model: Client, required: true },
@@ -257,11 +237,15 @@ const RootQuery = new GraphQLObjectType({
             { model: Trader, required: true, include: [{ model: User }] },
             {
               model: Item,
+              required: true,
               include: [
                 {
                   model: Assortment,
                   required: true,
-                  include: [{ model: Kind }, { model: Type }]
+                  include: [
+                    { model: Kind, required: true },
+                    { model: Type, required: true }
+                  ]
                 }
               ]
             }
@@ -270,7 +254,7 @@ const RootQuery = new GraphQLObjectType({
             symbol: {
               [Op.or]: ["ZK", "FP"]
             },
-            dateInsert: { [Op.gte]: "2019-06-25" }
+            dateInsert: { [Op.gte]: "2019-06-28" }
           },
           order: [["id", "DESC"]]
         });

@@ -59,8 +59,9 @@ Item.init(
   }
 );
 
-Item.associate = function () {
-  Item.belongsTo(Assortment);
-};
+Assortment.hasOne(Item, { foreignKey: "assortmentId" });
+Item.belongsTo(Order, { foreignKey: "itemId" });
+Item.belongsTo(Assortment, { foreignKey: "assortmentId" });
+Order.hasOne(Item, { foreignKey: "itemId" });
 
 module.exports = Item;
