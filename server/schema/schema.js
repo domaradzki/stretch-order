@@ -52,9 +52,17 @@ const OrderType = new GraphQLObjectType({
       resolve(parent, args) {
         return Address.findOne({
           where: {
-            id: {
-              [Op.or]: [parent.addressId, parent.addressOutId]
-            }
+            id: parent.addressId
+          }
+        });
+      }
+    },
+    address2: {
+      type: AddressType,
+      resolve(parent, args) {
+        return Address.findOne({
+          where: {
+            id: parent.addressOutId
           }
         });
       }
@@ -229,7 +237,6 @@ const RootQuery = new GraphQLObjectType({
     orders: {
       type: new GraphQLList(OrderType),
       resolve(parent, args) {
-
         return Order.findAll({
           include: [
             { model: Client, required: true },
@@ -254,7 +261,7 @@ const RootQuery = new GraphQLObjectType({
             symbol: {
               [Op.or]: ["ZK", "FP"]
             },
-            dateInsert: { [Op.gte]: "2019-07-01" }
+            dateInsert: { [Op.gte]: "2019-06-01" }
           },
           order: [["id", "DESC"]]
         });

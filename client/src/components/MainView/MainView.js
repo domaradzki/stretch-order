@@ -1,13 +1,58 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { compose } from "redux";
 import moment from "moment";
+import { gql } from "apollo-boost";
+import { graphql } from "react-apollo";
 
 import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
 import { changePaginationMainView } from "../../ducks/interfaceMenu";
-import { Table, Button, Segment } from "semantic-ui-react";
 
+import { Table, Button, Segment } from "semantic-ui-react";
 import "./MainView.css";
+
 import DetailsView from "../DetailsView/DetailsView";
+
+const getQuery = gql`
+  {
+    orders {
+      dateInsert
+      client {
+        name
+      }
+      signature
+      symbol
+      address {
+        deliveryAddress
+      }
+      address2 {
+        deliveryAddress
+      }
+      items {
+        price
+        quantity
+        assortment {
+          name
+          code
+          kind {
+            name
+          }
+          type {
+            name
+          }
+        }
+      }
+      details
+      closed
+      documentStatus
+      trader {
+        user {
+          name
+        }
+      }
+    }
+  }
+`;
 
 class MainView extends Component {
   componentDidMount() {
@@ -29,10 +74,11 @@ class MainView extends Component {
   };
 
   render() {
+    console.log(this.props);
     const { pagination } = this.props;
     const paginationButton =
       pagination === 0 ? pagination : pagination / 10 - 1;
-    const newOrders = this.props.data;
+    const newOrders = this.props.datas;
     return (
       <div className="mainview__container">
         <DetailsView />
@@ -120,7 +166,7 @@ MainView.defaultProps = {
 
 const mapStateToProps = state => {
   return {
-    data: state.data.data,
+    datas: state.data.data,
     isLoadingData: getDataLoading(state),
     pagination: state.interfaceMenu.paginationMain
     //active: state.data.activeDetails
@@ -136,7 +182,13 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
+const reduxWrapper = connect(
   mapStateToProps,
   mapDispatchToProps
+);
+const reduxGQL = graphql(getQuery);
+
+export default compose(
+  reduxWrapper,
+  reduxGQL
 )(MainView);
