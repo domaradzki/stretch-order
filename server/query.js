@@ -30,7 +30,7 @@ const sqlQuery = `SELECT d.id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[PozycjeDokumentu] pozycje 
           ON d.Id = pozycje.Dokument_Id 
 
-          INNER JOIN (Select Symbol <> 'TRANSPORT IN POST' and Symbol <> 'TRANSPORT'* FROM [Nexo_Goodmarks].[ModelDanychContainer].[Asortymenty] WHERE ) asortyment
+          INNER JOIN (Select * FROM [Nexo_Goodmarks].[ModelDanychContainer].[Asortymenty] WHERE Symbol <> 'TRANSPORT IN POST' and Symbol <> 'TRANSPORT') asortyment
           ON pozycje.AsortymentAktualnyId = asortyment.Id
           INNER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[RodzajeAsortymentu] rodzaj
           ON asortyment.Rodzaj_Id = rodzaj.Id

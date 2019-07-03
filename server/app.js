@@ -1,18 +1,21 @@
-const sequelize = require('./config');
+const sequelize = require("./config");
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
+const cors = require("cors");
 
 sequelize
   .authenticate()
   .then(() => {
-    console.log('Connection has been established successfully.');
+    console.log("Connection has been established successfully.");
   })
   .catch(err => {
-    console.error('Unable to connect to the database:', err);
+    console.error("Unable to connect to the database:", err);
   });
-  
+
 const app = express();
+
+app.use(cors());
 
 app.use(
   "/graphql",

@@ -3,6 +3,7 @@ const sequelize = require("../config");
 const Client = require("../models/client");
 const Trader = require("../models/trader");
 const Address = require("../models/address");
+const Op = Sequelize.Op;
 
 const { Model, INTEGER, DATE, STRING, BOOLEAN } = Sequelize;
 
@@ -91,5 +92,16 @@ Order.init(
     tableName: "[Dokumenty]"
   }
 );
+
+Order.belongsTo(Client, { foreignKey: "clientId" });
+Client.hasOne(Order, { foreignKey: "clientId" });
+Order.belongsTo(Trader, { foreignKey: "traderId" });
+Trader.hasOne(Order, { foreignKey: "traderId" });
+Order.belongsTo(Address, {
+  foreignKey: { [Op.or]: ["addressId", "addressOutId"] }
+});
+Address.hasOne(Order, {
+  foreignKey: { [Op.or]: ["addressId", "addressOutId"] }
+});
 
 module.exports = Order;

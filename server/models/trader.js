@@ -29,8 +29,8 @@ Trader.init({
   tableName: '[OpiekunowiePodmiotu]'
   // options
 });
-Trader.associate = function () {
-  Trader.hasOne(User);
-};
+
+User.hasOne(Trader, { foreignKey: "userId" });
+Trader.belongsTo(User, { foreignKey: "userId" });
 
 module.exports = Trader;
