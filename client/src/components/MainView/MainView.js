@@ -101,7 +101,6 @@ class MainView extends Component {
                 <Table.HeaderCell>Opcje</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
-
             <Table.Body>
               {newOrders
                 .map((order, index) => (

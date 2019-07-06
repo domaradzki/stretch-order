@@ -1,8 +1,12 @@
 const sequelize = require("./config");
+const Sequelize = require("sequelize");
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
 const cors = require("cors");
+// const sqlQuery = require("./query");
+
+// const documentsController = require("../client/src/Controllers/DocumentsController")();
 
 sequelize
   .authenticate()
@@ -16,7 +20,12 @@ sequelize
 const app = express();
 
 app.use(cors());
-
+// app.get("/api", function(req, res) {
+//   sequelize
+//     .query(sqlQuery, { raw: false, type: Sequelize.QueryTypes.SELECT })
+//     .then(orders => orders);
+//   return res.orders;
+// });
 app.use(
   "/graphql",
   graphqlHTTP({
