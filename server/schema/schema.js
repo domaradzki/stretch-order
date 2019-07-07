@@ -1,6 +1,5 @@
 const graphql = require("graphql");
 const Sequelize = require("sequelize");
-const joinMonster = require("join-monster");
 const Op = Sequelize.Op;
 
 const Order = require("../models/order");
@@ -258,36 +257,41 @@ const RootQuery = new GraphQLObjectType({
     },
     orders: {
       type: new GraphQLList(OrderType),
-      resolve(parent, args) {
-        return Order.findAll({
-          include: [
-            { model: Client, required: true },
-            { model: Address },
-            { model: Trader, required: true, include: [{ model: User }] },
-            {
-              model: Item,
-              required: true,
-              include: [
-                {
-                  model: Assortment,
-                  required: true,
-                  include: [
-                    { model: Kind, required: true },
-                    { model: Type, required: true }
-                  ]
-                }
-              ]
-            }
-          ],
-          where: {
-            symbol: {
-              [Op.or]: ["ZK", "FP"]
-            },
-            dateInsert: { [Op.gte]: "2019-07-01" }
-          },
-          order: [["id", "DESC"]]
+      resolve: (parent, args, context, resolveInfo) => {
+        return joinMonster(resolveInfo, {}, sql => {
+          return knex.raw(sql);
         });
       }
+      // resolve(parent, args) {
+      //   return Order.findAll({
+      //     include: [
+      //       { model: Client, required: true },
+      //       { model: Address },
+      //       { model: Trader, required: true, include: [{ model: User }] },
+      //       {
+      //         model: Item,
+      //         required: true,
+      //         include: [
+      //           {
+      //             model: Assortment,
+      //             required: true,
+      //             include: [
+      //               { model: Kind, required: true },
+      //               { model: Type, required: true }
+      //             ]
+      //           }
+      //         ]
+      //       }
+      //     ],
+      //     where: {
+      //       symbol: {
+      //         [Op.or]: ["ZK", "FP"]
+      //       },
+      //       dateInsert: { [Op.gte]: "2019-07-01" }
+      //     },
+      //     order: [["id", "DESC"]]
+      //   });
+      // }
     },
     clients: {
       type: new GraphQLList(ClientType),

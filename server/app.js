@@ -1,21 +1,23 @@
-const sequelize = require("./config");
-const Sequelize = require("sequelize");
+// const sequelize = require("./config");
+// const Sequelize = require("sequelize");
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
 const cors = require("cors");
+const connectDB = require("./connection");
 // const sqlQuery = require("./query");
 
 // const documentsController = require("../client/src/Controllers/DocumentsController")();
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Connection has been established successfully.");
-  })
-  .catch(err => {
-    console.error("Unable to connect to the database:", err);
-  });
+connectDB();
+// sequelize
+//   .authenticate()
+//   .then(() => {
+//     console.log("Connection has been established successfully.");
+//   })
+//   .catch(err => {
+//     console.error("Unable to connect to the database:", err);
+//   });
 
 const app = express();
 
