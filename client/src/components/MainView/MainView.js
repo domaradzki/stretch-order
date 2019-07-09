@@ -74,7 +74,6 @@ class MainView extends Component {
   };
 
   render() {
-    console.log(this.props);
     const { pagination } = this.props;
     const paginationButton =
       pagination === 0 ? pagination : pagination / 10 - 1;

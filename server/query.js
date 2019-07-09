@@ -36,7 +36,7 @@ const sqlQuery = `SELECT d.id
           ON asortyment.Grupa_Id = grupa.Id
 	  LEFT OUTER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[DokumentDokument] dokument_realizujacy
           ON dokument_realizujacy.[DokumentyRealizujace_Id] = d.Id
-          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-07-05')
+          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-07-01')
           ORDER BY d.Id DESC`;
 
 module.exports = sqlQuery;

@@ -1,16 +1,30 @@
 const graphql = require("graphql");
-const Sequelize = require("sequelize");
-const Op = Sequelize.Op;
-
-const Order = require("../models/order");
-const Client = require("../models/client");
-const Trader = require("../models/trader");
-const User = require("../models/user");
-const Item = require("../models/item");
-const Assortment = require("../models/assortment");
-const Kind = require("../models/kind");
-const Type = require("../models/type");
-const Address = require("../models/address");
+const joinMonster = require("join-monster").default;
+//const Sequelize = require("sequelize");
+//const Op = Sequelize.Op;
+// const Order = require("../models/order");
+// const Client = require("../models/client");
+// const Trader = require("../models/trader");
+// const User = require("../models/user");
+// const Item = require("../models/item");
+// const Assortment = require("../models/assortment");
+// const Kind = require("../models/kind");
+// const Type = require("../models/type");
+// const Address = require("../models/address");
+const knex = require("knex")({
+  client: "mssql",
+  connection: {
+    user: "sa",
+    password: "",
+    server: "192.168.0.13",
+    database: "Nexo_Goodmarks",
+    port: 58857,
+    dialect: "mssql",
+    dialectOptions: {
+      instanceName: "SQLEXPRESS"
+    }
+  }
+});
 
 const {
   GraphQLObjectType,
@@ -25,8 +39,6 @@ const {
 
 const OrderType = new GraphQLObjectType({
   name: "Order",
-  sqlTable: "[ModelDanychContainer].[Dokumenty]",
-  uniqueKey: "id",
   fields: () => ({
     id: { type: GraphQLID, sqlColumn: "Id" },
     dateInsert: { type: GraphQLString, sqlColumn: "DataWprowadzenia" },
@@ -44,12 +56,8 @@ const OrderType = new GraphQLObjectType({
     addressOutId: { type: GraphQLID, sqlColumn: "MiejsceDostawyZewnetrzneId" },
     client: {
       type: ClientType,
-      resolve(parent, args) {
-        return Client.findOne({
-          where: {
-            id: parent.clientId
-          }
-        });
+      sqlJoin(OrderType, ClientType) {
+        return `${OrderType}.clientId = ${ClientType}.id`;
       }
     },
     address: {
@@ -97,21 +105,28 @@ const OrderType = new GraphQLObjectType({
   })
 });
 
+OrderType._typeConfig = {
+  sqlTable: "ModelDanychContainer.Dokumenty",
+  uniqueKey: "id"
+};
+
 const ClientType = new GraphQLObjectType({
   name: "Client",
-  sqlTable: "[ModelDanychContainer].[PodmiotHistorie]",
-  uniqueKey: "id",
   fields: () => ({
     id: { type: GraphQLID, sqlColumn: "Id" },
     name: { type: GraphQLString, sqlColumn: "Nazwa" },
     orders: {
       type: new GraphQLList(OrderType),
-      resolve(parent, args) {
-        return Order.findAll({ where: { clientId: parent.id } });
+      sqlJoin(ClientType, OrderType) {
+        return `${ClientType}.id= ${OrderType}.clientId `;
       }
     }
   })
 });
+ClientType._typeConfig = {
+  sqlTable: "ModelDanychContainer.PodmiotHistorie",
+  uniqueKey: "id"
+};
 
 const TraderType = new GraphQLObjectType({
   name: "Trader",
@@ -237,11 +252,7 @@ const RootQuery = new GraphQLObjectType({
       type: OrderType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return Order.findOne({
-          where: {
-            id: args.id
-          }
-        });
+        return console.log(parent);
       }
     },
     client: {
@@ -259,6 +270,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(OrderType),
       resolve: (parent, args, context, resolveInfo) => {
         return joinMonster(resolveInfo, {}, sql => {
+          console.log(knex.raw(sql));
           return knex.raw(sql);
         });
       }

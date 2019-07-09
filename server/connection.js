@@ -1,3 +1,4 @@
+const sqlQuery = require("./query");
 const knex = require("knex")({
   client: "mssql",
   connection: {
@@ -30,4 +31,16 @@ async function connectDB(retries = 5) {
   }
 }
 
-module.exports = connectDB;
+function getDataFromApi(req, res) {
+  knex
+    .raw(sqlQuery)
+    .then(function(recordset) {
+      res.json(recordset);
+    })
+    .catch(function(err) {
+      res.status(400).send("Error while inserting data");
+    });
+}
+
+module.exports.connectDB = connectDB;
+module.exports.getDataFromApi = getDataFromApi;
