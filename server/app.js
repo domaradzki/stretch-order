@@ -1,29 +1,24 @@
-const sequelize = require("./config");
 const express = require("express");
 const graphqlHTTP = require("express-graphql");
 const schema = require("./schema/schema");
 const cors = require("cors");
+const connection = require("./connection");
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Connection has been established successfully.");
-  })
-  .catch(err => {
-    console.error("Unable to connect to the database:", err);
-  });
+connection.connectDB();
 
 const app = express();
 
 app.use(cors());
 
-app.use(
-  "/graphql",
-  graphqlHTTP({
-    schema,
-    graphiql: true
-  })
-);
+app.get("/api", connection.getDataFromApi);
+
+// app.use(
+//   "/graphql",
+//   graphqlHTTP({
+//     schema,
+//     graphiql: true
+//   })
+// );
 
 app.listen(4000, () => {
   console.log("Server started on port 4000");

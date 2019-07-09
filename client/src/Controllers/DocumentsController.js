@@ -48,7 +48,7 @@ const routes = function() {
           ON uzytkownicy.Id = opiekunowie.UzytkownikId
 		      LEFT OUTER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[DokumentDokument] dokument_realizujacy
           ON dokument_realizujacy.[DokumentyRealizowane_Id] = d.Id
-          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-06-01')
+          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-07-01')
           ORDER BY d.Id DESC`;
         const req = new sql.Request(config);
         req

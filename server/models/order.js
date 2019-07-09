@@ -97,11 +97,9 @@ Order.belongsTo(Client, { foreignKey: "clientId" });
 Client.hasOne(Order, { foreignKey: "clientId" });
 Order.belongsTo(Trader, { foreignKey: "traderId" });
 Trader.hasOne(Order, { foreignKey: "traderId" });
-Order.belongsTo(Address, {
-  foreignKey: { [Op.or]: ["addressId", "addressOutId"] }
-});
-Address.hasOne(Order, {
-  foreignKey: { [Op.or]: ["addressId", "addressOutId"] }
-});
+Order.belongsTo(Address, { foreignKey: "addressId" });
+Address.hasOne(Order, { foreignKey: "addressId" });
+Order.belongsTo(Address, { foreignKey: "addressOutId" });
+Address.hasOne(Order, { foreignKey: "addressOutId" });
 
 module.exports = Order;
