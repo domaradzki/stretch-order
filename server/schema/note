@@ -1,0 +1,91 @@
+assortment: "Folia stretch ręczna 31523/25"
+client: "ALMAR Sp. z o.o."
+closed: false
+code: "FSRG 29023/250"
+dateInsert: "2019-07-09"
+dateOfPay: ""
+dateOfRealisation: "2019-07-12"
+deliveryAddress: "Hutnicza  22, 81-061  Gdynia"
+details: "dostawa w czwartek naszym transportem  "
+documentStatus: 6
+grossWeight: 540
+id: 126653
+invoice: ""
+itemId: "20f768a8dc6a4a0e874775167f2011b2"
+kind: "KT"
+netValue: 1123.8
+netWeight: 290
+numberOfDocumentInvoice: null
+postfix: ƒ postfix()
+price: 18.73
+quantity: 60
+signature: "ZK 2201/MG/07/2019"
+sleeve: 250
+stretchColor: "transparentna"
+stretchThickness: 23
+symbol: "ZK"
+trader: "Marcin Rynkowski"
+type: "FS"
+
+assortment: "TPD Taśma pakowa z nadrukiem "
+client: "DEWMIX Adam Bochynski"
+closed: false
+code: "TPD32 4550HB1"
+color1: ""
+color2: ""
+color3: ""
+dateInsert: "2019-07-09"
+dateOfAcceptation: ""
+dateOfPay: ""
+dateOfRealisation: "2019-07-23"
+deliveryAddress: "ul.Bolewskiego  95/2/H, 63-700  Krotoszyn"
+details: "Foto Fischer "
+documentStatus: 6
+glue: "H"
+id: 126652
+invoice: ""
+itemId: "5263c0776772442c9ec1b316d29be0b4"
+kind: "KT"
+netValue: 320.4
+numberOfColors: "1"
+numberOfDocumentInvoice: null
+postfix: ƒ postfix()
+price: 4.45
+printName: ""
+productCode: "TPD32"
+quantity: 72
+roller: ""
+signature: "FP 265/2019"
+symbol: "FP"
+tapeColor: "biała"
+tapeLong: 45
+tapeThickness: 32
+tapeWidth: 50
+trader: "Paulina Mizerek"
+type: "TPD"
+
+
+
+assortment: "KTH3519 Klebeband STARK  STRONG"
+client: "Dolfamex Sp. z o.o."
+closed: false
+code: "T-KTH3519 STRONG 48/54M"
+dateInsert: "2019-07-09"
+dateOfPay: ""
+dateOfRealisation: "2019-07-10"
+deliveryAddress: "Jana Sobieskiego  51, 58-500 Jelenia Góra"
+details: "LHP0283MWG"
+documentStatus: 6
+id: 126678
+invoice: ""
+itemId: "824a1bd785164acd92dd69849d240f69"
+kind: "TW"
+netValue: 133.92
+numberOfDocumentInvoice: null
+price: 1.86
+quantity: 72
+signature: "ZK 2204/MG/07/2019"
+symbol: "ZK"
+trader: "Paulina Mizerek"
+transport: ""
+type: "TP"

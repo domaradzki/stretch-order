@@ -12,13 +12,13 @@ app.use(cors());
 
 app.get("/api", connection.getDataFromApi);
 
-// app.use(
-//   "/graphql",
-//   graphqlHTTP({
-//     schema,
-//     graphiql: true
-//   })
-// );
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema,
+    graphiql: true
+  })
+);
 
 app.listen(4000, () => {
   console.log("Server started on port 4000");

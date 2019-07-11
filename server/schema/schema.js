@@ -1,7 +1,5 @@
 const graphql = require("graphql");
-const joinMonster = require("join-monster").default;
-//const Sequelize = require("sequelize");
-//const Op = Sequelize.Op;
+
 // const Order = require("../models/order");
 // const Client = require("../models/client");
 // const Trader = require("../models/trader");
@@ -11,20 +9,6 @@ const joinMonster = require("join-monster").default;
 // const Kind = require("../models/kind");
 // const Type = require("../models/type");
 // const Address = require("../models/address");
-const knex = require("knex")({
-  client: "mssql",
-  connection: {
-    user: "sa",
-    password: "",
-    server: "192.168.0.13",
-    database: "Nexo_Goodmarks",
-    port: 58857,
-    dialect: "mssql",
-    dialectOptions: {
-      instanceName: "SQLEXPRESS"
-    }
-  }
-});
 
 const {
   GraphQLObjectType,
@@ -40,208 +24,49 @@ const {
 const OrderType = new GraphQLObjectType({
   name: "Order",
   fields: () => ({
-    id: { type: GraphQLID, sqlColumn: "Id" },
-    dateInsert: { type: GraphQLString, sqlColumn: "DataWprowadzenia" },
-    signature: {
-      type: GraphQLString,
-      sqlColumn: "NumerWewnetrzny_PelnaSygnatura"
-    },
-    symbol: { type: GraphQLString, sqlColumn: "Symbol" },
-    details: { type: GraphQLString, sqlColumn: "Uwagi" },
-    closed: { type: GraphQLBoolean, sqlColumn: "Zamkniety" },
-    documentStatus: { type: GraphQLInt, sqlColumn: "StatusDokumentuId" },
-    clientId: { type: GraphQLID, sqlColumn: "PodmiotWybranyId" },
-    traderId: { type: GraphQLID, sqlColumn: "PodmiotId" },
-    addressId: { type: GraphQLID, sqlColumn: "MiejsceDostawyId" },
-    addressOutId: { type: GraphQLID, sqlColumn: "MiejsceDostawyZewnetrzneId" },
-    client: {
-      type: ClientType,
-      sqlJoin(OrderType, ClientType) {
-        return `${OrderType}.clientId = ${ClientType}.id`;
-      }
-    },
-    address: {
-      type: AddressType,
-      resolve(parent, args) {
-        return Address.findOne({
-          where: {
-            id: parent.addressId
-          }
-        });
-      }
-    },
-    address2: {
-      type: AddressType,
-      resolve(parent, args) {
-        return Address.findOne({
-          where: {
-            id: parent.addressOutId
-          }
-        });
-      }
-    },
-    trader: {
-      type: TraderType,
-      resolve(parent, args) {
-        return Trader.findOne({
-          where: {
-            id: parent.traderId
-          }
-        });
-      }
-    },
-    items: {
-      type: new GraphQLList(ItemType),
-      resolve(parent, args) {
-        return Item.findAll({
-          where: {
-            itemId: parent.id
-          }
-        });
-      }
-    }
-
-    // numberOfDocumentInvoice: { type: GraphQLInt }
-  })
-});
-
-OrderType._typeConfig = {
-  sqlTable: "ModelDanychContainer.Dokumenty",
-  uniqueKey: "id"
-};
-
-const ClientType = new GraphQLObjectType({
-  name: "Client",
-  fields: () => ({
-    id: { type: GraphQLID, sqlColumn: "Id" },
-    name: { type: GraphQLString, sqlColumn: "Nazwa" },
-    orders: {
-      type: new GraphQLList(OrderType),
-      sqlJoin(ClientType, OrderType) {
-        return `${ClientType}.id= ${OrderType}.clientId `;
-      }
-    }
-  })
-});
-ClientType._typeConfig = {
-  sqlTable: "ModelDanychContainer.PodmiotHistorie",
-  uniqueKey: "id"
-};
-
-const TraderType = new GraphQLObjectType({
-  name: "Trader",
-  sqlTable: "[ModelDanychContainer].[OpiekunowiePodmiotu]",
-  uniqueKey: "id",
-  fields: () => ({
-    id: { type: GraphQLID, sqlColumn: "PodmiotOpiekunaPodstawowego_Id" },
-    userId: { type: GraphQLID, sqlColumn: "UzytkownikId" },
-    user: {
-      type: UserType,
-      resolve(parent, args) {
-        return User.findOne({
-          where: {
-            id: parent.userId
-          }
-        });
-      }
-    }
-  })
-});
-
-const UserType = new GraphQLObjectType({
-  name: "User",
-  sqlTable: "[ModelDanychContainer].[Uzytkownicy]",
-  uniqueKey: "id",
-  fields: () => ({
-    id: { type: GraphQLID, sqlColumn: "Id" },
-    name: { type: GraphQLString, sqlColumn: "Login" }
-  })
-});
-
-const AddressType = new GraphQLObjectType({
-  name: "Address",
-  sqlTable: "[ModelDanychContainer].[AdresHistorie]",
-  uniqueKey: "id",
-  fields: () => ({
-    id: { type: GraphQLID, sqlColumn: "Id" },
-    deliveryAddress: { type: GraphQLString, sqlColumn: "LiniaCalosc" }
-  })
-});
-
-const ItemType = new GraphQLObjectType({
-  name: "Item",
-  sqlTable: "[ModelDanychContainer].[PozycjeDokumentu]",
-  uniqueKey: "id",
-  fields: () => ({
-    id: { type: GraphQLString, sqlColumn: "NumerReferencyjny" },
-    quantity: { type: GraphQLFloat, sqlColumn: "Ilosc" },
-    price: { type: GraphQLFloat, sqlColumn: "Cena_NettoPoRabacie" },
-    netValue: { type: GraphQLFloat, sqlColumn: "Wartosc_NettoPoRabacie" },
-    itemId: { type: GraphQLID, sqlColumn: "Dokument_Id" },
-    assortmentId: { type: GraphQLID, sqlColumn: "AsortymentAktualnyId" },
-    assortment: {
-      type: AssortmentType,
-      resolve(parent, args) {
-        return Assortment.findOne({
-          where: {
-            id: parent.assortmentId
-          }
-        });
-      }
-    }
-  })
-});
-
-const AssortmentType = new GraphQLObjectType({
-  name: "Assortment",
-  sqlTable: "[ModelDanychContainer].[Asortymenty]",
-  uniqueKey: "id",
-  fields: () => ({
-    id: { type: GraphQLID, sqlColumn: "Id" },
-    code: { type: GraphQLString, sqlColumn: "Symbol" },
-    name: { type: GraphQLString, sqlColumn: "Nazwa" },
-    kindId: { type: GraphQLID, sqlColumn: "Rodzaj_Id" },
-    typeId: { type: GraphQLID, sqlColumn: "Grupa_Id" },
-    kind: {
-      type: KindType,
-      resolve(parent, args) {
-        return Kind.findOne({
-          where: {
-            id: parent.kindId
-          }
-        });
-      }
-    },
-    type: {
-      type: TypeType,
-      resolve(parent, args) {
-        return Type.findOne({
-          where: {
-            id: parent.typeId
-          }
-        });
-      }
-    }
-  })
-});
-
-const KindType = new GraphQLObjectType({
-  name: "Kind",
-  sqlTable: "[ModelDanychContainer].[RodzajeAsortymentu]",
-  uniqueKey: "id",
-  fields: () => ({
-    id: { type: GraphQLID, sqlColumn: "Id" },
-    name: { type: GraphQLString, sqlColumn: "Symbol" }
-  })
-});
-
-const TypeType = new GraphQLObjectType({
-  name: "Type",
-  sqlTable: "[ModelDanychContainer].[GrupyAsortymentu]",
-  uniqueKey: "id",
-  fields: () => ({
-    id: { type: GraphQLID, sqlColumn: "Id" },
-    name: { type: GraphQLString, sqlColumn: "Nazwa" }
+    id: { type: GraphQLID },
+    documentId: { type: GraphQLID },
+    itemId: { type: GraphQLString },
+    assortment: { type: GraphQLString },
+    code: { type: GraphQLString },
+    client: { type: GraphQLString },
+    dateInsert: { type: GraphQLString },
+    dateOfPay: { type: GraphQLString },
+    dateOfRealisation: { type: GraphQLString },
+    dateOfAcceptation: { type: GraphQLString },
+    signature: { type: GraphQLString },
+    symbol: { type: GraphQLString },
+    kind: { type: GraphQLString },
+    type: { type: GraphQLString },
+    details: { type: GraphQLString },
+    closed: { type: GraphQLBoolean },
+    documentStatus: { type: GraphQLInt },
+    trader: { type: GraphQLString },
+    deliveryAddress: { type: GraphQLString },
+    details: { type: GraphQLString },
+    transport: { type: GraphQLString },
+    numberOfDocumentInvoice: { type: GraphQLInt },
+    invoice: { type: GraphQLString },
+    quantity: { type: GraphQLFloat },
+    price: { type: GraphQLFloat },
+    grossWeight: { type: GraphQLFloat },
+    netWeight: { type: GraphQLFloat },
+    netValue: { type: GraphQLString },
+    sleeve: { type: GraphQLInt },
+    stretchColor: { type: GraphQLString },
+    stretchThickness: { type: GraphQLInt },
+    color1: { type: GraphQLString },
+    color2: { type: GraphQLString },
+    color3: { type: GraphQLString },
+    glue: { type: GraphQLString },
+    numberOfColors: { type: GraphQLString },
+    printName: { type: GraphQLString },
+    productCode: { type: GraphQLString },
+    roller: { type: GraphQLString },
+    tapeColor: { type: GraphQLString },
+    tapeLong: { type: GraphQLInt },
+    tapeThickness: { type: GraphQLInt },
+    tapeWidth: { type: GraphQLInt }
   })
 });
 
@@ -255,60 +80,10 @@ const RootQuery = new GraphQLObjectType({
         return console.log(parent);
       }
     },
-    client: {
-      type: ClientType,
-      args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
-        return Client.findOne({
-          where: {
-            id: args.id
-          }
-        });
-      }
-    },
     orders: {
       type: new GraphQLList(OrderType),
-      resolve: (parent, args, context, resolveInfo) => {
-        return joinMonster(resolveInfo, {}, sql => {
-          console.log(knex.raw(sql));
-          return knex.raw(sql);
-        });
-      }
-      // resolve(parent, args) {
-      //   return Order.findAll({
-      //     include: [
-      //       { model: Client, required: true },
-      //       { model: Address },
-      //       { model: Trader, required: true, include: [{ model: User }] },
-      //       {
-      //         model: Item,
-      //         required: true,
-      //         include: [
-      //           {
-      //             model: Assortment,
-      //             required: true,
-      //             include: [
-      //               { model: Kind, required: true },
-      //               { model: Type, required: true }
-      //             ]
-      //           }
-      //         ]
-      //       }
-      //     ],
-      //     where: {
-      //       symbol: {
-      //         [Op.or]: ["ZK", "FP"]
-      //       },
-      //       dateInsert: { [Op.gte]: "2019-07-01" }
-      //     },
-      //     order: [["id", "DESC"]]
-      //   });
-      // }
-    },
-    clients: {
-      type: new GraphQLList(ClientType),
       resolve(parent, args) {
-        return Client.findAll();
+        return console.log(parent);
       }
     }
   }
