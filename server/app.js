@@ -5,6 +5,7 @@ const cors = require("cors");
 const connection = require("./connection");
 
 connection.connectDB();
+connection.connectMongoDB();
 
 const app = express();
 
