@@ -1,4 +1,5 @@
 const sqlQuery = require("./query");
+const mongoose = require("mongoose");
 const knex = require("knex")({
   client: "mssql",
   connection: {
@@ -42,5 +43,18 @@ function getDataFromApi(req, res) {
     });
 }
 
+function connectMongoDB() {
+  mongoose.connect("mongodb://localhost/test");
+
+  mongoose.connection
+    .once("open", function() {
+      console.log("Connection to MongoDB has been made!");
+    })
+    .on("error", function(error) {
+      console.log("Connection error: ", error);
+    });
+}
+
+module.exports.connectMongoDB = connectMongoDB;
 module.exports.connectDB = connectDB;
 module.exports.getDataFromApi = getDataFromApi;
