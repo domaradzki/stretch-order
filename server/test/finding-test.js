@@ -18,7 +18,7 @@ describe("Finding records", function() {
     });
   });
 
-  it("Find one by IDrecord to the database", function(done) {
+  it("Find one by ID record to the database", function(done) {
     Order.findOne({ _id: newOrder._id }).then(function(result) {
       assert(result._id.toString() === newOrder._id.toString());
       done();

@@ -3,7 +3,10 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 before(function(done) {
-  mongoose.connect("mongodb://localhost/testeroo", { useNewUrlParser: true });
+  mongoose.connect("mongodb://localhost/testeroo", {
+    useNewUrlParser: true,
+    useFindAndModify: false
+  });
   mongoose.connection
     .once("open", function() {
       console.log("Connection to MongoDB has been made!");
