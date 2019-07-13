@@ -44,7 +44,7 @@ function getDataFromApi(req, res) {
 }
 
 function connectMongoDB() {
-  mongoose.connect("mongodb://localhost/test");
+  mongoose.connect("mongodb://localhost/testeroo", { useNewUrlParser: true });
 
   mongoose.connection
     .once("open", function() {

@@ -9,9 +9,17 @@
     "express-graphql": "^0.8.0",
     "graphql": "^14.3.1",
     "knex": "^0.18.3",
+    "mocha": "^6.1.4",
     "mongoose": "^5.6.4",
     "mssql": "^5.1.0",
     "nodemon": "^1.19.1",
     "sequelize": "^5.8.10"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "mocha",
+    "eject": "react-scripts eject",
+    "server": "nodemon app.js"
   }
 }

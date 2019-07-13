@@ -1,105 +1,51 @@
-const Sequelize = require("sequelize");
-const sequelize = require("../config");
-const Client = require("../models/client");
-const Trader = require("../models/trader");
-const Address = require("../models/address");
-const Op = Sequelize.Op;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const { Model, INTEGER, DATE, STRING, BOOLEAN } = Sequelize;
+const orderSchema = new Schema({
+  id: Number,
+  documentId: Number,
+  itemId: String,
+  assortment: String,
+  code: String,
+  client: String,
+  dateInsert: String,
+  dateOfPay: String,
+  dateOfRealisation: String,
+  dateOfAcceptation: String,
+  signature: String,
+  symbol: String,
+  kind: String,
+  type: String,
+  details: String,
+  closed: Boolean,
+  documentStatus: Number,
+  trader: String,
+  deliveryAddress: String,
+  details: String,
+  transport: String,
+  numberOfDocumentInvoice: Number,
+  invoice: String,
+  quantity: Number,
+  price: Number,
+  grossWeight: Number,
+  netWeight: Number,
+  netValue: String,
+  sleeve: Number,
+  stretchColor: String,
+  stretchThickness: Number,
+  color1: String,
+  color2: String,
+  color3: String,
+  glue: String,
+  numberOfColors: String,
+  printName: String,
+  productCode: String,
+  roller: String,
+  tapeColor: String,
+  tapeLong: Number,
+  tapeThickness: Number,
+  tapeWidth: Number
+});
 
-class Order extends Model {}
-Order.init(
-  {
-    id: {
-      type: INTEGER,
-      primaryKey: true,
-      allowNull: false,
-      field: "Id"
-    },
-    dateInsert: {
-      type: DATE,
-      allowNull: false,
-      field: "DataWprowadzenia"
-    },
-    signature: {
-      type: STRING,
-      allowNull: false,
-      field: "NumerWewnetrzny_PelnaSygnatura"
-    },
-    symbol: {
-      type: STRING,
-      allowNull: false,
-      field: "Symbol"
-    },
-    details: {
-      type: STRING,
-      allowNull: false,
-      field: "Uwagi"
-    },
-    closed: {
-      type: BOOLEAN,
-      allowNull: false,
-      field: "Zamkniety"
-    },
-    documentStatus: {
-      type: INTEGER,
-      allowNull: false,
-      field: "StatusDokumentuId"
-    },
-    clientId: {
-      type: INTEGER,
-      allowNull: false,
-      field: "PodmiotWybranyId",
-      references: {
-        model: Client,
-        key: "id"
-      }
-    },
-    traderId: {
-      type: INTEGER,
-      allowNull: false,
-      field: "PodmiotId",
-      references: {
-        model: Trader,
-        key: "id"
-      }
-    },
-    addressId: {
-      type: INTEGER,
-      allowNull: true,
-      field: "MiejsceDostawyId",
-      references: {
-        model: Address,
-        key: "id"
-      }
-    },
-    addressOutId: {
-      type: INTEGER,
-      allowNull: true,
-      field: "MiejsceDostawyZewnetrzneId",
-      references: {
-        model: Address,
-        key: "id"
-      }
-    }
-  },
-  {
-    sequelize,
-    modelName: "order",
-    freezeTableName: true,
-    timestamps: false,
-    schema: "[ModelDanychContainer]",
-    tableName: "[Dokumenty]"
-  }
-);
-
-Order.belongsTo(Client, { foreignKey: "clientId" });
-Client.hasOne(Order, { foreignKey: "clientId" });
-Order.belongsTo(Trader, { foreignKey: "traderId" });
-Trader.hasOne(Order, { foreignKey: "traderId" });
-Order.belongsTo(Address, { foreignKey: "addressId" });
-Address.hasOne(Order, { foreignKey: "addressId" });
-Order.belongsTo(Address, { foreignKey: "addressOutId" });
-Address.hasOne(Order, { foreignKey: "addressOutId" });
-
+const Order = mongoose.model("order", orderSchema);
 module.exports = Order;

@@ -1,15 +1,5 @@
 const graphql = require("graphql");
 
-// const Order = require("../models/order");
-// const Client = require("../models/client");
-// const Trader = require("../models/trader");
-// const User = require("../models/user");
-// const Item = require("../models/item");
-// const Assortment = require("../models/assortment");
-// const Kind = require("../models/kind");
-// const Type = require("../models/type");
-// const Address = require("../models/address");
-
 const {
   GraphQLObjectType,
   GraphQLString,
