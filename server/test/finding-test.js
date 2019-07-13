@@ -1,8 +1,9 @@
 const assert = require("assert");
 const Order = require("../models/order");
 describe("Finding records", function() {
+  var newOrder;
   this.beforeEach(function(done) {
-    var newOrder = new Order({
+    newOrder = new Order({
       assortment: "Taśma z nadrukiem"
     });
     newOrder.save().then(function() {
@@ -13,6 +14,13 @@ describe("Finding records", function() {
   it("Find one record to the database", function(done) {
     Order.findOne({ assortment: "Taśma z nadrukiem" }).then(function(result) {
       assert(result.assortment === "Taśma z nadrukiem");
+      done();
+    });
+  });
+
+  it("Find one by IDrecord to the database", function(done) {
+    Order.findOne({ _id: newOrder._id }).then(function(result) {
+      assert(result._id.toString() === newOrder._id.toString());
       done();
     });
   });
