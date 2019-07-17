@@ -1,14 +1,10 @@
 const graphql = require("graphql");
-
-// const Order = require("../models/order");
-// const Client = require("../models/client");
-// const Trader = require("../models/trader");
-// const User = require("../models/user");
-// const Item = require("../models/item");
-// const Assortment = require("../models/assortment");
-// const Kind = require("../models/kind");
-// const Type = require("../models/type");
-// const Address = require("../models/address");
+const Order = require("../models/order");
+const Product = require("../models/product");
+const User = require("../models/user");
+const Client = require("../models/client");
+const Tape = require("../models/tape");
+const Stretch = require("../models/stretch");
 
 const {
   GraphQLObjectType,
@@ -24,49 +20,99 @@ const {
 const OrderType = new GraphQLObjectType({
   name: "Order",
   fields: () => ({
-    id: { type: GraphQLID },
     documentId: { type: GraphQLID },
-    itemId: { type: GraphQLString },
-    assortment: { type: GraphQLString },
-    code: { type: GraphQLString },
-    client: { type: GraphQLString },
     dateInsert: { type: GraphQLString },
     dateOfPay: { type: GraphQLString },
     dateOfRealisation: { type: GraphQLString },
-    dateOfAcceptation: { type: GraphQLString },
     signature: { type: GraphQLString },
     symbol: { type: GraphQLString },
-    kind: { type: GraphQLString },
-    type: { type: GraphQLString },
     details: { type: GraphQLString },
     closed: { type: GraphQLBoolean },
     documentStatus: { type: GraphQLInt },
-    trader: { type: GraphQLString },
     deliveryAddress: { type: GraphQLString },
-    details: { type: GraphQLString },
     transport: { type: GraphQLString },
     numberOfDocumentInvoice: { type: GraphQLInt },
     invoice: { type: GraphQLString },
+    client: {
+      type: ClientType,
+      resolve(parent, args) {
+        console.log(parent);
+        return findOne(Client, { _id: parent.clientId });
+      }
+    },
+    user: {
+      type: userType,
+      resolve(parent, args) {
+        console.log(parent);
+        return findOne(User, { _id: parent.userId });
+      }
+    },
+    products: {
+      type: new GraphQLList(ProductType),
+      resolve(parent, args) {
+        console.log(parent);
+        return findMany(Product, { _id: parent.productId });
+      }
+    }
+  })
+});
+
+const ClientType = new GraphQLObjectType({
+  name: "Client",
+  fields: () => ({
+    name: { type: GraphQLString }
+  })
+});
+
+const UserType = new GraphQLObjectType({
+  name: "User",
+  fields: () => ({
+    name: { type: GraphQLString },
+    email: { type: GraphQLString }
+  })
+});
+
+const ProductType = new GraphQLObjectType({
+  name: "Product",
+  fields: () => ({
+    itemId: { type: GraphQLString },
+    name: { type: GraphQLString },
+    code: { type: GraphQLString },
+    kind: { type: GraphQLString },
+    type: { type: GraphQLString },
     quantity: { type: GraphQLFloat },
     price: { type: GraphQLFloat },
-    grossWeight: { type: GraphQLFloat },
-    netWeight: { type: GraphQLFloat },
     netValue: { type: GraphQLString },
-    sleeve: { type: GraphQLInt },
-    stretchColor: { type: GraphQLString },
-    stretchThickness: { type: GraphQLInt },
+    productionId: { type: GraphQLInt }
+  })
+});
+
+const TapeType = new GraphQLObjectType({
+  name: "Tape",
+  fields: () => ({
+    printName: { type: GraphQLString },
+    dateOfAcceptation: { type: GraphQLString },
+    numberOfColors: { type: GraphQLString },
     color1: { type: GraphQLString },
     color2: { type: GraphQLString },
     color3: { type: GraphQLString },
     glue: { type: GraphQLString },
-    numberOfColors: { type: GraphQLString },
-    printName: { type: GraphQLString },
-    productCode: { type: GraphQLString },
     roller: { type: GraphQLString },
     tapeColor: { type: GraphQLString },
     tapeLong: { type: GraphQLInt },
     tapeThickness: { type: GraphQLInt },
     tapeWidth: { type: GraphQLInt }
+  })
+});
+
+const StretchType = new GraphQLObjectType({
+  name: "Stretch",
+  fields: () => ({
+    grossWeight: { type: GraphQLFloat },
+    netWeight: { type: GraphQLFloat },
+    sleeve: { type: GraphQLInt },
+    stretchColor: { type: GraphQLString },
+    stretchThickness: { type: GraphQLInt }
   })
 });
 
@@ -84,6 +130,18 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(OrderType),
       resolve(parent, args) {
         return console.log(parent);
+      }
+    }
+  }
+});
+
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    addOrder: {
+      type: OrderType,
+      args: {
+        name: String
       }
     }
   }

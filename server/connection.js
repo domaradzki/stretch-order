@@ -44,7 +44,10 @@ function getDataFromApi(req, res) {
 }
 
 function connectMongoDB() {
-  mongoose.connect("mongodb://localhost/test");
+  mongoose.connect("mongodb://localhost/goodmark", {
+    useNewUrlParser: true,
+    useFindAndModify: false
+  });
 
   mongoose.connection
     .once("open", function() {
