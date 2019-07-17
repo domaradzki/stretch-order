@@ -1,4 +1,10 @@
 const graphql = require("graphql");
+const Order = require("../models/order");
+const Product = require("../models/product");
+const User = require("../models/user");
+const Client = require("../models/client");
+const Tape = require("../models/tape");
+const Stretch = require("../models/stretch");
 
 const {
   GraphQLObjectType,
@@ -14,7 +20,7 @@ const {
 const OrderType = new GraphQLObjectType({
   name: "Order",
   fields: () => ({
-    id: { type: GraphQLID },
+    documentId: { type: GraphQLID },
     dateInsert: { type: GraphQLString },
     dateOfPay: { type: GraphQLString },
     dateOfRealisation: { type: GraphQLString },
@@ -27,9 +33,27 @@ const OrderType = new GraphQLObjectType({
     transport: { type: GraphQLString },
     numberOfDocumentInvoice: { type: GraphQLInt },
     invoice: { type: GraphQLString },
-    clientId: { type: GraphQLInt },
-    traderId: { type: GraphQLInt },
-    productId: { type: GraphQLInt }
+    client: {
+      type: ClientType,
+      resolve(parent, args) {
+        console.log(parent);
+        return findOne(Client, { _id: parent.clientId });
+      }
+    },
+    user: {
+      type: userType,
+      resolve(parent, args) {
+        console.log(parent);
+        return findOne(User, { _id: parent.userId });
+      }
+    },
+    products: {
+      type: new GraphQLList(ProductType),
+      resolve(parent, args) {
+        console.log(parent);
+        return findMany(Product, { _id: parent.productId });
+      }
+    }
   })
 });
 
@@ -40,8 +64,8 @@ const ClientType = new GraphQLObjectType({
   })
 });
 
-const TraderType = new GraphQLObjectType({
-  name: "Trader",
+const UserType = new GraphQLObjectType({
+  name: "User",
   fields: () => ({
     name: { type: GraphQLString },
     email: { type: GraphQLString }
