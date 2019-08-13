@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const stretchSchema = new Schema({
@@ -9,5 +9,5 @@ const stretchSchema = new Schema({
   stretchThickness: Number
 });
 
-const Stretch = mongoose.model("stretch", stretchSchema);
-module.exports = Stretch;
+const Stretch = mongoose.model("Stretch", stretchSchema);
+export default Stretch;

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const tapeSchema = new Schema({
@@ -16,5 +16,5 @@ const tapeSchema = new Schema({
   tapeWidth: Number
 });
 
-const Tape = mongoose.model("tape", tapeSchema);
-module.exports = Tape;
+const Tape = mongoose.model("Tape", tapeSchema);
+export default Tape;
