@@ -10,7 +10,7 @@ import Order from "../../models/order";
 import OrderType from "./orderType";
 import { OrderInterface } from "../../types/orderType";
 
-const orderMutations = new GraphQLObjectType({
+const orderMutations = {
   addOrder: {
     type: OrderType,
     args: {
@@ -39,6 +39,6 @@ const orderMutations = new GraphQLObjectType({
       return order.save();
     }
   }
-});
+};
 
 export default orderMutations;

@@ -11,7 +11,7 @@ import DocumentType from "./documentType";
 import { DocumentInterface } from "../../types/documentType";
 import Document from "../../models/document";
 
-const documentMutations = new GraphQLObjectType({
+const documentMutations = {
   addDocument: {
     type: DocumentType,
     args: {
@@ -52,6 +52,6 @@ const documentMutations = new GraphQLObjectType({
       return document.save();
     }
   }
-});
+};
 
 export default documentMutations;

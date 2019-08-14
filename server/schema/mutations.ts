@@ -5,10 +5,8 @@ import orderMutations from "./orders/mutations";
 const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
-    document: {
-      ...documentMutations,
-      ...orderMutations
-    }
+    ...documentMutations,
+    ...orderMutations
   }
 });
 

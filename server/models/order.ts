@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import * as mongoose from "mongoose";
 import { OrderInterface } from "../types/orderType";
 
-const orderSchema = new Schema({
+const orderSchema = new mongoose.Schema({
   itemId: String,
   name: String,
   code: String,

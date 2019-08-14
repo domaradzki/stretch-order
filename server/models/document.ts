@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import * as mongoose from "mongoose";
 import { DocumentInterface } from "../types/documentType";
 
-const documentSchema: Schema = new Schema({
+const documentSchema = new mongoose.Schema({
   documentId: Number,
   dateInsert: String,
   dateOfPay: String,
