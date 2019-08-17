@@ -38,6 +38,56 @@ const orderMutations = {
       });
       return order.save();
     }
+  },
+  updateOrder: {
+    type: OrderType,
+    args: {
+      id: { type: GraphQLString },
+      itemId: { type: GraphQLString },
+      name: { type: GraphQLString },
+      code: { type: GraphQLString },
+      kind: { type: GraphQLString },
+      type: { type: GraphQLString },
+      quantity: { type: GraphQLFloat },
+      price: { type: GraphQLFloat },
+      netValue: { type: GraphQLFloat },
+      documentId: { type: GraphQLInt }
+    },
+    resolve(parent, args) {
+      return Order.findByIdAndUpdate(
+        { _id: args.id },
+        {
+          $set: {
+            itemId: args.itemId,
+            name: args.name,
+            code: args.code,
+            kind: args.kind,
+            type: args.type,
+            quantity: args.quantity,
+            price: args.price,
+            netValue: args.netValue,
+            documentId: args.documentId
+          }
+        }
+      )
+        .then((updatedOrder): any => updatedOrder)
+        .catch((err): void => console.log(err));
+    }
+  },
+  deleteOrder: {
+    type: OrderType,
+    args: {
+      id: { type: GraphQLString }
+    },
+    resolve(parent, args) {
+      return Order.findByIdAndDelete(args.id)
+        .then((order: any) => {
+          order.remove();
+          return order;
+        })
+        .then((deletedOrder): any => deletedOrder)
+        .catch((err): void => console.log(err));
+    }
   }
 };
 

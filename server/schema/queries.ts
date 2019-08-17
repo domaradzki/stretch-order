@@ -5,10 +5,8 @@ import orderQueries from "./orders/queries";
 const query = new GraphQLObjectType({
   name: "Query",
   fields: {
-    document: {
-      ...documentQueries,
-      ...orderQueries
-    }
+    ...documentQueries,
+    ...orderQueries
   }
 });
 

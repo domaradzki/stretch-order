@@ -1,18 +1,15 @@
-import { GraphQLObjectType } from "graphql";
+import { GraphQLObjectType, GraphQLList } from "graphql";
 
 import OrderType from "./orderType";
 import Order from "../../models/order";
 
-const orderQueries = new GraphQLObjectType({
-  name: "Query",
-  fields: {
-    orders: {
-      type: OrderType,
-      resolve(parent, args) {
-        return Order.find({});
-      }
+const orderQueries = {
+  orders: {
+    type: new GraphQLList(OrderType),
+    resolve(parent, args) {
+      return Order.find({});
     }
   }
-});
+};
 
 export default orderQueries;
