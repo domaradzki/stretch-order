@@ -1,5 +1,4 @@
 import {
-  GraphQLList,
   GraphQLString,
   GraphQLInt,
   GraphQLBoolean,
@@ -11,14 +10,12 @@ import {
 import DocumentType from "./documentType";
 import { DocumentInterface } from "../../types/documentType";
 import Document from "../../models/document";
-import OrderType from "../orders/orderType";
-import Order from "../../models/order";
 
 const documentMutations = {
   addDocument: {
     type: DocumentType,
     args: {
-      documentId: { type: new GraphQLNonNull(GraphQLID) },
+      id: { type: new GraphQLNonNull(GraphQLID) },
       dateInsert: { type: new GraphQLNonNull(GraphQLString) },
       dateOfPay: { type: GraphQLString },
       dateOfRealisation: { type: GraphQLString },
@@ -37,7 +34,6 @@ const documentMutations = {
     },
     resolve(parent, args: DocumentInterface) {
       const document = new Document({
-        documentId: args.documentId,
         dateInsert: args.dateInsert,
         dateOfPay: args.dateOfPay,
         dateOfRealisation: args.dateOfRealisation,
@@ -60,7 +56,6 @@ const documentMutations = {
     type: DocumentType,
     args: {
       id: { type: GraphQLString },
-      documentId: { type: GraphQLID },
       dateInsert: { type: GraphQLString },
       dateOfPay: { type: GraphQLString },
       dateOfRealisation: { type: GraphQLString },
@@ -81,7 +76,6 @@ const documentMutations = {
         { _id: args.id },
         {
           $set: {
-            documentId: args.documentId,
             dateInsert: args.dateInsert,
             dateOfPay: args.dateOfPay,
             dateOfRealisation: args.dateOfRealisation,

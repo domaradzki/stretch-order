@@ -1,8 +1,14 @@
-import { GraphQLObjectType, GraphQLString, GraphQLInt } from "graphql";
+import {
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLString,
+  GraphQLInt
+} from "graphql";
 
 const TapeType = new GraphQLObjectType({
   name: "Tape",
   fields: () => ({
+    id: { type: GraphQLID },
     printName: { type: GraphQLString },
     dateOfAcceptation: { type: GraphQLString },
     numberOfColors: { type: GraphQLString },

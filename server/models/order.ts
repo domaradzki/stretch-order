@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema({
   price: Number,
   netValue: Number,
   documentId: Number,
-  productionId: Number
+  productId: Number
 });
 
 const Order = mongoose.model<OrderInterface>("Order", orderSchema);

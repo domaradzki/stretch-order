@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { UserInterface } from "../types/userType";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -8,5 +9,5 @@ const userSchema = new Schema({
   password: String
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model<UserInterface>("User", userSchema);
 export default User;

@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLList } from "graphql";
+import { GraphQLID, GraphQLList } from "graphql";
 
 import OrderType from "./orderType";
 import Order from "../../models/order";
@@ -12,7 +12,7 @@ const orderQueries = {
   },
   order: {
     type: OrderType,
-    args: { id: { type: GraphQLString } },
+    args: { id: { type: GraphQLID } },
     resolve(parent, args) {
       return Order.findById(args.id);
     }

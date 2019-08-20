@@ -1,8 +1,17 @@
-import { GraphQLObjectType, GraphQLString, GraphQLFloat } from "graphql";
+import {
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLString,
+  GraphQLFloat
+} from "graphql";
+
+import Document from "../../models/document";
+import DocumentType from "../documents/documentType";
 
 const OrderType = new GraphQLObjectType({
   name: "Order",
   fields: () => ({
+    id: { type: GraphQLID },
     itemId: { type: GraphQLString },
     name: { type: GraphQLString },
     code: { type: GraphQLString },
@@ -11,7 +20,12 @@ const OrderType = new GraphQLObjectType({
     quantity: { type: GraphQLFloat },
     price: { type: GraphQLFloat },
     netValue: { type: GraphQLFloat },
-    documentId: { type: GraphQLString }
+    document: {
+      type: DocumentType,
+      resolve(parent, args) {
+        return Document.findById(parent.documentId);
+      }
+    }
   })
 });
 

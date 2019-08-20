@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLList } from "graphql";
+import { GraphQLID, GraphQLList } from "graphql";
 
 import DocumentType from "./documentType";
 import Document from "../../models/document";
@@ -12,7 +12,7 @@ const documentQueries = {
   },
   document: {
     type: DocumentType,
-    args: { id: { type: GraphQLString } },
+    args: { id: { type: GraphQLID } },
     resolve(parent, args) {
       return Document.findById(args.id);
     }

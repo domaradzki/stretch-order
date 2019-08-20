@@ -17,7 +17,7 @@ import Order from "../../models/order";
 const DocumentType = new GraphQLObjectType({
   name: "Document",
   fields: () => ({
-    documentId: { type: GraphQLID },
+    id: { type: GraphQLID },
     dateInsert: { type: GraphQLString },
     dateOfPay: { type: GraphQLString },
     dateOfRealisation: { type: GraphQLString },
@@ -45,7 +45,7 @@ const DocumentType = new GraphQLObjectType({
     orders: {
       type: new GraphQLList(OrderType),
       resolve(parent, args) {
-        return Order.find({ documentId: parent.documentId });
+        return Order.find({ documentId: parent.id });
       }
     }
   })

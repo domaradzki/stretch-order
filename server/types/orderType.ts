@@ -10,5 +10,5 @@ export interface OrderInterface extends Document {
   price: Number;
   netValue: Number;
   documentId: Number;
-  productionId: Number;
+  productId: Number;
 }
