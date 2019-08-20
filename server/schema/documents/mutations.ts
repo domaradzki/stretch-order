@@ -1,15 +1,18 @@
 import {
-  GraphQLObjectType,
+  GraphQLList,
   GraphQLString,
   GraphQLInt,
   GraphQLBoolean,
   GraphQLID,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLInputType
 } from "graphql";
 
 import DocumentType from "./documentType";
 import { DocumentInterface } from "../../types/documentType";
 import Document from "../../models/document";
+import OrderType from "../orders/orderType";
+import Order from "../../models/order";
 
 const documentMutations = {
   addDocument: {
@@ -29,7 +32,8 @@ const documentMutations = {
       numberOfDocumentInvoice: { type: GraphQLInt },
       invoice: { type: GraphQLString },
       clientId: { type: new GraphQLNonNull(GraphQLInt) },
-      userId: { type: new GraphQLNonNull(GraphQLInt) }
+      userId: { type: new GraphQLNonNull(GraphQLInt) },
+      orders: { type: GraphQLInputType }
     },
     resolve(parent, args: DocumentInterface) {
       const document = new Document({
