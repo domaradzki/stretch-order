@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { TapeInterface } from "../types/tapeType";
 const Schema = mongoose.Schema;
 
 const tapeSchema = new Schema({
@@ -16,5 +17,5 @@ const tapeSchema = new Schema({
   tapeWidth: Number
 });
 
-const Tape = mongoose.model("Tape", tapeSchema);
+const Tape = mongoose.model<TapeInterface>("Tape", tapeSchema);
 export default Tape;

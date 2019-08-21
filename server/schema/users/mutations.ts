@@ -9,11 +9,17 @@ const userMutations = {
     type: UserType,
     args: {
       id: { type: new GraphQLNonNull(GraphQLID) },
-      name: { type: new GraphQLNonNull(GraphQLString) }
+      name: { type: new GraphQLNonNull(GraphQLString) },
+      email: { type: GraphQLString },
+      login: { type: GraphQLString },
+      password: { type: GraphQLString }
     },
     resolve(parent, args: UserInterface) {
       const user = new User({
-        name: args.name
+        name: args.name,
+        email: args.email,
+        login: args.login,
+        password: args.password
       });
       return user.save();
     }
@@ -22,14 +28,20 @@ const userMutations = {
     type: UserType,
     args: {
       id: { type: GraphQLID },
-      name: { type: GraphQLString }
+      name: { type: GraphQLString },
+      email: { type: GraphQLString },
+      login: { type: GraphQLString },
+      password: { type: GraphQLString }
     },
     resolve(parent, args) {
       return User.findByIdAndUpdate(
         { _id: args.id },
         {
           $set: {
-            name: args.name
+            name: args.name,
+            email: args.email,
+            login: args.login,
+            password: args.password
           }
         }
       )

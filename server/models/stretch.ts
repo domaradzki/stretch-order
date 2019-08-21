@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { StretchInterface } from "../types/stretchType";
 const Schema = mongoose.Schema;
 
 const stretchSchema = new Schema({
@@ -9,5 +10,5 @@ const stretchSchema = new Schema({
   stretchThickness: Number
 });
 
-const Stretch = mongoose.model("Stretch", stretchSchema);
+const Stretch = mongoose.model<StretchInterface>("Stretch", stretchSchema);
 export default Stretch;
