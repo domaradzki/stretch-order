@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "target": "es6",
+    "outDir": "build"
+  },
+  "include": ["**/*.ts", "config.js"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true
+}

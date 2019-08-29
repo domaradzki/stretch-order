@@ -1,23 +1,21 @@
-const sqlQuery = require("./query");
-const mongoose = require("mongoose");
-const knex = require("knex")({
+import sqlQuery from "./query";
+import * as mongoose from "mongoose";
+import * as knex from "knex";
+
+const knexConfig = knex({
   client: "mssql",
   connection: {
     user: "sa",
     password: "",
     server: "192.168.0.13",
     database: "Nexo_Goodmarks",
-    port: 58857,
-    dialect: "mssql",
-    dialectOptions: {
-      instanceName: "SQLEXPRESS"
-    }
+    port: 58857
   }
 });
 async function connectDB(retries = 5) {
   while (retries) {
     try {
-      await knex.raw("select 1+1 as result");
+      await knexConfig.raw("select 1+1 as result");
       console.log(`Connection from KNEX has been established successfully.`);
       break;
     } catch (error) {
@@ -33,7 +31,7 @@ async function connectDB(retries = 5) {
 }
 
 function getDataFromApi(req, res) {
-  knex
+  knexConfig
     .raw(sqlQuery)
     .then(function(recordset) {
       res.json(recordset);
@@ -58,6 +56,4 @@ function connectMongoDB() {
     });
 }
 
-module.exports.connectMongoDB = connectMongoDB;
-module.exports.connectDB = connectDB;
-module.exports.getDataFromApi = getDataFromApi;
+export { connectMongoDB, connectDB, getDataFromApi };

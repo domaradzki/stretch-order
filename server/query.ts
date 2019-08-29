@@ -39,4 +39,4 @@ const sqlQuery = `SELECT d.id
           WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-07-01')
           ORDER BY d.Id DESC`;
 
-module.exports = sqlQuery;
+export default sqlQuery;

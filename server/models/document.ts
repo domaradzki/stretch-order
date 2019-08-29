@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import * as mongoose from "mongoose";
+import { DocumentInterface } from "../types/documentType";
 
-const orderSchema = new Schema({
-  documentId: Number,
+const documentSchema = new mongoose.Schema({
   dateInsert: String,
   dateOfPay: String,
   dateOfRealisation: String,
@@ -16,9 +15,8 @@ const orderSchema = new Schema({
   numberOfDocumentInvoice: Number,
   invoice: String,
   clientId: Number,
-  userId: Number,
-  productId: Number
+  userId: Number
 });
 
-const Order = mongoose.model("order", orderSchema);
-module.exports = Order;
+const Document = mongoose.model<DocumentInterface>("Document", documentSchema);
+export default Document;
