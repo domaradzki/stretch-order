@@ -121,7 +121,8 @@ class FormOrderTPD extends Component {
       color2,
       color3,
       dateOfAcceptation,
-      dateOfRealisation
+      dateOfRealisation,
+      deliveryAddress
     } = this.props;
     const dateOfAcceptOrOrder =
       dateInsert > dateOfAcceptation ? dateInsert : dateOfAcceptation;
@@ -260,15 +261,15 @@ class FormOrderTPD extends Component {
               <Form.Input
                 value={numberOfColors}
                 name="numberOfColors"
-                label="Ilość kolorów"
-                placeholder="Ilość kolorów"
+                label="Kolory"
+                placeholder="Kolory"
                 width={2}
                 onChange={this.handleChangeInput}
               />
               <Form.Input
                 value={color1}
                 name="color1"
-                label="Color 1"
+                label="Kolor 1"
                 placeholder="Color 1"
                 width={3}
                 onChange={this.handleChangeInput}
@@ -276,7 +277,7 @@ class FormOrderTPD extends Component {
               <Form.Input
                 value={color2}
                 name="color2"
-                label="Color 2"
+                label="Kolor 2"
                 placeholder="Color 2"
                 width={3}
                 onChange={this.handleChangeInput}
@@ -284,7 +285,7 @@ class FormOrderTPD extends Component {
               <Form.Input
                 value={color3}
                 name="color3"
-                label="Color 3"
+                label="Kolor 3"
                 placeholder="Color 3"
                 width={3}
                 onChange={this.handleChangeInput}
@@ -356,7 +357,15 @@ class FormOrderTPD extends Component {
                 name="details"
                 label="Uwagi"
                 placeholder="Uwagi"
-                width={16}
+                width={8}
+                onChange={this.handleChangeInput}
+              />
+              <Form.Input
+                value={deliveryAddress}
+                name="deliveryAddress"
+                label="Adres dostawy"
+                placeholder="Adres dostawy"
+                width={8}
                 onChange={this.handleChangeInput}
               />
             </Form.Group>
@@ -398,7 +407,7 @@ const mapStateToProps = state => {
     details: state.orders.details,
     dateInsert: state.orders.dateInsert,
     trader: state.orders.trader,
-    deliveryAddress : state.orders.deliveryAddress,
+    deliveryAddress: state.orders.deliveryAddress,
     pickedOrder: pickedOrder(state)
   };
 };
