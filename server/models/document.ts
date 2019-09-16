@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 import { DocumentInterface } from "../types/documentType";
 
 const documentSchema = new mongoose.Schema({
+  documentId: Number,
   dateInsert: String,
   dateOfPay: String,
   dateOfRealisation: String,
@@ -14,8 +15,8 @@ const documentSchema = new mongoose.Schema({
   transport: String,
   numberOfDocumentInvoice: Number,
   invoice: String,
-  clientId: Number,
-  userId: Number
+  clientId: String,
+  userId: String
 });
 
 const Document = mongoose.model<DocumentInterface>("Document", documentSchema);

@@ -16,40 +16,7 @@ import DetailsView from "../DetailsView/DetailsView";
 const getQuery = gql`
   {
     orders {
-      dateInsert
-      client {
-        name
-      }
-      signature
-      symbol
-      address {
-        deliveryAddress
-      }
-      address2 {
-        deliveryAddress
-      }
-      items {
-        price
-        quantity
-        assortment {
-          name
-          code
-          kind {
-            name
-          }
-          type {
-            name
-          }
-        }
-      }
-      details
-      closed
-      documentStatus
-      trader {
-        user {
-          name
-        }
-      }
+      id
     }
   }
 `;
@@ -67,9 +34,8 @@ class MainView extends Component {
 
   handleClick = (event, data) => {
     const { activateDetails } = this.props;
-    const id = data.id;
-    const name = data.name;
-    const kind = data.kind;
+    const { id, name, kind } = data;
+
     activateDetails(id, name, kind);
   };
 
@@ -78,6 +44,7 @@ class MainView extends Component {
     const paginationButton =
       pagination === 0 ? pagination : pagination / 10 - 1;
     const newOrders = this.props.datas;
+    console.log(this.props);
     return (
       <div className="mainview__container">
         <DetailsView />

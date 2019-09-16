@@ -1,9 +1,9 @@
 import {
-  GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
   GraphQLFloat,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLID
 } from "graphql";
 
 import Order from "../../models/order";
@@ -22,7 +22,7 @@ const orderMutations = {
       quantity: { type: new GraphQLNonNull(GraphQLFloat) },
       price: { type: new GraphQLNonNull(GraphQLFloat) },
       netValue: { type: new GraphQLNonNull(GraphQLFloat) },
-      documentId: { type: new GraphQLNonNull(GraphQLInt) }
+      documentId: { type: new GraphQLNonNull(GraphQLID) }
     },
     resolve(parent, args: OrderInterface) {
       const order = new Order({
@@ -42,7 +42,7 @@ const orderMutations = {
   updateOrder: {
     type: OrderType,
     args: {
-      id: { type: GraphQLString },
+      id: { type: GraphQLID },
       itemId: { type: GraphQLString },
       name: { type: GraphQLString },
       code: { type: GraphQLString },
@@ -51,7 +51,7 @@ const orderMutations = {
       quantity: { type: GraphQLFloat },
       price: { type: GraphQLFloat },
       netValue: { type: GraphQLFloat },
-      documentId: { type: GraphQLInt }
+      documentId: { type: GraphQLID }
     },
     resolve(parent, args) {
       return Order.findByIdAndUpdate(
@@ -68,7 +68,8 @@ const orderMutations = {
             netValue: args.netValue,
             documentId: args.documentId
           }
-        }
+        },
+        { new: true }
       )
         .then((updatedOrder): any => updatedOrder)
         .catch((err): void => console.log(err));
@@ -77,7 +78,7 @@ const orderMutations = {
   deleteOrder: {
     type: OrderType,
     args: {
-      id: { type: GraphQLString }
+      id: { type: GraphQLID }
     },
     resolve(parent, args) {
       return Order.findByIdAndDelete(args.id)

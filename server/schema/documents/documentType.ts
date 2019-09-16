@@ -18,6 +18,7 @@ const DocumentType = new GraphQLObjectType({
   name: "Document",
   fields: () => ({
     id: { type: GraphQLID },
+    documentId: { type: GraphQLInt },
     dateInsert: { type: GraphQLString },
     dateOfPay: { type: GraphQLString },
     dateOfRealisation: { type: GraphQLString },

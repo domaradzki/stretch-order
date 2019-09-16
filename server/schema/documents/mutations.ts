@@ -3,8 +3,7 @@ import {
   GraphQLInt,
   GraphQLBoolean,
   GraphQLID,
-  GraphQLNonNull,
-  GraphQLInputType
+  GraphQLNonNull
 } from "graphql";
 
 import DocumentType from "./documentType";
@@ -15,7 +14,7 @@ const documentMutations = {
   addDocument: {
     type: DocumentType,
     args: {
-      id: { type: new GraphQLNonNull(GraphQLID) },
+      documentId: { type: new GraphQLNonNull(GraphQLInt) },
       dateInsert: { type: new GraphQLNonNull(GraphQLString) },
       dateOfPay: { type: GraphQLString },
       dateOfRealisation: { type: GraphQLString },
@@ -28,12 +27,12 @@ const documentMutations = {
       transport: { type: GraphQLString },
       numberOfDocumentInvoice: { type: GraphQLInt },
       invoice: { type: GraphQLString },
-      clientId: { type: new GraphQLNonNull(GraphQLInt) },
-      userId: { type: new GraphQLNonNull(GraphQLInt) },
-      orders: { type: GraphQLInputType }
+      clientId: { type: new GraphQLNonNull(GraphQLID) },
+      userId: { type: new GraphQLNonNull(GraphQLID) }
     },
     resolve(parent, args: DocumentInterface) {
       const document = new Document({
+        documentId: args.documentId,
         dateInsert: args.dateInsert,
         dateOfPay: args.dateOfPay,
         dateOfRealisation: args.dateOfRealisation,
@@ -55,7 +54,8 @@ const documentMutations = {
   updateDocument: {
     type: DocumentType,
     args: {
-      id: { type: GraphQLString },
+      id: { type: GraphQLID },
+      documentId: { type: GraphQLInt },
       dateInsert: { type: GraphQLString },
       dateOfPay: { type: GraphQLString },
       dateOfRealisation: { type: GraphQLString },
@@ -68,14 +68,15 @@ const documentMutations = {
       transport: { type: GraphQLString },
       numberOfDocumentInvoice: { type: GraphQLInt },
       invoice: { type: GraphQLString },
-      clientId: { type: GraphQLInt },
-      userId: { type: GraphQLInt }
+      clientId: { type: GraphQLID },
+      userId: { type: GraphQLID }
     },
     resolve(parent, args) {
       return Document.findByIdAndUpdate(
         { _id: args.id },
         {
           $set: {
+            documentId: args.documentId,
             dateInsert: args.dateInsert,
             dateOfPay: args.dateOfPay,
             dateOfRealisation: args.dateOfRealisation,
@@ -91,7 +92,8 @@ const documentMutations = {
             clientId: args.clientId,
             userId: args.userId
           }
-        }
+        },
+        { new: true }
       )
         .then((updatedOrder): any => updatedOrder)
         .catch((err): void => console.log(err));
@@ -100,7 +102,7 @@ const documentMutations = {
   deleteDocument: {
     type: DocumentType,
     args: {
-      id: { type: GraphQLString }
+      id: { type: GraphQLID }
     },
     resolve(parent, args) {
       return Document.findByIdAndDelete(args.id)
