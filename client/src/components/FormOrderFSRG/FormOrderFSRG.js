@@ -120,6 +120,7 @@ class FormOrderFSRG extends Component {
                 placeholder="Klient"
                 width={8}
                 onChange={this.handleChangeInput}
+                required
               />
               <div className="four wide field">
                 <label>Zamówienie</label>
@@ -160,6 +161,7 @@ class FormOrderFSRG extends Component {
                 type="number"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={sleeve}
@@ -169,6 +171,7 @@ class FormOrderFSRG extends Component {
                 type="number"
                 width={2}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={stretchColor}
@@ -178,6 +181,7 @@ class FormOrderFSRG extends Component {
                 type="text"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={stretchThickness}
@@ -187,6 +191,7 @@ class FormOrderFSRG extends Component {
                 type="text"
                 width={2}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={netWeight}
@@ -196,6 +201,7 @@ class FormOrderFSRG extends Component {
                 type="number"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={grossWeight}
@@ -205,6 +211,7 @@ class FormOrderFSRG extends Component {
                 type="number"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
             </Form.Group>
           </Segment>
@@ -221,6 +228,7 @@ class FormOrderFSRG extends Component {
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 name="netValue"
@@ -233,6 +241,7 @@ class FormOrderFSRG extends Component {
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Select
                 fluid
@@ -249,6 +258,7 @@ class FormOrderFSRG extends Component {
                   { key: 6, value: "3", text: "3" }
                 ]}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Select
                 fluid
@@ -265,6 +275,7 @@ class FormOrderFSRG extends Component {
                   { key: 6, value: "Paleta max", text: "Paleta max" }
                 ]}
                 onChange={this.handleChangeInput}
+                required
               />
             </Form.Group>
             <Form.Group>

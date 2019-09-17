@@ -11,11 +11,10 @@ import { unactivateDetails, pickedOrder } from "../../ducks/data";
 
 class FormOrderPacking extends Component {
   componentDidMount() {
-    
     const { pickedOrder } = this.props;
     pickedOrder.dateOfRealisation = moment(pickedOrder.dateInsert)
-    .add(1, "days")
-    .format("YYYY-MM-DD")
+      .add(1, "days")
+      .format("YYYY-MM-DD");
 
     for (let key in pickedOrder) {
       if (pickedOrder.hasOwnProperty(key)) {
@@ -96,13 +95,14 @@ class FormOrderPacking extends Component {
         <Form>
           <Segment color="blue">
             <Form.Group>
-            <Form.Input
+              <Form.Input
                 value={client}
                 name="client"
                 label="Klient"
                 placeholder="Klient"
                 width={8}
                 onChange={this.handleChangeInput}
+                required
               />
               <div className="four wide field">
                 <label>Zamówienie</label>
@@ -135,7 +135,7 @@ class FormOrderPacking extends Component {
           </Segment>
           <Segment color="blue">
             <Form.Group>
-            <Form.Input
+              <Form.Input
                 value={quantity}
                 name="quantity"
                 label="Ilość"
@@ -143,6 +143,7 @@ class FormOrderPacking extends Component {
                 type="number"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 name="price"
@@ -155,6 +156,7 @@ class FormOrderPacking extends Component {
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 name="netValue"
@@ -167,6 +169,7 @@ class FormOrderPacking extends Component {
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Select
                 fluid
@@ -183,6 +186,7 @@ class FormOrderPacking extends Component {
                   { key: 6, value: "3", text: "3" }
                 ]}
                 onChange={this.handleChangeInput}
+                required
               />
             </Form.Group>
           </Segment>
@@ -203,6 +207,7 @@ class FormOrderPacking extends Component {
                   { key: 6, value: "Paleta max", text: "Paleta max" }
                 ]}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={deliveryAddress}
@@ -245,7 +250,7 @@ const mapStateToProps = state => {
     margin: state.orders.margin,
     details: state.orders.details,
     dateInsert: state.orders.dateInsert,
-    dateOfRealisation : state.orders.dateOfRealisation,
+    dateOfRealisation: state.orders.dateOfRealisation,
     deliveryAddress: state.orders.deliveryAddress,
     trader: state.orders.trader,
     pickedOrder: pickedOrder(state)

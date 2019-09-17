@@ -139,6 +139,7 @@ class FormOrderTPD extends Component {
                 placeholder="Klient"
                 width={8}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={printName}
@@ -147,6 +148,7 @@ class FormOrderTPD extends Component {
                 placeholder="Nadruk"
                 width={8}
                 onChange={this.handleChangeInput}
+                required
               />
             </Form.Group>
             <Form.Group>
@@ -200,6 +202,7 @@ class FormOrderTPD extends Component {
                 type="number"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={tapeLong}
@@ -208,6 +211,7 @@ class FormOrderTPD extends Component {
                 placeholder="Długość"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={tapeWidth}
@@ -216,6 +220,7 @@ class FormOrderTPD extends Component {
                 placeholder="Szerokość"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={tapeThickness}
@@ -224,6 +229,7 @@ class FormOrderTPD extends Component {
                 placeholder="Grubość"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={tapeColor}
@@ -232,6 +238,7 @@ class FormOrderTPD extends Component {
                 placeholder="Kolor taśmy"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
             </Form.Group>
             <Form.Group>
@@ -249,6 +256,7 @@ class FormOrderTPD extends Component {
                   { key: 5, value: "438", text: "438" }
                 ]}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={glue}
@@ -257,14 +265,22 @@ class FormOrderTPD extends Component {
                 placeholder="Klej"
                 width={2}
                 onChange={this.handleChangeInput}
+                required
               />
-              <Form.Input
+              <Form.Select
+                fluid
                 value={numberOfColors}
                 name="numberOfColors"
                 label="Kolory"
                 placeholder="Kolory"
                 width={2}
+                options={[
+                  { key: 1, value: "1", text: "1" },
+                  { key: 2, value: "2", text: "2" },
+                  { key: 3, value: "3", text: "3" }
+                ]}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={color1}
@@ -273,6 +289,7 @@ class FormOrderTPD extends Component {
                 placeholder="Color 1"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={color2}
@@ -305,6 +322,7 @@ class FormOrderTPD extends Component {
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 name="netValue"
@@ -317,6 +335,7 @@ class FormOrderTPD extends Component {
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Select
                 fluid
@@ -333,6 +352,7 @@ class FormOrderTPD extends Component {
                   { key: 6, value: "3", text: "3" }
                 ]}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Select
                 fluid
@@ -349,6 +369,7 @@ class FormOrderTPD extends Component {
                   { key: 6, value: "Paleta max", text: "Paleta max" }
                 ]}
                 onChange={this.handleChangeInput}
+                required
               />
             </Form.Group>
             <Form.Group>
