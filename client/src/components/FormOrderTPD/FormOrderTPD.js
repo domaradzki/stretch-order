@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Form, Button, Segment } from "semantic-ui-react";
+import { compose } from "redux";
 import { connect } from "react-redux";
+import { graphql } from "react-apollo";
+import addOrder from "../../graphql/addOrder";
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
@@ -28,8 +31,7 @@ class FormOrderTPD extends Component {
   }
 
   handleChangeInput = (event, data) => {
-    const name = data.name;
-    const value = data.value;
+    const { name, value } = data;
     this.props.changeInput(name, value);
   };
 
@@ -97,11 +99,31 @@ class FormOrderTPD extends Component {
       dateOfRealisation,
       deliveryAddress
     };
+    const { assortment, itemId, code, kind, type, documentId } = pickedOrder;
+    const vor = () =>
+      this.props
+        .addOrder({
+          variables: {
+            itemId,
+            name: assortment,
+            code,
+            kind,
+            type,
+            quantity,
+            price,
+            netValue,
+            documentId
+          }
+        })
+        .then(res => console.log(res.data.addOrder));
+    //console.log(vor);
+    vor();
     console.log(order);
     this.props.unactivateDetails();
     this.props.clearInput();
   };
   render() {
+    console.log(this.props);
     const {
       printName,
       client,
@@ -442,7 +464,14 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
+const reduxWrapper = connect(
   mapStateToProps,
   mapDispatchToProps
+);
+
+const graphqlWrapper = graphql(addOrder, { name: "addOrder" });
+
+export default compose(
+  reduxWrapper,
+  graphqlWrapper
 )(FormOrderTPD);

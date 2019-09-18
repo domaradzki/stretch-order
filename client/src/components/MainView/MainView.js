@@ -35,7 +35,6 @@ class MainView extends Component {
   handleClick = (event, data) => {
     const { activateDetails } = this.props;
     const { id, name, kind } = data;
-
     activateDetails(id, name, kind);
   };
 
@@ -44,7 +43,6 @@ class MainView extends Component {
     const paginationButton =
       pagination === 0 ? pagination : pagination / 10 - 1;
     const newOrders = this.props.datas;
-    console.log(this.props);
     return (
       <div className="mainview__container">
         <DetailsView />
@@ -95,7 +93,6 @@ class MainView extends Component {
                 ))
                 .slice(pagination, pagination + 10)}
             </Table.Body>
-
             <Table.Footer>
               <Table.Row>
                 <Table.HeaderCell colSpan="8">

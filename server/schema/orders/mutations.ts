@@ -1,6 +1,5 @@
 import {
   GraphQLString,
-  GraphQLInt,
   GraphQLFloat,
   GraphQLNonNull,
   GraphQLID
