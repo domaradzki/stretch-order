@@ -3,7 +3,6 @@ import { Form, Button, Segment } from "semantic-ui-react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { graphql } from "react-apollo";
-import addOrder from "../../graphql/addOrder";
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
@@ -11,6 +10,9 @@ import moment from "moment";
 
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
+
+import addOrderMutation from "../../graphql/addOrderMutation";
+import addDocumentMutation from "../../graphql/addDocumentMutation";
 
 class FormOrderTPD extends Component {
   componentDidMount() {
@@ -72,6 +74,7 @@ class FormOrderTPD extends Component {
       dateOfAcceptation,
       dateOfRealisation,
       deliveryAddress,
+      transport,
       pickedOrder
     } = this.props;
     const order = {
@@ -99,26 +102,60 @@ class FormOrderTPD extends Component {
       dateOfRealisation,
       deliveryAddress
     };
-    const { assortment, itemId, code, kind, type, documentId } = pickedOrder;
-    const vor = () =>
-      this.props
-        .addOrder({
-          variables: {
-            itemId,
-            name: assortment,
-            code,
-            kind,
-            type,
-            quantity,
-            price,
-            netValue,
-            documentId
-          }
-        })
-        .then(res => console.log(res.data.addOrder));
-    //console.log(vor);
-    vor();
-    console.log(order);
+    const {
+      assortment,
+      signature,
+      documentStatus,
+      closed,
+      symbol,
+      itemId,
+      code,
+      kind,
+      type,
+      numberOfDocumentInvoice,
+      documentId
+    } = pickedOrder;
+    this.props
+      .addDocumentMutation({
+        variables: {
+          documentId,
+          dateInsert,
+          dateOfPay,
+          dateOfRealisation,
+          signature,
+          symbol,
+          details,
+          closed,
+          documentStatus,
+          deliveryAddress,
+          transport,
+          numberOfDocumentInvoice,
+          invoice,
+          clientId: "",
+          userId: ""
+        }
+      })
+      .then(res => {
+        return res.data.addDocument.id;
+      })
+      .then(res => {
+        this.props
+          .addOrderMutation({
+            variables: {
+              itemId,
+              name: assortment,
+              code,
+              kind,
+              type,
+              quantity,
+              price,
+              netValue,
+              documentId: res
+            }
+          })
+          .then(res => console.log(res.data.addOrder));
+      });
+
     this.props.unactivateDetails();
     this.props.clearInput();
   };
@@ -469,9 +506,13 @@ const reduxWrapper = connect(
   mapDispatchToProps
 );
 
-const graphqlWrapper = graphql(addOrder, { name: "addOrder" });
+const graphqlOrder = graphql(addOrderMutation, { name: "addOrderMutation" });
+const graphqlDocument = graphql(addDocumentMutation, {
+  name: "addDocumentMutation"
+});
 
 export default compose(
   reduxWrapper,
-  graphqlWrapper
+  graphqlOrder,
+  graphqlDocument
 )(FormOrderTPD);

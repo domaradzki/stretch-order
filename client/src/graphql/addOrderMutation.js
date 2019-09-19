@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-const addOrder = gql`
+const addOrderMutation = gql`
   mutation(
     $itemId: String!
     $name: String!
@@ -37,4 +37,4 @@ const addOrder = gql`
   }
 `;
 
-export default addOrder;
+export default addOrderMutation;
