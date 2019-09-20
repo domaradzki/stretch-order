@@ -11,6 +11,7 @@ const addOrderMutation = gql`
     $price: Float!
     $netValue: Float!
     $documentId: ID!
+    $productId: ID!
   ) {
     addOrder(
       itemId: $itemId
@@ -22,6 +23,7 @@ const addOrderMutation = gql`
       price: $price
       netValue: $netValue
       documentId: $documentId
+      productId: $productId
     ) {
       id
       itemId
@@ -33,6 +35,7 @@ const addOrderMutation = gql`
       price
       netValue
       documentId
+      productId
     }
   }
 `;

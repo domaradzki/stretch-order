@@ -13,6 +13,9 @@ import { unactivateDetails, pickedOrder } from "../../ducks/data";
 
 import addOrderMutation from "../../graphql/addOrderMutation";
 import addDocumentMutation from "../../graphql/addDocumentMutation";
+import addClientMutation from "../../graphql/addClientMutation";
+import addUserMutation from "../../graphql/addUserMutation";
+import addTapeMutation from "../../graphql/addTapeMutation";
 
 class FormOrderTPD extends Component {
   componentDidMount() {
@@ -50,10 +53,10 @@ class FormOrderTPD extends Component {
 
   handleAddOrder = event => {
     event.preventDefault();
-    console.log("added");
     const {
       printName,
       client,
+      trader,
       quantity,
       price,
       netValue,
@@ -77,31 +80,6 @@ class FormOrderTPD extends Component {
       transport,
       pickedOrder
     } = this.props;
-    const order = {
-      ...pickedOrder,
-      printName,
-      client,
-      quantity,
-      price,
-      netValue,
-      details,
-      dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
-      tapeLong,
-      tapeWidth,
-      tapeThickness,
-      tapeColor,
-      numberOfColors,
-      glue,
-      roller,
-      invoice,
-      dateOfPay,
-      color1,
-      color2,
-      color3,
-      dateOfAcceptation,
-      dateOfRealisation,
-      deliveryAddress
-    };
     const {
       assortment,
       signature,
@@ -113,54 +91,91 @@ class FormOrderTPD extends Component {
       kind,
       type,
       numberOfDocumentInvoice,
+      companyId,
       documentId
     } = pickedOrder;
-    this.props
-      .addDocumentMutation({
+    Promise.all([
+      this.props.addTapeMutation({
         variables: {
-          documentId,
-          dateInsert,
-          dateOfPay,
-          dateOfRealisation,
-          signature,
-          symbol,
-          details,
-          closed,
-          documentStatus,
-          deliveryAddress,
-          transport,
-          numberOfDocumentInvoice,
-          invoice,
-          clientId: "",
-          userId: ""
+          printName,
+          dateOfAcceptation,
+          numberOfColors,
+          color1,
+          color2,
+          color3,
+          glue,
+          roller,
+          tapeColor,
+          tapeLong,
+          tapeThickness,
+          tapeWidth
+        }
+      }),
+      this.props.addUserMutation({
+        variables: {
+          name: trader
+        }
+      }),
+      this.props.addClientMutation({
+        variables: {
+          name: client,
+          companyId
         }
       })
-      .then(res => {
-        return res.data.addDocument.id;
+    ])
+      .then(result => {
+        return {
+          productId: result[0].data.addTape.id,
+          userId: result[1].data.addUser.id,
+          clientId: result[2].data.addClient.id
+        };
       })
-      .then(res => {
+      .then(result => {
         this.props
-          .addOrderMutation({
+          .addDocumentMutation({
             variables: {
-              itemId,
-              name: assortment,
-              code,
-              kind,
-              type,
-              quantity,
-              price,
-              netValue,
-              documentId: res
+              documentId,
+              dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
+              dateOfPay,
+              dateOfRealisation,
+              signature,
+              symbol,
+              details,
+              closed,
+              documentStatus,
+              deliveryAddress,
+              transport,
+              numberOfDocumentInvoice,
+              invoice,
+              clientId: result.clientId,
+              userId: result.userId
             }
           })
-          .then(res => console.log(res.data.addOrder));
+          .then(res => {
+            return res.data.addDocument.id;
+          })
+          .then(res => {
+            this.props.addOrderMutation({
+              variables: {
+                itemId,
+                name: assortment,
+                code,
+                kind,
+                type,
+                quantity,
+                price,
+                netValue,
+                documentId: res,
+                productId: result.productId
+              }
+            });
+          });
       });
 
     this.props.unactivateDetails();
     this.props.clearInput();
   };
   render() {
-    console.log(this.props);
     const {
       printName,
       client,
@@ -507,12 +522,22 @@ const reduxWrapper = connect(
 );
 
 const graphqlOrder = graphql(addOrderMutation, { name: "addOrderMutation" });
+const graphqlTape = graphql(addTapeMutation, { name: "addTapeMutation" });
 const graphqlDocument = graphql(addDocumentMutation, {
   name: "addDocumentMutation"
+});
+const graphqlClient = graphql(addClientMutation, {
+  name: "addClientMutation"
+});
+const graphqlUser = graphql(addUserMutation, {
+  name: "addUserMutation"
 });
 
 export default compose(
   reduxWrapper,
   graphqlOrder,
-  graphqlDocument
+  graphqlDocument,
+  graphqlClient,
+  graphqlUser,
+  graphqlTape
 )(FormOrderTPD);

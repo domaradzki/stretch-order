@@ -21,7 +21,8 @@ const orderMutations = {
       quantity: { type: new GraphQLNonNull(GraphQLFloat) },
       price: { type: new GraphQLNonNull(GraphQLFloat) },
       netValue: { type: new GraphQLNonNull(GraphQLFloat) },
-      documentId: { type: new GraphQLNonNull(GraphQLID) }
+      documentId: { type: new GraphQLNonNull(GraphQLID) },
+      productId: { type: new GraphQLNonNull(GraphQLID) }
     },
     resolve(parent, args: OrderInterface) {
       const order = new Order({
@@ -33,7 +34,8 @@ const orderMutations = {
         quantity: args.quantity,
         price: args.price,
         netValue: args.netValue,
-        documentId: args.documentId
+        documentId: args.documentId,
+        productId: args.productId
       });
       return order.save();
     }
@@ -50,7 +52,8 @@ const orderMutations = {
       quantity: { type: GraphQLFloat },
       price: { type: GraphQLFloat },
       netValue: { type: GraphQLFloat },
-      documentId: { type: GraphQLID }
+      documentId: { type: GraphQLID },
+      productId: { type: GraphQLID }
     },
     resolve(parent, args) {
       return Order.findByIdAndUpdate(
@@ -65,7 +68,8 @@ const orderMutations = {
             quantity: args.quantity,
             price: args.price,
             netValue: args.netValue,
-            documentId: args.documentId
+            documentId: args.documentId,
+            productId: args.productId
           }
         },
         { new: true }

@@ -1,4 +1,9 @@
-import { GraphQLObjectType, GraphQLID, GraphQLString } from "graphql";
+import {
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLString,
+  GraphQLInt
+} from "graphql";
 import Document from "../../models/document";
 import DocumentType from "../documents/documentType";
 
@@ -7,6 +12,7 @@ const ClientType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
+    companyId: { type: GraphQLInt },
     documents: {
       type: DocumentType,
       resolve(parent, args) {

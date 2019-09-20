@@ -8,7 +8,6 @@ const userMutations = {
   addUser: {
     type: UserType,
     args: {
-      id: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: new GraphQLNonNull(GraphQLString) },
       email: { type: GraphQLString },
       login: { type: GraphQLString },

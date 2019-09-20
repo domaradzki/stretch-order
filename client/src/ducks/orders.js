@@ -5,38 +5,38 @@ const CLEAR_INPUT = "CLEAR_INPUT";
 
 // Initial Values
 const initialState = {
-  dateInsert:'',
-  printName:'',
-  client: '',
-  invoice: '',
-  kindOfPay:'',
-  dateOfPay: '',
+  dateInsert: "",
+  printName: "",
+  client: "",
+  invoice: "",
+  kindOfPay: "",
+  dateOfPay: "",
   quantity: 0,
-  tapeLong:'',
-  tapeWidth:'',
-  tapeThickness:'',
-  tapeColor:'',
-  numberOfColors:0,
-  color1:'',
-  color2:'',
-  color3:'',
-  glue:'',
-  roller:'',
-  dateOfAcceptation:'',
-  transport:'',
-  trader:'',
-  deliveryAddress:'',
-  dateOfRealisation:'',
-  details:'',
-  sleeve:'',
-  stretchColor:'',
-  stretchThickness:'',
-  netWeight:'',
-  grossWeight:'',
-  price: '',
+  tapeLong: 0,
+  tapeWidth: 0,
+  tapeThickness: 0,
+  tapeColor: "",
+  numberOfColors: 0,
+  color1: "",
+  color2: "",
+  color3: "",
+  glue: "",
+  roller: "",
+  dateOfAcceptation: "",
+  transport: "",
+  trader: "",
+  deliveryAddress: "",
+  dateOfRealisation: "",
+  details: "",
+  sleeve: "",
+  stretchColor: "",
+  stretchThickness: "",
+  netWeight: "",
+  grossWeight: "",
+  price: "",
   netValue: 0,
-  margin: '',
-  postfix:''
+  margin: "",
+  postfix: ""
 };
 
 // Reducer
@@ -47,12 +47,12 @@ export default function orderReducer(state = initialState, action) {
         ...state,
         [action.name]: action.value
       };
-      case CLEAR_INPUT:
+    case CLEAR_INPUT:
       return {
         ...state,
         initialState
       };
-      case CHANGE_DATE:
+    case CHANGE_DATE:
       return {
         ...state,
         [action.name]: action.value

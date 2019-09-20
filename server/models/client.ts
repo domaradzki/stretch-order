@@ -3,7 +3,8 @@ import { ClientInterface } from "../types/clientType";
 const Schema = mongoose.Schema;
 
 const clientSchema = new Schema({
-  name: String
+  name: String,
+  companyId: Number
 });
 
 const Client = mongoose.model<ClientInterface>("Client", clientSchema);
