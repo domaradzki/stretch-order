@@ -10,8 +10,8 @@ const orderSchema = new mongoose.Schema({
   quantity: Number,
   price: Number,
   netValue: Number,
-  documentId: Number,
-  productId: Number
+  documentId: String,
+  productId: String
 });
 
 const Order = mongoose.model<OrderInterface>("Order", orderSchema);

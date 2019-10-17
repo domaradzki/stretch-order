@@ -9,6 +9,6 @@ export interface OrderInterface extends Document {
   quantity: Number;
   price: Number;
   netValue: Number;
-  documentId: Number;
-  productId: Number;
+  documentId: String;
+  productId: String;
 }

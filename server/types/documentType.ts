@@ -1,6 +1,7 @@
 import { Document } from "mongoose";
 
 export interface DocumentInterface extends Document {
+  documentId: Number;
   dateInsert: String;
   dateOfPay: String;
   dateOfRealisation: String;
@@ -13,6 +14,6 @@ export interface DocumentInterface extends Document {
   transport: String;
   numberOfDocumentInvoice: Number | {};
   invoice: String | {};
-  clientId: Number;
-  userId: Number;
+  clientId: String;
+  userId: String;
 }

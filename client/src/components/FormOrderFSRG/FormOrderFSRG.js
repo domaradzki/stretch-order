@@ -14,7 +14,7 @@ class FormOrderFSRG extends Component {
     const { pickedOrder } = this.props;
     const detail2 = pickedOrder.postfix();
     for (let key in pickedOrder) {
-      if (key === 'dateOfRealisation'){
+      if (key === "dateOfRealisation") {
         this.props.changeDate(key, pickedOrder[key]());
       }
       if (pickedOrder.hasOwnProperty(key)) {
@@ -103,7 +103,8 @@ class FormOrderFSRG extends Component {
       netWeight,
       grossWeight,
       dateOfPay,
-      dateOfRealisation
+      dateOfRealisation,
+      deliveryAddress
     } = this.props;
 
     return (
@@ -135,6 +136,15 @@ class FormOrderFSRG extends Component {
                   onDayChange={this.handleDayChange}
                   selectedDay={moment(dateOfRealisation).format("YYYY-MM-DD")}
                   value={moment(dateOfRealisation).format("YYYY-MM-DD")}
+                  name="dateOfRealisation"
+                />
+              </div>
+              <div className="four wide field">
+                <label>Data płatności</label>
+                <DayPickerInput
+                  placeholder={moment(new Date()).format("YYYY-MM-DD")}
+                  onDayChange={this.handleDayChange}
+                  selectedDay={dateOfPay}
                   name="dateOfRealisation"
                 />
               </div>
@@ -258,21 +268,20 @@ class FormOrderFSRG extends Component {
               />
             </Form.Group>
             <Form.Group>
-              <div className="four wide field">
-                <label>Data płatności</label>
-                <DayPickerInput
-                  placeholder={moment(new Date()).format("YYYY-MM-DD")}
-                  onDayChange={this.handleDayChange}
-                  selectedDay={dateOfPay}
-                  name="dateOfRealisation"
-                />
-              </div>
               <Form.Input
                 value={details}
                 name="details"
                 label="Uwagi"
                 placeholder="Uwagi"
-                width={12}
+                width={8}
+                onChange={this.handleChangeInput}
+              />
+              <Form.Input
+                value={deliveryAddress}
+                name="deliveryAddress"
+                label="Adres dostawy"
+                placeholder="Adres dostawy"
+                width={8}
                 onChange={this.handleChangeInput}
               />
             </Form.Group>
@@ -307,7 +316,7 @@ const mapStateToProps = state => {
     netWeight: state.orders.netWeight,
     grossWeight: state.orders.grossWeight,
     trader: state.orders.trader,
-    deliveryAddress : state.orders.deliveryAddress,
+    deliveryAddress: state.orders.deliveryAddress,
     pickedOrder: pickedOrder(state)
   };
 };

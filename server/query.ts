@@ -1,4 +1,4 @@
-const sqlQuery = `SELECT d.id 
+const sqlQuery = `SELECT d.id AS documentId
         ,d.DataWprowadzenia AS dateInsert
         ,d.NumerWewnetrzny_PelnaSygnatura AS signature
         ,d.Symbol AS symbol
