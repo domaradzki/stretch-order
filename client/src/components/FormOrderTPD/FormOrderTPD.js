@@ -36,7 +36,9 @@ class FormOrderTPD extends Component {
   }
 
   handleChangeInput = (event, data) => {
-    const { name, value } = data;
+    const name = event.target.name ? event.target.name : data.name;
+    const value = event.target.value ? event.target.value : data.value;
+    console.log(name, value);
     this.props.changeInput(name, value);
   };
 
@@ -190,10 +192,13 @@ class FormOrderTPD extends Component {
       tapeColor,
       numberOfColors,
       glue,
+      roller,
       dateOfPay,
       color1,
       color2,
       color3,
+      margin,
+      transport,
       dateOfAcceptation,
       dateOfRealisation,
       deliveryAddress
@@ -203,7 +208,7 @@ class FormOrderTPD extends Component {
     return (
       <Segment color="blue">
         <h3>Zlecenie produkcyjne taśmy pakowej z nadrukiem</h3>
-        <Form>
+        <Form lang="pl" onSubmit={this.handleAddOrder}>
           <Segment color="blue">
             <Form.Group>
               <Form.Input
@@ -316,22 +321,25 @@ class FormOrderTPD extends Component {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Select
-                fluid
-                name="roller"
-                label="Wałek"
-                placeholder="Wałek"
-                width={3}
-                options={[
-                  { key: 1, value: "144", text: "144" },
-                  { key: 2, value: "180", text: "180" },
-                  { key: 3, value: "244", text: "244" },
-                  { key: 4, value: "306", text: "306" },
-                  { key: 5, value: "438", text: "438" }
-                ]}
-                onChange={this.handleChangeInput}
-                required
-              />
+              <Form.Field required width={3}>
+                <label>Kolory</label>
+                <select
+                  required
+                  onChange={this.handleChangeInput}
+                  value={roller}
+                  placeholder="Wałek"
+                  name="roller"
+                >
+                  <option value="" disabled>
+                    Wałek
+                  </option>
+                  <option value="144">144</option>
+                  <option value="180">180</option>
+                  <option value="244">244</option>
+                  <option value="306">306</option>
+                  <option value="438">438</option>
+                </select>
+              </Form.Field>
               <Form.Input
                 value={glue}
                 name="glue"
@@ -341,21 +349,20 @@ class FormOrderTPD extends Component {
                 onChange={this.handleChangeInput}
                 required
               />
-              <Form.Select
-                fluid
-                value={numberOfColors}
-                name="numberOfColors"
-                label="Kolory"
-                placeholder="Kolory"
-                width={2}
-                options={[
-                  { key: 1, value: "1", text: "1" },
-                  { key: 2, value: "2", text: "2" },
-                  { key: 3, value: "3", text: "3" }
-                ]}
-                onChange={this.handleChangeInput}
-                required
-              />
+              <Form.Field required width={2}>
+                <label>Kolory</label>
+                <select
+                  required
+                  onChange={this.handleChangeInput}
+                  value={"" || numberOfColors}
+                  placeholder="Kolory"
+                  name="numberOfColors"
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </Form.Field>
               <Form.Input
                 value={color1}
                 name="color1"
@@ -391,8 +398,6 @@ class FormOrderTPD extends Component {
                 label="Cena"
                 placeholder="Cena"
                 type="number"
-                min="0.00"
-                max="100000.00"
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
@@ -411,40 +416,46 @@ class FormOrderTPD extends Component {
                 onChange={this.handleChangeInput}
                 required
               />
-              <Form.Select
-                fluid
-                name="margin"
-                label="Marża"
-                placeholder="Marża"
-                width={4}
-                options={[
-                  { key: 1, value: "0", text: "0" },
-                  { key: 2, value: "0.25", text: "0.25" },
-                  { key: 3, value: "0.5", text: "0.5" },
-                  { key: 4, value: "1", text: "1" },
-                  { key: 5, value: "2", text: "2" },
-                  { key: 6, value: "3", text: "3" }
-                ]}
-                onChange={this.handleChangeInput}
-                required
-              />
-              <Form.Select
-                fluid
-                name="transport"
-                label="Transport"
-                placeholder="Transport"
-                width={4}
-                options={[
-                  { key: 1, value: "Goodmark", text: "Goodmark" },
-                  { key: 2, value: "Odbiór własny", text: "Odbiór własny" },
-                  { key: 3, value: "Paczka", text: "Paczka" },
-                  { key: 4, value: "Półpaleta", text: "Półpaleta" },
-                  { key: 5, value: "Paleta euro", text: "Paleta euro" },
-                  { key: 6, value: "Paleta max", text: "Paleta max" }
-                ]}
-                onChange={this.handleChangeInput}
-                required
-              />
+              <Form.Field required width={4}>
+                <label>Marża</label>
+                <select
+                  required
+                  onChange={this.handleChangeInput}
+                  value={margin}
+                  placeholder="Marża"
+                  name="margin"
+                >
+                  <option value="" disabled>
+                    Marża
+                  </option>
+                  <option value="0">0</option>
+                  <option value="0.25">0.25</option>
+                  <option value="0.5">0.5</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </Form.Field>
+              <Form.Field required width={4}>
+                <label>Transport</label>
+                <select
+                  required
+                  onChange={this.handleChangeInput}
+                  value={transport}
+                  placeholder="Transport"
+                  name="transport"
+                >
+                  <option value="" disabled>
+                    Transport
+                  </option>
+                  <option value="Goodmark">Goodmark</option>
+                  <option value="Odbiór własny">Odbiór własny</option>
+                  <option value="Paczka">Paczka</option>
+                  <option value="Półpaleta">Półpaleta</option>
+                  <option value="Paleta euro">Paleta euro</option>
+                  <option value="Paleta max">Paleta max</option>
+                </select>
+              </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Input
@@ -466,7 +477,7 @@ class FormOrderTPD extends Component {
             </Form.Group>
           </Segment>
           <Segment textAlign="center">
-            <Button onClick={this.handleAddOrder}>Potwierdź</Button>
+            <Button type="submit">Potwierdź</Button>
             <Button onClick={this.handleCancel}>Anuluj</Button>
           </Segment>
         </Form>

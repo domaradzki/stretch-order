@@ -16,7 +16,7 @@ const initialState = {
   tapeWidth: 0,
   tapeThickness: 0,
   tapeColor: "",
-  numberOfColors: 0,
+  numberOfColors: "",
   color1: "",
   color2: "",
   color3: "",
