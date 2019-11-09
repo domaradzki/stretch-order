@@ -16,6 +16,7 @@ import addDocumentMutation from "../../graphql/addDocumentMutation";
 import addClientMutation from "../../graphql/addClientMutation";
 import addUserMutation from "../../graphql/addUserMutation";
 import addTapeMutation from "../../graphql/addTapeMutation";
+import isClientInDatabase from "../../graphql/queries/isClientInDatabase";
 
 class FormOrderTPD extends Component {
   componentDidMount() {
@@ -38,7 +39,6 @@ class FormOrderTPD extends Component {
   handleChangeInput = (event, data) => {
     const name = event.target.name ? event.target.name : data.name;
     const value = event.target.value ? event.target.value : data.value;
-    console.log(name, value);
     this.props.changeInput(name, value);
   };
 
@@ -96,86 +96,90 @@ class FormOrderTPD extends Component {
       companyId,
       documentId
     } = pickedOrder;
-    Promise.all([
-      this.props.addTapeMutation({
-        variables: {
-          printName,
-          dateOfAcceptation,
-          numberOfColors,
-          color1,
-          color2,
-          color3,
-          glue,
-          roller,
-          tapeColor,
-          tapeLong,
-          tapeThickness,
-          tapeWidth
-        }
-      }),
-      this.props.addUserMutation({
-        variables: {
-          name: trader
-        }
-      }),
-      this.props.addClientMutation({
-        variables: {
-          name: client,
-          companyId
-        }
-      })
-    ])
-      .then(result => {
-        return {
-          productId: result[0].data.addTape.id,
-          userId: result[1].data.addUser.id,
-          clientId: result[2].data.addClient.id
-        };
-      })
-      .then(result => {
-        this.props
-          .addDocumentMutation({
-            variables: {
-              documentId,
-              dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
-              dateOfPay,
-              dateOfRealisation,
-              signature,
-              symbol,
-              details,
-              closed,
-              documentStatus,
-              deliveryAddress,
-              transport,
-              numberOfDocumentInvoice,
-              invoice,
-              clientId: result.clientId,
-              userId: result.userId
-            }
-          })
-          .then(res => {
-            return res.data.addDocument.id;
-          })
-          .then(res => {
-            this.props.addOrderMutation({
+    if (!this.props.data.isLoading) {
+      const isClient = this.props.data.clientCheck;
+      console.log(isClient);
+      Promise.all([
+        this.props.addTapeMutation({
+          variables: {
+            printName,
+            dateOfAcceptation,
+            numberOfColors,
+            color1,
+            color2,
+            color3,
+            glue,
+            roller,
+            tapeColor,
+            tapeLong,
+            tapeThickness,
+            tapeWidth
+          }
+        }),
+        this.props.addUserMutation({
+          variables: {
+            name: trader
+          }
+        }),
+        this.props.addClientMutation({
+          variables: {
+            name: client,
+            companyId
+          }
+        })
+      ])
+        .then(result => {
+          return {
+            productId: result[0].data.addTape.id,
+            userId: result[1].data.addUser.id,
+            clientId: result[2].data.addClient.id
+          };
+        })
+        .then(result => {
+          this.props
+            .addDocumentMutation({
               variables: {
-                itemId,
-                name: assortment,
-                code,
-                kind,
-                type,
-                quantity,
-                price,
-                netValue,
-                documentId: res,
-                productId: result.productId
+                documentId,
+                dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
+                dateOfPay,
+                dateOfRealisation,
+                signature,
+                symbol,
+                details,
+                closed,
+                documentStatus,
+                deliveryAddress,
+                transport,
+                numberOfDocumentInvoice,
+                invoice,
+                clientId: result.clientId,
+                userId: result.userId
               }
+            })
+            .then(res => {
+              return res.data.addDocument.id;
+            })
+            .then(res => {
+              this.props.addOrderMutation({
+                variables: {
+                  itemId,
+                  name: assortment,
+                  code,
+                  kind,
+                  type,
+                  quantity,
+                  price,
+                  netValue,
+                  documentId: res,
+                  productId: result.productId
+                }
+              });
             });
-          });
-      });
+        });
 
-    this.props.unactivateDetails();
-    this.props.clearInput();
+      this.props.unactivateDetails();
+      this.props.clearInput();
+    }
   };
   render() {
     const {
@@ -544,11 +548,22 @@ const graphqlUser = graphql(addUserMutation, {
   name: "addUserMutation"
 });
 
+const graphqlClientCheck = graphql(isClientInDatabase, {
+  options: props => {
+    return {
+      variables: {
+        companyId: props.pickedOrder.companyId
+      }
+    };
+  }
+});
+
 export default compose(
   reduxWrapper,
   graphqlOrder,
   graphqlDocument,
   graphqlClient,
   graphqlUser,
-  graphqlTape
+  graphqlTape,
+  graphqlClientCheck
 )(FormOrderTPD);
