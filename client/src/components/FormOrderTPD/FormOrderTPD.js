@@ -16,10 +16,10 @@ import addDocumentMutation from "../../graphql/addDocumentMutation";
 import addClientMutation from "../../graphql/addClientMutation";
 import addUserMutation from "../../graphql/addUserMutation";
 import addTapeMutation from "../../graphql/addTapeMutation";
-import isClientInDatabase from "../../graphql/queries/isClientInDatabase";
+import isInDatabase from "../../graphql/queries/isInDatabase";
 
 class FormOrderTPD extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const { pickedOrder } = this.props;
     const detail2 = pickedOrder.postfix();
     for (let key in pickedOrder) {
@@ -34,9 +34,11 @@ class FormOrderTPD extends Component {
           : this.props.changeInput(key, pickedOrder[key]);
       }
     }
+    await this.props.data.refetch();
   }
 
   handleChangeInput = (event, data) => {
+    console.log(this.props);
     const name = event.target.name ? event.target.name : data.name;
     const value = event.target.value ? event.target.value : data.value;
     this.props.changeInput(name, value);
@@ -97,84 +99,114 @@ class FormOrderTPD extends Component {
       documentId
     } = pickedOrder;
     if (!this.props.data.isLoading) {
-      const isClient = this.props.data.clientCheck;
-      console.log(isClient);
-      Promise.all([
-        this.props.addTapeMutation({
+      const isClient = this.props.data.client;
+      const isUser = this.props.data.user;
+      const isDocument = this.props.data.document;
+
+      const addingClient = () =>
+        this.props
+          .addClientMutation({
+            variables: {
+              name: client,
+              companyId
+            }
+          })
+          .then(res => res.data.addClient.id);
+
+      const addingUser = () =>
+        this.props
+          .addUserMutation({
+            variables: {
+              name: trader
+            }
+          })
+          .then(res => res.data.addUser.id);
+
+      const addingTape = async () =>
+        await this.props
+          .addTapeMutation({
+            variables: {
+              printName,
+              dateOfAcceptation,
+              numberOfColors,
+              color1,
+              color2,
+              color3,
+              glue,
+              roller,
+              tapeColor,
+              tapeLong,
+              tapeThickness,
+              tapeWidth
+            }
+          })
+          .then(res => res.data.addTape.id);
+
+      const addingOrder = async (idDoc, idProduct) =>
+        await this.props.addOrderMutation({
           variables: {
-            printName,
-            dateOfAcceptation,
-            numberOfColors,
-            color1,
-            color2,
-            color3,
-            glue,
-            roller,
-            tapeColor,
-            tapeLong,
-            tapeThickness,
-            tapeWidth
+            itemId,
+            name: assortment,
+            code,
+            kind,
+            type,
+            quantity,
+            price,
+            netValue,
+            documentId: idDoc,
+            productId: idProduct
           }
-        }),
-        this.props.addUserMutation({
-          variables: {
-            name: trader
-          }
-        }),
-        this.props.addClientMutation({
-          variables: {
-            name: client,
-            companyId
-          }
-        })
-      ])
+        });
+
+      const addingDocument = (idC, idU) =>
+        this.props
+          .addDocumentMutation({
+            variables: {
+              documentId,
+              dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
+              dateOfPay,
+              dateOfRealisation,
+              signature,
+              symbol,
+              details,
+              closed,
+              documentStatus,
+              deliveryAddress,
+              transport,
+              numberOfDocumentInvoice,
+              invoice,
+              clientId: idC,
+              userId: idU
+            }
+          })
+          .then(res => res.data.addDocument.id);
+
+      const promiseIfNoClient = async () =>
+        isClient ? isClient.id : await addingClient();
+
+      const promiseIfNoUser = async () =>
+        isUser ? isUser.id : await addingUser();
+
+      const promiseIfNoDocument = async (idC, idU) =>
+        isDocument ? isDocument.id : await addingDocument(idC, idU);
+
+      Promise.all([promiseIfNoClient(), promiseIfNoUser(), addingTape()])
         .then(result => {
+          console.log({
+            clientId: result[0],
+            userId: result[1],
+            tapeId: result[2]
+          });
           return {
-            productId: result[0].data.addTape.id,
-            userId: result[1].data.addUser.id,
-            clientId: result[2].data.addClient.id
+            clientId: result[0],
+            userId: result[1],
+            tapeId: result[2]
           };
         })
-        .then(result => {
-          this.props
-            .addDocumentMutation({
-              variables: {
-                documentId,
-                dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
-                dateOfPay,
-                dateOfRealisation,
-                signature,
-                symbol,
-                details,
-                closed,
-                documentStatus,
-                deliveryAddress,
-                transport,
-                numberOfDocumentInvoice,
-                invoice,
-                clientId: result.clientId,
-                userId: result.userId
-              }
-            })
-            .then(res => {
-              return res.data.addDocument.id;
-            })
-            .then(res => {
-              this.props.addOrderMutation({
-                variables: {
-                  itemId,
-                  name: assortment,
-                  code,
-                  kind,
-                  type,
-                  quantity,
-                  price,
-                  netValue,
-                  documentId: res,
-                  productId: result.productId
-                }
-              });
-            });
+        .then(res => {
+          promiseIfNoDocument(res.clientId, res.userId).then(r => {
+            addingOrder(r, res.tapeId);
+          });
         });
 
       this.props.unactivateDetails();
@@ -548,11 +580,13 @@ const graphqlUser = graphql(addUserMutation, {
   name: "addUserMutation"
 });
 
-const graphqlClientCheck = graphql(isClientInDatabase, {
+const graphqlCheck = graphql(isInDatabase, {
   options: props => {
     return {
       variables: {
-        companyId: props.pickedOrder.companyId
+        documentId: props.pickedOrder.documentId,
+        companyId: props.pickedOrder.companyId,
+        name: props.trader
       }
     };
   }
@@ -565,5 +599,5 @@ export default compose(
   graphqlClient,
   graphqlUser,
   graphqlTape,
-  graphqlClientCheck
+  graphqlCheck
 )(FormOrderTPD);

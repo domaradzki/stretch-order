@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLList } from "graphql";
+import { GraphQLID, GraphQLList, GraphQLString } from "graphql";
 
 import UserType from "./userType";
 import User from "../../models/user";
@@ -15,6 +15,13 @@ const userQueries = {
     args: { id: { type: GraphQLID } },
     resolve(parent, args) {
       return User.findById(args.id);
+    }
+  },
+  userCheck: {
+    type: UserType,
+    args: { name: { type: GraphQLString } },
+    resolve(parent, args) {
+      return User.findOne({ name: args.name });
     }
   }
 };
