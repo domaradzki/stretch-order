@@ -37,13 +37,6 @@ class FormOrderTPD extends Component {
     await this.props.data.refetch();
   }
 
-  clearInputsAfterOrderAdded = () => {
-    const { pickedOrder } = this.props;
-    for (let key in pickedOrder) {
-      this.props.changeInput(key, "");
-    }
-  };
-
   handleChangeInput = (event, data) => {
     const name = event.target.name ? event.target.name : data.name;
     const value = event.target.value ? event.target.value : data.value;
@@ -58,6 +51,7 @@ class FormOrderTPD extends Component {
 
   handleCancel = event => {
     event.preventDefault();
+    this.props.clearInput();
     this.props.unactivateDetails();
   };
 
@@ -445,8 +439,6 @@ class FormOrderTPD extends Component {
                 label="Wartość"
                 placeholder="Wartość"
                 type="number"
-                min="0.00"
-                max="100000.00"
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
