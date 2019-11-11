@@ -37,8 +37,14 @@ class FormOrderTPD extends Component {
     await this.props.data.refetch();
   }
 
+  clearInputsAfterOrderAdded = () => {
+    const { pickedOrder } = this.props;
+    for (let key in pickedOrder) {
+      this.props.changeInput(key, "");
+    }
+  };
+
   handleChangeInput = (event, data) => {
-    console.log(this.props);
     const name = event.target.name ? event.target.name : data.name;
     const value = event.target.value ? event.target.value : data.value;
     this.props.changeInput(name, value);
@@ -192,11 +198,6 @@ class FormOrderTPD extends Component {
 
       Promise.all([promiseIfNoClient(), promiseIfNoUser(), addingTape()])
         .then(result => {
-          console.log({
-            clientId: result[0],
-            userId: result[1],
-            tapeId: result[2]
-          });
           return {
             clientId: result[0],
             userId: result[1],
@@ -208,9 +209,8 @@ class FormOrderTPD extends Component {
             addingOrder(r, res.tapeId);
           });
         });
-
-      this.props.unactivateDetails();
       this.props.clearInput();
+      this.props.unactivateDetails();
     }
   };
   render() {

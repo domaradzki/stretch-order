@@ -50,7 +50,7 @@ export default function orderReducer(state = initialState, action) {
     case CLEAR_INPUT:
       return {
         ...state,
-        initialState
+        ...initialState
       };
     case CHANGE_DATE:
       return {
