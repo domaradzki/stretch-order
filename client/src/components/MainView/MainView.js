@@ -2,24 +2,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import moment from "moment";
-import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 
 import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
 import { changePaginationMainView } from "../../ducks/interfaceMenu";
+import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 import { Table, Button, Segment } from "semantic-ui-react";
 import "./MainView.css";
 
 import DetailsView from "../DetailsView/DetailsView";
-
-const getQuery = gql`
-  {
-    orders {
-      id
-    }
-  }
-`;
 
 class MainView extends Component {
   componentDidMount() {
@@ -35,16 +27,20 @@ class MainView extends Component {
   handleClick = (event, data) => {
     const { activateDetails } = this.props;
     const { id, name, kind } = data;
-
     activateDetails(id, name, kind);
   };
 
   render() {
+    const ordersAlreadyInDB = this.props.data.loading
+      ? []
+      : this.props.data.orders.map(order => order.itemId);
     const { pagination } = this.props;
     const paginationButton =
       pagination === 0 ? pagination : pagination / 10 - 1;
     const newOrders = this.props.datas;
-    console.log(this.props);
+    const filteredOrders = newOrders.filter(order => {
+      return !ordersAlreadyInDB.includes(order.itemId);
+    });
     return (
       <div className="mainview__container">
         <DetailsView />
@@ -68,9 +64,9 @@ class MainView extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {newOrders
-                .map((order, index) => (
-                  <Table.Row key={index}>
+              {filteredOrders
+                .map(order => (
+                  <Table.Row key={order.itemId}>
                     <Table.Cell>
                       {moment(order.dateInsert).format("DD-MM-YYYY")}
                     </Table.Cell>
@@ -95,7 +91,6 @@ class MainView extends Component {
                 ))
                 .slice(pagination, pagination + 10)}
             </Table.Body>
-
             <Table.Footer>
               <Table.Row>
                 <Table.HeaderCell colSpan="8">
@@ -147,13 +142,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const reduxWrapper = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
-const reduxGQL = graphql(getQuery);
+const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
+const graphqlQuery = graphql(getOrdersItemid);
 
-export default compose(
-  reduxWrapper,
-  reduxGQL
-)(MainView);
+export default compose(reduxWrapper, graphqlQuery)(MainView);

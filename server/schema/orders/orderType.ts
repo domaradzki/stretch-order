@@ -21,6 +21,7 @@ const OrderType = new GraphQLObjectType({
     price: { type: GraphQLFloat },
     netValue: { type: GraphQLFloat },
     documentId: { type: GraphQLID },
+    productId: { type: GraphQLID },
     document: {
       type: DocumentType,
       resolve(parent, args) {

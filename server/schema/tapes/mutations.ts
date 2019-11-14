@@ -8,7 +8,6 @@ const tapeMutations = {
   addTape: {
     type: TapeType,
     args: {
-      id: { type: new GraphQLNonNull(GraphQLID) },
       printName: { type: new GraphQLNonNull(GraphQLString) },
       dateOfAcceptation: { type: new GraphQLNonNull(GraphQLString) },
       numberOfColors: { type: new GraphQLNonNull(GraphQLString) },

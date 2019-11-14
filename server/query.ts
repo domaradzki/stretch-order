@@ -6,6 +6,7 @@ const sqlQuery = `SELECT d.id AS documentId
         ,d.Zamkniety AS closed
         ,d.StatusDokumentuId AS documentStatus
         ,podmiot.Nazwa AS client
+        ,podmiot.Id As companyId
         ,uzytkownicy.Login AS trader
         ,adres.LiniaCalosc AS deliveryAddress
         ,pozycje.Ilosc AS quantity
@@ -36,7 +37,7 @@ const sqlQuery = `SELECT d.id AS documentId
           ON asortyment.Grupa_Id = grupa.Id
 	  LEFT OUTER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[DokumentDokument] dokument_realizujacy
           ON dokument_realizujacy.[DokumentyRealizujace_Id] = d.Id
-          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-07-01')
+          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-09-01')
           ORDER BY d.Id DESC`;
 
 export default sqlQuery;

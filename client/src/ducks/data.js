@@ -14,7 +14,7 @@ const initialState = {
   error: null,
   activeOrder: "",
   activeType: "",
-  activeKind:"",
+  activeKind: "",
   activeDetails: false,
   data: []
 };
@@ -47,14 +47,14 @@ export default function dataReducer(state = initialState, action) {
         activeDetails: true,
         activeOrder: action.id,
         activeType: action.name,
-        activeKind:action.kind
+        activeKind: action.kind
       };
     case UNACTIVATE_DETAILS:
       return {
         ...state,
         activeDetails: false,
-        activeOrder: '',
-        activeType: ''
+        activeOrder: "",
+        activeType: ""
       };
     default:
       return state;
@@ -88,7 +88,7 @@ export const fetchData = () => {
   };
 };
 
-export const activateDetails = (id,name,kind) => {
+export const activateDetails = (id, name, kind) => {
   return {
     type: ACTIVATE_DETAILS,
     id,
@@ -151,9 +151,10 @@ export const pickedOrder = state => {
               return colors._;
             }
           },
-          dateOfRealisation: function() {return moment(pickedOrder.dateInsert)
-            .add(3, "days")
-            .format("YYYY-MM-DD")
+          dateOfRealisation: function() {
+            return moment(pickedOrder.dateInsert)
+              .add(3, "days")
+              .format("YYYY-MM-DD");
           },
           postfix: function() {
             const length = productArray.length;
@@ -182,9 +183,10 @@ export const pickedOrder = state => {
             return colors._;
           }
         },
-        dateOfRealisation:function() {return moment(pickedOrder.dateInsert)
-          .add(3, "days")
-          .format("YYYY-MM-DD")
+        dateOfRealisation: function() {
+          return moment(pickedOrder.dateInsert)
+            .add(3, "days")
+            .format("YYYY-MM-DD");
         },
         postfix: function() {
           const length = productArray.length;
@@ -212,9 +214,10 @@ export const pickedOrder = state => {
             return colors._;
           }
         },
-        dateOfRealisation: function() {return moment(pickedOrder.dateInsert)
-          .add(3, "days")
-          .format("YYYY-MM-DD")
+        dateOfRealisation: function() {
+          return moment(pickedOrder.dateInsert)
+            .add(3, "days")
+            .format("YYYY-MM-DD");
         },
         postfix: function() {
           const length = productArray.length;
@@ -242,17 +245,20 @@ export const pickedOrder = state => {
         glue: productSize.slice(ind, ind + 1),
         tapeColor: function() {
           const indR =
-            productSize.indexOf("R") !== -1 ? productSize.indexOf("R")+1 : ind+2;
-          const colorSymbol = productSize.slice(ind+1, indR);
+            productSize.indexOf("R") !== -1
+              ? productSize.indexOf("R") + 1
+              : ind + 2;
+          const colorSymbol = productSize.slice(ind + 1, indR);
           if (colors.hasOwnProperty(colorSymbol)) {
             return colors[colorSymbol];
           } else {
             return colors._;
           }
         },
-        dateOfRealisation: function() {return moment(pickedOrder.dateInsert)
-          .add(14, "days")
-          .format("YYYY-MM-DD")
+        dateOfRealisation: function() {
+          return moment(pickedOrder.dateInsert)
+            .add(14, "days")
+            .format("YYYY-MM-DD");
         },
         postfix: function() {
           const length = productArray.length;
@@ -266,10 +272,7 @@ export const pickedOrder = state => {
       };
     }
     return Object.assign(pickedOrder, order);
-    
   } else {
     return pickedOrder;
   }
-
-  
 };

@@ -14,7 +14,6 @@ const stretchMutations = {
   addStretch: {
     type: StretchType,
     args: {
-      id: { type: new GraphQLNonNull(GraphQLID) },
       grossWeight: { type: new GraphQLNonNull(GraphQLFloat) },
       netWeight: { type: new GraphQLNonNull(GraphQLFloat) },
       sleeve: { type: new GraphQLNonNull(GraphQLInt) },

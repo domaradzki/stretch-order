@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLID, GraphQLNonNull } from "graphql";
+import { GraphQLString, GraphQLID, GraphQLInt, GraphQLNonNull } from "graphql";
 
 import Client from "../../models/client";
 import ClientType from "./clientType";
@@ -8,12 +8,13 @@ const clientMutations = {
   addClient: {
     type: ClientType,
     args: {
-      id: { type: new GraphQLNonNull(GraphQLID) },
-      name: { type: new GraphQLNonNull(GraphQLString) }
+      name: { type: new GraphQLNonNull(GraphQLString) },
+      companyId: { type: new GraphQLNonNull(GraphQLInt) }
     },
     resolve(parent, args: ClientInterface) {
       const client = new Client({
-        name: args.name
+        name: args.name,
+        companyId: args.companyId
       });
       return client.save();
     }
@@ -22,14 +23,16 @@ const clientMutations = {
     type: ClientType,
     args: {
       id: { type: GraphQLID },
-      name: { type: GraphQLString }
+      name: { type: GraphQLString },
+      companyId: { type: GraphQLInt }
     },
     resolve(parent, args) {
       return Client.findByIdAndUpdate(
         { _id: args.id },
         {
           $set: {
-            name: args.name
+            name: args.name,
+            companyId: args.companyId
           }
         }
       )

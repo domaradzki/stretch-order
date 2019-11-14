@@ -3,12 +3,11 @@ const CHANGE_MENU = "CHANGE_MENU";
 const CHANGE_VIEW = "CHANGE_VIEW";
 const PAGINATION_MAINVIEW = "PAGINATION_MAINVIEW";
 
-
 // Initial Value
 const initialState = {
   activeItem: "oczekujące",
   activeView: "dashboard",
-  paginationMain: 0,
+  paginationMain: 0
 };
 
 // Reducer
@@ -53,7 +52,5 @@ export const changePaginationMainView = value => {
     value
   };
 };
-
-
 
 // Selectors

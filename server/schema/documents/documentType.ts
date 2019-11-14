@@ -31,6 +31,8 @@ const DocumentType = new GraphQLObjectType({
     transport: { type: GraphQLString },
     numberOfDocumentInvoice: { type: GraphQLInt },
     invoice: { type: GraphQLString },
+    clientId: { type: GraphQLID },
+    userId: { type: GraphQLID },
     client: {
       type: ClientType,
       resolve(parent, args) {

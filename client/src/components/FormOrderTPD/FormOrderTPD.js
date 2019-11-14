@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Form, Button, Segment } from "semantic-ui-react";
+import { compose } from "redux";
 import { connect } from "react-redux";
+import { graphql } from "react-apollo";
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
@@ -9,8 +11,15 @@ import moment from "moment";
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder } from "../../ducks/data";
 
+import addOrderMutation from "../../graphql/addOrderMutation";
+import addDocumentMutation from "../../graphql/addDocumentMutation";
+import addClientMutation from "../../graphql/addClientMutation";
+import addUserMutation from "../../graphql/addUserMutation";
+import addTapeMutation from "../../graphql/addTapeMutation";
+import isInDatabase from "../../graphql/queries/isInDatabase";
+
 class FormOrderTPD extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const { pickedOrder } = this.props;
     const detail2 = pickedOrder.postfix();
     for (let key in pickedOrder) {
@@ -25,11 +34,12 @@ class FormOrderTPD extends Component {
           : this.props.changeInput(key, pickedOrder[key]);
       }
     }
+    await this.props.data.refetch();
   }
 
   handleChangeInput = (event, data) => {
-    const name = data.name;
-    const value = data.value;
+    const name = event.target.name ? event.target.name : data.name;
+    const value = event.target.value ? event.target.value : data.value;
     this.props.changeInput(name, value);
   };
 
@@ -41,15 +51,16 @@ class FormOrderTPD extends Component {
 
   handleCancel = event => {
     event.preventDefault();
+    this.props.clearInput();
     this.props.unactivateDetails();
   };
 
   handleAddOrder = event => {
     event.preventDefault();
-    console.log("added");
     const {
       printName,
       client,
+      trader,
       quantity,
       price,
       netValue,
@@ -70,36 +81,131 @@ class FormOrderTPD extends Component {
       dateOfAcceptation,
       dateOfRealisation,
       deliveryAddress,
+      transport,
       pickedOrder
     } = this.props;
-    const order = {
-      ...pickedOrder,
-      printName,
-      client,
-      quantity,
-      price,
-      netValue,
-      details,
-      dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
-      tapeLong,
-      tapeWidth,
-      tapeThickness,
-      tapeColor,
-      numberOfColors,
-      glue,
-      roller,
-      invoice,
-      dateOfPay,
-      color1,
-      color2,
-      color3,
-      dateOfAcceptation,
-      dateOfRealisation,
-      deliveryAddress
-    };
-    console.log(order);
-    this.props.unactivateDetails();
-    this.props.clearInput();
+    const {
+      assortment,
+      signature,
+      documentStatus,
+      closed,
+      symbol,
+      itemId,
+      code,
+      kind,
+      type,
+      numberOfDocumentInvoice,
+      companyId,
+      documentId
+    } = pickedOrder;
+    if (!this.props.data.isLoading) {
+      const isClient = this.props.data.client;
+      const isUser = this.props.data.user;
+      const isDocument = this.props.data.document;
+
+      const addingClient = () =>
+        this.props
+          .addClientMutation({
+            variables: {
+              name: client,
+              companyId
+            }
+          })
+          .then(res => res.data.addClient.id);
+
+      const addingUser = () =>
+        this.props
+          .addUserMutation({
+            variables: {
+              name: trader
+            }
+          })
+          .then(res => res.data.addUser.id);
+
+      const addingTape = async () =>
+        await this.props
+          .addTapeMutation({
+            variables: {
+              printName,
+              dateOfAcceptation,
+              numberOfColors,
+              color1,
+              color2,
+              color3,
+              glue,
+              roller,
+              tapeColor,
+              tapeLong,
+              tapeThickness,
+              tapeWidth
+            }
+          })
+          .then(res => res.data.addTape.id);
+
+      const addingOrder = async (idDoc, idProduct) =>
+        await this.props.addOrderMutation({
+          variables: {
+            itemId,
+            name: assortment,
+            code,
+            kind,
+            type,
+            quantity,
+            price,
+            netValue,
+            documentId: idDoc,
+            productId: idProduct
+          }
+        });
+
+      const addingDocument = (idC, idU) =>
+        this.props
+          .addDocumentMutation({
+            variables: {
+              documentId,
+              dateInsert: moment(dateInsert).format("YYYY-MM-DD"),
+              dateOfPay,
+              dateOfRealisation,
+              signature,
+              symbol,
+              details,
+              closed,
+              documentStatus,
+              deliveryAddress,
+              transport,
+              numberOfDocumentInvoice,
+              invoice,
+              clientId: idC,
+              userId: idU
+            }
+          })
+          .then(res => res.data.addDocument.id);
+
+      const promiseIfNoClient = async () =>
+        isClient ? isClient.id : await addingClient();
+
+      const promiseIfNoUser = async () =>
+        isUser ? isUser.id : await addingUser();
+
+      const promiseIfNoDocument = async (idC, idU) =>
+        isDocument ? isDocument.id : await addingDocument(idC, idU);
+
+      Promise.all([promiseIfNoClient(), promiseIfNoUser(), addingTape()])
+        .then(result => {
+          return {
+            clientId: result[0],
+            userId: result[1],
+            tapeId: result[2]
+          };
+        })
+        .then(res => {
+          promiseIfNoDocument(res.clientId, res.userId).then(r => {
+            addingOrder(r, res.tapeId);
+          });
+        });
+      this.props.clearInput();
+      this.props.unactivateDetails();
+    }
   };
   render() {
     const {
@@ -116,10 +222,13 @@ class FormOrderTPD extends Component {
       tapeColor,
       numberOfColors,
       glue,
+      roller,
       dateOfPay,
       color1,
       color2,
       color3,
+      margin,
+      transport,
       dateOfAcceptation,
       dateOfRealisation,
       deliveryAddress
@@ -129,7 +238,7 @@ class FormOrderTPD extends Component {
     return (
       <Segment color="blue">
         <h3>Zlecenie produkcyjne taśmy pakowej z nadrukiem</h3>
-        <Form>
+        <Form lang="pl" onSubmit={this.handleAddOrder}>
           <Segment color="blue">
             <Form.Group>
               <Form.Input
@@ -139,6 +248,7 @@ class FormOrderTPD extends Component {
                 placeholder="Klient"
                 width={8}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={printName}
@@ -147,6 +257,7 @@ class FormOrderTPD extends Component {
                 placeholder="Nadruk"
                 width={8}
                 onChange={this.handleChangeInput}
+                required
               />
             </Form.Group>
             <Form.Group>
@@ -200,6 +311,7 @@ class FormOrderTPD extends Component {
                 type="number"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={tapeLong}
@@ -208,6 +320,7 @@ class FormOrderTPD extends Component {
                 placeholder="Długość"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={tapeWidth}
@@ -216,6 +329,7 @@ class FormOrderTPD extends Component {
                 placeholder="Szerokość"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={tapeThickness}
@@ -224,6 +338,7 @@ class FormOrderTPD extends Component {
                 placeholder="Grubość"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={tapeColor}
@@ -232,24 +347,29 @@ class FormOrderTPD extends Component {
                 placeholder="Kolor taśmy"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
             </Form.Group>
             <Form.Group>
-              <Form.Select
-                fluid
-                name="roller"
-                label="Wałek"
-                placeholder="Wałek"
-                width={3}
-                options={[
-                  { key: 1, value: "144", text: "144" },
-                  { key: 2, value: "180", text: "180" },
-                  { key: 3, value: "244", text: "244" },
-                  { key: 4, value: "306", text: "306" },
-                  { key: 5, value: "438", text: "438" }
-                ]}
-                onChange={this.handleChangeInput}
-              />
+              <Form.Field required width={3}>
+                <label>Kolory</label>
+                <select
+                  required
+                  onChange={this.handleChangeInput}
+                  value={roller}
+                  placeholder="Wałek"
+                  name="roller"
+                >
+                  <option value="" disabled>
+                    Wałek
+                  </option>
+                  <option value="144">144</option>
+                  <option value="180">180</option>
+                  <option value="244">244</option>
+                  <option value="306">306</option>
+                  <option value="438">438</option>
+                </select>
+              </Form.Field>
               <Form.Input
                 value={glue}
                 name="glue"
@@ -257,15 +377,22 @@ class FormOrderTPD extends Component {
                 placeholder="Klej"
                 width={2}
                 onChange={this.handleChangeInput}
+                required
               />
-              <Form.Input
-                value={numberOfColors}
-                name="numberOfColors"
-                label="Kolory"
-                placeholder="Kolory"
-                width={2}
-                onChange={this.handleChangeInput}
-              />
+              <Form.Field required width={2}>
+                <label>Kolory</label>
+                <select
+                  required
+                  onChange={this.handleChangeInput}
+                  value={"" || numberOfColors}
+                  placeholder="Kolory"
+                  name="numberOfColors"
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </Form.Field>
               <Form.Input
                 value={color1}
                 name="color1"
@@ -273,6 +400,7 @@ class FormOrderTPD extends Component {
                 placeholder="Color 1"
                 width={3}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 value={color2}
@@ -300,11 +428,10 @@ class FormOrderTPD extends Component {
                 label="Cena"
                 placeholder="Cena"
                 type="number"
-                min="0.00"
-                max="100000.00"
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
               <Form.Input
                 name="netValue"
@@ -312,44 +439,51 @@ class FormOrderTPD extends Component {
                 label="Wartość"
                 placeholder="Wartość"
                 type="number"
-                min="0.00"
-                max="100000.00"
                 step="0.01"
                 width={4}
                 onChange={this.handleChangeInput}
+                required
               />
-              <Form.Select
-                fluid
-                name="margin"
-                label="Marża"
-                placeholder="Marża"
-                width={4}
-                options={[
-                  { key: 1, value: "0", text: "0" },
-                  { key: 2, value: "0.25", text: "0.25" },
-                  { key: 3, value: "0.5", text: "0.5" },
-                  { key: 4, value: "1", text: "1" },
-                  { key: 5, value: "2", text: "2" },
-                  { key: 6, value: "3", text: "3" }
-                ]}
-                onChange={this.handleChangeInput}
-              />
-              <Form.Select
-                fluid
-                name="transport"
-                label="Transport"
-                placeholder="Transport"
-                width={4}
-                options={[
-                  { key: 1, value: "Goodmark", text: "Goodmark" },
-                  { key: 2, value: "Odbiór własny", text: "Odbiór własny" },
-                  { key: 3, value: "Paczka", text: "Paczka" },
-                  { key: 4, value: "Półpaleta", text: "Półpaleta" },
-                  { key: 5, value: "Paleta euro", text: "Paleta euro" },
-                  { key: 6, value: "Paleta max", text: "Paleta max" }
-                ]}
-                onChange={this.handleChangeInput}
-              />
+              <Form.Field required width={4}>
+                <label>Marża</label>
+                <select
+                  required
+                  onChange={this.handleChangeInput}
+                  value={margin}
+                  placeholder="Marża"
+                  name="margin"
+                >
+                  <option value="" disabled>
+                    Marża
+                  </option>
+                  <option value="0">0</option>
+                  <option value="0.25">0.25</option>
+                  <option value="0.5">0.5</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </Form.Field>
+              <Form.Field required width={4}>
+                <label>Transport</label>
+                <select
+                  required
+                  onChange={this.handleChangeInput}
+                  value={transport}
+                  placeholder="Transport"
+                  name="transport"
+                >
+                  <option value="" disabled>
+                    Transport
+                  </option>
+                  <option value="Goodmark">Goodmark</option>
+                  <option value="Odbiór własny">Odbiór własny</option>
+                  <option value="Paczka">Paczka</option>
+                  <option value="Półpaleta">Półpaleta</option>
+                  <option value="Paleta euro">Paleta euro</option>
+                  <option value="Paleta max">Paleta max</option>
+                </select>
+              </Form.Field>
             </Form.Group>
             <Form.Group>
               <Form.Input
@@ -371,7 +505,7 @@ class FormOrderTPD extends Component {
             </Form.Group>
           </Segment>
           <Segment textAlign="center">
-            <Button onClick={this.handleAddOrder}>Potwierdź</Button>
+            <Button type="submit">Potwierdź</Button>
             <Button onClick={this.handleCancel}>Anuluj</Button>
           </Segment>
         </Form>
@@ -421,7 +555,41 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
+const reduxWrapper = connect(
   mapStateToProps,
   mapDispatchToProps
+);
+
+const graphqlOrder = graphql(addOrderMutation, { name: "addOrderMutation" });
+const graphqlTape = graphql(addTapeMutation, { name: "addTapeMutation" });
+const graphqlDocument = graphql(addDocumentMutation, {
+  name: "addDocumentMutation"
+});
+const graphqlClient = graphql(addClientMutation, {
+  name: "addClientMutation"
+});
+const graphqlUser = graphql(addUserMutation, {
+  name: "addUserMutation"
+});
+
+const graphqlCheck = graphql(isInDatabase, {
+  options: props => {
+    return {
+      variables: {
+        documentId: props.pickedOrder.documentId,
+        companyId: props.pickedOrder.companyId,
+        name: props.trader
+      }
+    };
+  }
+});
+
+export default compose(
+  reduxWrapper,
+  graphqlOrder,
+  graphqlDocument,
+  graphqlClient,
+  graphqlUser,
+  graphqlTape,
+  graphqlCheck
 )(FormOrderTPD);

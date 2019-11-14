@@ -1,4 +1,4 @@
-import { GraphQLID, GraphQLList } from "graphql";
+import { GraphQLID, GraphQLList, GraphQLInt } from "graphql";
 
 import ClientType from "./clientType";
 import Client from "../../models/client";
@@ -15,6 +15,13 @@ const clientQueries = {
     args: { id: { type: GraphQLID } },
     resolve(parent, args) {
       return Client.findById(args.id);
+    }
+  },
+  clientCheck: {
+    type: ClientType,
+    args: { companyId: { type: GraphQLInt } },
+    resolve(parent, args) {
+      return Client.findOne({ companyId: args.companyId });
     }
   }
 };
