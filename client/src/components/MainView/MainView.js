@@ -31,11 +31,16 @@ class MainView extends Component {
   };
 
   render() {
-    console.log(this.props);
+    const ordersAlreadyInDB = this.props.data.loading
+      ? []
+      : this.props.data.orders.map(order => order.itemId);
     const { pagination } = this.props;
     const paginationButton =
       pagination === 0 ? pagination : pagination / 10 - 1;
     const newOrders = this.props.datas;
+    const filteredOrders = newOrders.filter(order => {
+      return !ordersAlreadyInDB.includes(order.itemId);
+    });
     return (
       <div className="mainview__container">
         <DetailsView />
@@ -59,7 +64,7 @@ class MainView extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {newOrders
+              {filteredOrders
                 .map(order => (
                   <Table.Row key={order.itemId}>
                     <Table.Cell>
