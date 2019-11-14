@@ -2,24 +2,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import moment from "moment";
-import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 
 import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
 import { changePaginationMainView } from "../../ducks/interfaceMenu";
+import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 import { Table, Button, Segment } from "semantic-ui-react";
 import "./MainView.css";
 
 import DetailsView from "../DetailsView/DetailsView";
-
-const getQuery = gql`
-  {
-    orders {
-      id
-    }
-  }
-`;
 
 class MainView extends Component {
   componentDidMount() {
@@ -39,6 +31,7 @@ class MainView extends Component {
   };
 
   render() {
+    console.log(this.props);
     const { pagination } = this.props;
     const paginationButton =
       pagination === 0 ? pagination : pagination / 10 - 1;
@@ -67,8 +60,8 @@ class MainView extends Component {
             </Table.Header>
             <Table.Body>
               {newOrders
-                .map((order, index) => (
-                  <Table.Row key={index}>
+                .map(order => (
+                  <Table.Row key={order.itemId}>
                     <Table.Cell>
                       {moment(order.dateInsert).format("DD-MM-YYYY")}
                     </Table.Cell>
@@ -144,13 +137,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const reduxWrapper = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
-const reduxGQL = graphql(getQuery);
+const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
+const graphqlQuery = graphql(getOrdersItemid);
 
-export default compose(
-  reduxWrapper,
-  reduxGQL
-)(MainView);
+export default compose(reduxWrapper, graphqlQuery)(MainView);
