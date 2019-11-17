@@ -9,7 +9,7 @@ import "react-day-picker/lib/style.css";
 import moment from "moment";
 
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
-import { unactivateDetails, pickedOrder } from "../../ducks/data";
+import { unactivateDetails, pickedOrder, fetchData } from "../../ducks/data";
 
 import addOrderMutation from "../../graphql/addOrderMutation";
 import addDocumentMutation from "../../graphql/addDocumentMutation";
@@ -205,6 +205,7 @@ class FormOrderTPD extends Component {
         });
       this.props.clearInput();
       this.props.unactivateDetails();
+      this.props.fetchData();
     }
   };
   render() {
@@ -551,14 +552,12 @@ const mapDispatchToProps = dispatch => {
     changeInput: (name, value) => dispatch(changeInput(name, value)),
     changeDate: (_date, value) => dispatch(changeDate(_date, value)),
     clearInput: () => dispatch(clearInput()),
-    unactivateDetails: () => dispatch(unactivateDetails())
+    unactivateDetails: () => dispatch(unactivateDetails()),
+    fetchData: () => dispatch(fetchData())
   };
 };
 
-const reduxWrapper = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
+const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
 
 const graphqlOrder = graphql(addOrderMutation, { name: "addOrderMutation" });
 const graphqlTape = graphql(addTapeMutation, { name: "addTapeMutation" });

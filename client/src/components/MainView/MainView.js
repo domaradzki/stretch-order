@@ -16,6 +16,7 @@ import DetailsView from "../DetailsView/DetailsView";
 class MainView extends Component {
   componentDidMount() {
     this.props.fetchData();
+    this.props.data.startPolling({ pollInterval: 500 });
   }
 
   handlePaginationChange = event => {
@@ -44,7 +45,7 @@ class MainView extends Component {
     return (
       <div className="mainview__container">
         <DetailsView />
-        {this.props.isLoadingData ? (
+        {this.props.isLoadingData && newOrders.length === 0 ? (
           <Segment loading>
             <div className="empty__container" />
           </Segment>
