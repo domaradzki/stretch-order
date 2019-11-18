@@ -4,9 +4,8 @@ import { Segment } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 import "./Dashboard.css";
-import DashboardMenu from "../DashboardMenu";
-import MainView from "../MainView";
-
+import DashboardMenu from "../DashboardMenu/DashboardMenu";
+import MainView from "../MainView/MainView";
 
 class Dashboard extends Component {
   render() {
@@ -15,7 +14,11 @@ class Dashboard extends Component {
       <div className="dashboard__container">
         <h1>Dashboard</h1>
         <DashboardMenu />
-        {activeItem === "oczekujące" && <Segment attached='bottom'><MainView /></Segment>}
+        {activeItem === "oczekujące" && (
+          <Segment attached="bottom">
+            <MainView />
+          </Segment>
+        )}
       </div>
     );
   }
