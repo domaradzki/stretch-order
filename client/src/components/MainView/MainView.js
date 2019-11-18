@@ -16,7 +16,6 @@ import DetailsView from "../DetailsView/DetailsView";
 class MainView extends Component {
   componentDidMount() {
     this.props.fetchData();
-    this.props.data.startPolling({ pollInterval: 500 });
   }
 
   handlePaginationChange = event => {
@@ -130,7 +129,6 @@ const mapStateToProps = state => {
     datas: state.data.data,
     isLoadingData: getDataLoading(state),
     pagination: state.interfaceMenu.paginationMain
-    //active: state.data.activeDetails
   };
 };
 

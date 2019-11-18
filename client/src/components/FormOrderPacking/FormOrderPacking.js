@@ -16,6 +16,7 @@ import addDocumentMutation from "../../graphql/addDocumentMutation";
 import addClientMutation from "../../graphql/addClientMutation";
 import addUserMutation from "../../graphql/addUserMutation";
 import isInDatabase from "../../graphql/queries/isInDatabase";
+import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 class FormOrderPacking extends Component {
   async componentDidMount() {
@@ -118,7 +119,8 @@ class FormOrderPacking extends Component {
             netValue,
             documentId: idDoc,
             productId: idProduct
-          }
+          },
+          refetchQueries: [{ query: getOrdersItemid }]
         });
 
       const addingDocument = (idC, idU) =>
@@ -213,9 +215,7 @@ class FormOrderPacking extends Component {
                 <DayPickerInput
                   onDayChange={this.handleDayChange}
                   selectedDay={moment(dateOfRealisation).format("YYYY-MM-DD")}
-                  value={moment(dateOfRealisation)
-                    .add(2, "days")
-                    .format("YYYY-MM-DD")}
+                  value={moment(dateOfRealisation).format("YYYY-MM-DD")}
                   name="dateOfRealisation"
                 />
               </div>

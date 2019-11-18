@@ -17,6 +17,7 @@ import addClientMutation from "../../graphql/addClientMutation";
 import addUserMutation from "../../graphql/addUserMutation";
 import addTapeMutation from "../../graphql/addTapeMutation";
 import isInDatabase from "../../graphql/queries/isInDatabase";
+import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 class FormOrderTPD extends Component {
   async componentDidMount() {
@@ -155,7 +156,8 @@ class FormOrderTPD extends Component {
             netValue,
             documentId: idDoc,
             productId: idProduct
-          }
+          },
+          refetchQueries: [{ query: getOrdersItemid }]
         });
 
       const addingDocument = (idC, idU) =>
