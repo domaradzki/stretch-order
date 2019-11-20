@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import "./Dashboard.css";
 import DashboardMenu from "../DashboardMenu/DashboardMenu";
 import MainView from "../MainView/MainView";
+import AcceptedOrderView from "../AcceptedOrderView/AcceptedOrderView";
 
 class Dashboard extends Component {
   render() {
@@ -13,12 +14,11 @@ class Dashboard extends Component {
     return (
       <div className="dashboard__container">
         <h1>Dashboard</h1>
-        <DashboardMenu />
-        {activeItem === "oczekujące" && (
-          <Segment attached="bottom">
-            <MainView />
-          </Segment>
-        )}
+        <DashboardMenu />{" "}
+        <Segment attached="bottom">
+          {activeItem === "oczekujące" && <MainView />}
+          {activeItem === "zlecone" && <AcceptedOrderView />}
+        </Segment>
       </div>
     );
   }
