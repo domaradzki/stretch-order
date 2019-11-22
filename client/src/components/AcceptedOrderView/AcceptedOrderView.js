@@ -54,7 +54,7 @@ class AcceptedOrderView extends Component {
             <Table.Body>
               {userOrders
                 .map(order => (
-                  <Table.Row key={order.itemId}>
+                  <Table.Row key={order.id}>
                     <Table.Cell>
                       {moment(order.dateInsert).format("DD-MM-YYYY")}
                     </Table.Cell>
