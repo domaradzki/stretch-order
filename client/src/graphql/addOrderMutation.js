@@ -11,7 +11,7 @@ const addOrderMutation = gql`
     $price: Float!
     $netValue: Float!
     $documentId: ID!
-    $productId: ID!
+    $productId: ID
   ) {
     addOrder(
       itemId: $itemId

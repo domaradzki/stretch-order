@@ -164,7 +164,7 @@ class FormOrderPacking extends Component {
         })
         .then(res => {
           promiseIfNoDocument(res.clientId, res.userId).then(r => {
-            addingOrder(r, "123"); //temporary string 123, product in null
+            addingOrder(r, null);
           });
         });
       this.props.unactivateDetails();

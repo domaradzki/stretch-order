@@ -2,29 +2,14 @@ import {
   GraphQLObjectType,
   GraphQLID,
   GraphQLString,
-  GraphQLFloat,
-  GraphQLUnionType
+  GraphQLFloat
 } from "graphql";
 
 import Document from "../../models/document";
 import DocumentType from "../documents/documentType";
-import TapeType from "../tapes/tapeType";
-import StretchType from "../stretches/stretchType";
+import ProductType from "../products/productType";
 import Stretch from "../../models/stretch";
 import Tape from "../../models/tape";
-
-const ProductType = new GraphQLUnionType({
-  name: "Product",
-  types: [TapeType, StretchType],
-  resolveType(value) {
-    if (value instanceof Tape) {
-      return TapeType;
-    }
-    if (value instanceof Stretch) {
-      return StretchType;
-    }
-  }
-});
 
 const OrderType = new GraphQLObjectType({
   name: "Order",
@@ -48,13 +33,11 @@ const OrderType = new GraphQLObjectType({
     },
     product: {
       type: ProductType,
-      resolve(parent, args) {
-        if ((parent.__typename = "Tape")) {
-          return Tape.findById(parent.productId);
-        }
-        if ((parent.__typename = "Stretch")) {
-          return Stretch.findById(parent.productId);
-        }
+      async resolve(parent, args) {
+        return (
+          (await Tape.findById(parent.productId)) ||
+          (await Stretch.findById(parent.productId))
+        );
       }
     }
   })

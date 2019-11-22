@@ -36,7 +36,6 @@ class FormOrderFSRG extends Component {
       }
     }
     await this.props.data.refetch();
-    console.log(this.props);
   }
 
   handleChangeInput = (event, data) => {

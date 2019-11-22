@@ -22,7 +22,7 @@ const orderMutations = {
       price: { type: new GraphQLNonNull(GraphQLFloat) },
       netValue: { type: new GraphQLNonNull(GraphQLFloat) },
       documentId: { type: new GraphQLNonNull(GraphQLID) },
-      productId: { type: new GraphQLNonNull(GraphQLID) }
+      productId: { type: GraphQLID }
     },
     resolve(parent, args: OrderInterface) {
       const order = new Order({
