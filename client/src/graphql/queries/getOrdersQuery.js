@@ -4,7 +4,19 @@ const getOrdersQuery = gql`
   query {
     orders {
       id
-      name
+      code
+      netValue
+      document {
+        id
+        signature
+        dateInsert
+        dateOfPay
+        dateOfRealisation
+        invoice
+        client {
+          name
+        }
+      }
     }
   }
 `;

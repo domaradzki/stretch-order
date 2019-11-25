@@ -8,20 +8,19 @@ import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
 import { changePaginationMainView } from "../../ducks/interfaceMenu";
 import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
-import { Table, Button, Segment } from "semantic-ui-react";
+import { Table, Button, Segment, Pagination } from "semantic-ui-react";
 import "./MainView.css";
 
 import DetailsView from "../DetailsView/DetailsView";
 
 class MainView extends Component {
   componentDidMount() {
+    this.props.changePagination(0);
     this.props.fetchData();
   }
 
-  handlePaginationChange = event => {
-    const paginationPage = event.target.value;
-    const { changePagination } = this.props;
-    changePagination(paginationPage);
+  handlePaginationChange = (event, { activePage }) => {
+    this.props.changePagination(activePage - 1);
   };
 
   handleClick = (event, data) => {
@@ -35,8 +34,6 @@ class MainView extends Component {
       ? []
       : this.props.data.orders.map(order => order.itemId);
     const { pagination } = this.props;
-    const paginationButton =
-      pagination === 0 ? pagination : pagination / 10 - 1;
     const newOrders = this.props.datas;
     const filteredOrders = newOrders.filter(order => {
       return !ordersAlreadyInDB.includes(order.itemId);
@@ -44,7 +41,7 @@ class MainView extends Component {
     return (
       <div className="mainview__container">
         <DetailsView />
-        {this.props.isLoadingData && newOrders.length === 0 ? (
+        {this.props.isLoadingData && this.props.data.loading ? (
           <Segment loading>
             <div className="empty__container" />
           </Segment>
@@ -59,7 +56,6 @@ class MainView extends Component {
                 <Table.HeaderCell>Ilość</Table.HeaderCell>
                 <Table.HeaderCell>Cena</Table.HeaderCell>
                 <Table.HeaderCell>Wartość</Table.HeaderCell>
-                <Table.HeaderCell>Uwagi</Table.HeaderCell>
                 <Table.HeaderCell>Opcje</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -76,7 +72,6 @@ class MainView extends Component {
                     <Table.Cell>{order.quantity}</Table.Cell>
                     <Table.Cell>{order.price}</Table.Cell>
                     <Table.Cell>{order.netValue}</Table.Cell>
-                    <Table.Cell>{order.details}</Table.Cell>
                     <Table.Cell>
                       <Button
                         id={order.itemId}
@@ -93,23 +88,12 @@ class MainView extends Component {
             </Table.Body>
             <Table.Footer>
               <Table.Row>
-                <Table.HeaderCell colSpan="8">
-                  <div className="pagination">
-                    {Array.from({
-                      length: Math.ceil(newOrders.length / 10)
-                    })
-                      .map((button, index) => (
-                        <button
-                          className="ui button"
-                          key={index}
-                          value={index}
-                          onClick={this.handlePaginationChange}
-                        >
-                          {index + 1}
-                        </button>
-                      ))
-                      .slice(paginationButton, paginationButton + 5)}
-                  </div>
+                <Table.HeaderCell textAlign="center" colSpan="8">
+                  <Pagination
+                    defaultActivePage={1}
+                    totalPages={Math.ceil(filteredOrders.length / 10)}
+                    onPageChange={this.handlePaginationChange}
+                  />
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Footer>
