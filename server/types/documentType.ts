@@ -14,6 +14,8 @@ export interface DocumentInterface extends Document {
   transport: String;
   numberOfDocumentInvoice: Number | {};
   invoice: String | {};
+  currency: String;
+  exchangeRate: Number | {};
   clientId: String;
   userId: String;
 }

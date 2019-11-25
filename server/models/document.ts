@@ -15,6 +15,8 @@ const documentSchema = new mongoose.Schema({
   transport: String,
   numberOfDocumentInvoice: Number,
   invoice: String,
+  currency: String,
+  exchangeRate: Number,
   clientId: String,
   userId: String
 });

@@ -7,6 +7,7 @@ export interface OrderInterface extends Document {
   kind: String;
   type: String;
   quantity: Number;
+  unit: String;
   price: Number;
   netValue: Number;
   documentId: String;

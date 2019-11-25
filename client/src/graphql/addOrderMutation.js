@@ -8,6 +8,7 @@ const addOrderMutation = gql`
     $kind: String!
     $type: String!
     $quantity: Float!
+    $unit: String!
     $price: Float!
     $netValue: Float!
     $documentId: ID!
@@ -20,6 +21,7 @@ const addOrderMutation = gql`
       kind: $kind
       type: $type
       quantity: $quantity
+      unit: $unit
       price: $price
       netValue: $netValue
       documentId: $documentId
@@ -32,6 +34,7 @@ const addOrderMutation = gql`
       kind
       type
       quantity
+      unit
       price
       netValue
       documentId

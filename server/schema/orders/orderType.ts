@@ -21,6 +21,7 @@ const OrderType = new GraphQLObjectType({
     kind: { type: GraphQLString },
     type: { type: GraphQLString },
     quantity: { type: GraphQLFloat },
+    unit: { type: GraphQLString },
     price: { type: GraphQLFloat },
     netValue: { type: GraphQLFloat },
     documentId: { type: GraphQLID },

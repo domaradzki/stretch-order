@@ -10,6 +10,8 @@ const addDocumentMutation = gql`
     $symbol: String!
     $details: String
     $closed: Boolean!
+    $currency: String!
+    $exchangeRate: Float
     $documentStatus: Int!
     $deliveryAddress: String
     $transport: String
@@ -27,6 +29,8 @@ const addDocumentMutation = gql`
       symbol: $symbol
       details: $details
       closed: $closed
+      currency: $currency
+      exchangeRate: $exchangeRate
       documentStatus: $documentStatus
       deliveryAddress: $deliveryAddress
       transport: $transport
@@ -44,6 +48,8 @@ const addDocumentMutation = gql`
       symbol
       details
       closed
+      currency
+      exchangeRate
       documentStatus
       deliveryAddress
       transport

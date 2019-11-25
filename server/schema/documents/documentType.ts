@@ -31,6 +31,8 @@ const DocumentType = new GraphQLObjectType({
     transport: { type: GraphQLString },
     numberOfDocumentInvoice: { type: GraphQLInt },
     invoice: { type: GraphQLString },
+    currency: { type: GraphQLString },
+    exchangeRate: { type: GraphQLInt },
     clientId: { type: GraphQLID },
     userId: { type: GraphQLID },
     client: {
