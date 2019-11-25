@@ -7,6 +7,9 @@ import {
 
 import Document from "../../models/document";
 import DocumentType from "../documents/documentType";
+import ProductType from "../products/productType";
+import Stretch from "../../models/stretch";
+import Tape from "../../models/tape";
 
 const OrderType = new GraphQLObjectType({
   name: "Order",
@@ -18,6 +21,7 @@ const OrderType = new GraphQLObjectType({
     kind: { type: GraphQLString },
     type: { type: GraphQLString },
     quantity: { type: GraphQLFloat },
+    unit: { type: GraphQLString },
     price: { type: GraphQLFloat },
     netValue: { type: GraphQLFloat },
     documentId: { type: GraphQLID },
@@ -26,6 +30,15 @@ const OrderType = new GraphQLObjectType({
       type: DocumentType,
       resolve(parent, args) {
         return Document.findById(parent.documentId);
+      }
+    },
+    product: {
+      type: ProductType,
+      async resolve(parent, args) {
+        return (
+          (await Tape.findById(parent.productId)) ||
+          (await Stretch.findById(parent.productId))
+        );
       }
     }
   })

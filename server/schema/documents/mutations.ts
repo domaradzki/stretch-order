@@ -2,6 +2,7 @@ import {
   GraphQLString,
   GraphQLInt,
   GraphQLBoolean,
+  GraphQLFloat,
   GraphQLID,
   GraphQLNonNull
 } from "graphql";
@@ -27,6 +28,8 @@ const documentMutations = {
       transport: { type: GraphQLString },
       numberOfDocumentInvoice: { type: GraphQLInt },
       invoice: { type: GraphQLString },
+      currency: { type: new GraphQLNonNull(GraphQLString) },
+      exchangeRate: { type: GraphQLFloat },
       clientId: { type: new GraphQLNonNull(GraphQLID) },
       userId: { type: new GraphQLNonNull(GraphQLID) }
     },
@@ -45,6 +48,8 @@ const documentMutations = {
         transport: args.transport,
         numberOfDocumentInvoice: args.numberOfDocumentInvoice,
         invoice: args.invoice,
+        currency: args.currency,
+        exchangeRate: args.exchangeRate,
         clientId: args.clientId,
         userId: args.userId
       });
@@ -68,6 +73,8 @@ const documentMutations = {
       transport: { type: GraphQLString },
       numberOfDocumentInvoice: { type: GraphQLInt },
       invoice: { type: GraphQLString },
+      currency: { type: GraphQLString },
+      exchangeRate: { type: GraphQLFloat },
       clientId: { type: GraphQLID },
       userId: { type: GraphQLID }
     },
@@ -89,6 +96,8 @@ const documentMutations = {
             transport: args.transport,
             numberOfDocumentInvoice: args.numberOfDocumentInvoice,
             invoice: args.invoice,
+            currency: args.currency,
+            exchangeRate: args.exchangeRate,
             clientId: args.clientId,
             userId: args.userId
           }

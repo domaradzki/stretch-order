@@ -9,14 +9,15 @@ import "react-day-picker/lib/style.css";
 import moment from "moment";
 
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
-import { unactivateDetails, pickedOrder } from "../../ducks/data";
+import { unactivateDetails, pickedOrder, fetchData } from "../../ducks/data";
 
-import addOrderMutation from "../../graphql/addOrderMutation";
-import addDocumentMutation from "../../graphql/addDocumentMutation";
-import addClientMutation from "../../graphql/addClientMutation";
-import addUserMutation from "../../graphql/addUserMutation";
-import addTapeMutation from "../../graphql/addTapeMutation";
+import addOrderMutation from "../../graphql/mutations/addOrderMutation";
+import addDocumentMutation from "../../graphql/mutations/addDocumentMutation";
+import addClientMutation from "../../graphql/mutations/addClientMutation";
+import addUserMutation from "../../graphql/mutations/addUserMutation";
+import addTapeMutation from "../../graphql/mutations/addTapeMutation";
 import isInDatabase from "../../graphql/queries/isInDatabase";
+import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 class FormOrderTPD extends Component {
   async componentDidMount() {
@@ -94,6 +95,9 @@ class FormOrderTPD extends Component {
       code,
       kind,
       type,
+      unit,
+      currency,
+      exchangeRate,
       numberOfDocumentInvoice,
       companyId,
       documentId
@@ -151,11 +155,13 @@ class FormOrderTPD extends Component {
             kind,
             type,
             quantity,
+            unit,
             price,
             netValue,
             documentId: idDoc,
             productId: idProduct
-          }
+          },
+          refetchQueries: [{ query: getOrdersItemid }]
         });
 
       const addingDocument = (idC, idU) =>
@@ -170,6 +176,8 @@ class FormOrderTPD extends Component {
               symbol,
               details,
               closed,
+              currency,
+              exchangeRate,
               documentStatus,
               deliveryAddress,
               transport,
@@ -205,6 +213,7 @@ class FormOrderTPD extends Component {
         });
       this.props.clearInput();
       this.props.unactivateDetails();
+      this.props.fetchData();
     }
   };
   render() {
@@ -551,14 +560,12 @@ const mapDispatchToProps = dispatch => {
     changeInput: (name, value) => dispatch(changeInput(name, value)),
     changeDate: (_date, value) => dispatch(changeDate(_date, value)),
     clearInput: () => dispatch(clearInput()),
-    unactivateDetails: () => dispatch(unactivateDetails())
+    unactivateDetails: () => dispatch(unactivateDetails()),
+    fetchData: () => dispatch(fetchData())
   };
 };
 
-const reduxWrapper = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
+const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
 
 const graphqlOrder = graphql(addOrderMutation, { name: "addOrderMutation" });
 const graphqlTape = graphql(addTapeMutation, { name: "addTapeMutation" });

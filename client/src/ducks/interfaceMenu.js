@@ -5,7 +5,7 @@ const PAGINATION_MAINVIEW = "PAGINATION_MAINVIEW";
 
 // Initial Value
 const initialState = {
-  activeItem: "oczekujące",
+  activeItem: "Produkcja Nadruk",
   activeView: "dashboard",
   paginationMain: 0
 };

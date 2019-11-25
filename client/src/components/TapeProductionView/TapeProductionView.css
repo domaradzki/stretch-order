@@ -1,0 +1,13 @@
+.tapeproduction__container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+.empty__container {
+  width: 85vw;
+  height: 20vw;
+}

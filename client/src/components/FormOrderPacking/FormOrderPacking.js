@@ -11,11 +11,12 @@ import moment from "moment";
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder, fetchData } from "../../ducks/data";
 
-import addOrderMutation from "../../graphql/addOrderMutation";
-import addDocumentMutation from "../../graphql/addDocumentMutation";
-import addClientMutation from "../../graphql/addClientMutation";
-import addUserMutation from "../../graphql/addUserMutation";
+import addOrderMutation from "../../graphql/mutations/addOrderMutation";
+import addDocumentMutation from "../../graphql/mutations/addDocumentMutation";
+import addClientMutation from "../../graphql/mutations/addClientMutation";
+import addUserMutation from "../../graphql/mutations/addUserMutation";
 import isInDatabase from "../../graphql/queries/isInDatabase";
+import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 class FormOrderPacking extends Component {
   async componentDidMount() {
@@ -77,6 +78,9 @@ class FormOrderPacking extends Component {
       code,
       kind,
       type,
+      unit,
+      currency,
+      exchangeRate,
       numberOfDocumentInvoice,
       companyId,
       documentId
@@ -114,11 +118,13 @@ class FormOrderPacking extends Component {
             kind,
             type,
             quantity,
+            unit,
             price,
             netValue,
             documentId: idDoc,
             productId: idProduct
-          }
+          },
+          refetchQueries: [{ query: getOrdersItemid }]
         });
 
       const addingDocument = (idC, idU) =>
@@ -133,6 +139,8 @@ class FormOrderPacking extends Component {
               symbol,
               details,
               closed,
+              currency,
+              exchangeRate,
               documentStatus,
               deliveryAddress,
               transport,
@@ -162,7 +170,7 @@ class FormOrderPacking extends Component {
         })
         .then(res => {
           promiseIfNoDocument(res.clientId, res.userId).then(r => {
-            addingOrder(r, "123"); //temporary string 123, product in null
+            addingOrder(r, null);
           });
         });
       this.props.unactivateDetails();
@@ -213,9 +221,7 @@ class FormOrderPacking extends Component {
                 <DayPickerInput
                   onDayChange={this.handleDayChange}
                   selectedDay={moment(dateOfRealisation).format("YYYY-MM-DD")}
-                  value={moment(dateOfRealisation)
-                    .add(2, "days")
-                    .format("YYYY-MM-DD")}
+                  value={moment(dateOfRealisation).format("YYYY-MM-DD")}
                   name="dateOfRealisation"
                 />
               </div>

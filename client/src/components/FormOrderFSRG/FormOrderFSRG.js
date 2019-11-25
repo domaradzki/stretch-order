@@ -9,17 +9,18 @@ import "react-day-picker/lib/style.css";
 import moment from "moment";
 
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
-import { unactivateDetails, pickedOrder } from "../../ducks/data";
+import { unactivateDetails, pickedOrder, fetchData } from "../../ducks/data";
 
-import addOrderMutation from "../../graphql/addOrderMutation";
-import addDocumentMutation from "../../graphql/addDocumentMutation";
-import addClientMutation from "../../graphql/addClientMutation";
-import addUserMutation from "../../graphql/addUserMutation";
-import addStretchMutation from "../../graphql/addStretchMutation.js";
+import addOrderMutation from "../../graphql/mutations/addOrderMutation";
+import addDocumentMutation from "../../graphql/mutations/addDocumentMutation";
+import addClientMutation from "../../graphql/mutations/addClientMutation";
+import addUserMutation from "../../graphql/mutations/addUserMutation";
+import addStretchMutation from "../../graphql/mutations/addStretchMutation";
 import isInDatabase from "../../graphql/queries/isInDatabase";
+import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 class FormOrderFSRG extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const { pickedOrder } = this.props;
     const detail2 = pickedOrder.postfix();
     for (let key in pickedOrder) {
@@ -34,6 +35,7 @@ class FormOrderFSRG extends Component {
           : this.props.changeInput(key, pickedOrder[key]);
       }
     }
+    await this.props.data.refetch();
   }
 
   handleChangeInput = (event, data) => {
@@ -86,6 +88,9 @@ class FormOrderFSRG extends Component {
       code,
       kind,
       type,
+      unit,
+      currency,
+      exchangeRate,
       numberOfDocumentInvoice,
       companyId,
       documentId
@@ -136,11 +141,13 @@ class FormOrderFSRG extends Component {
             kind,
             type,
             quantity,
+            unit,
             price,
             netValue,
             documentId: idDoc,
             productId: idProduct
-          }
+          },
+          refetchQueries: [{ query: getOrdersItemid }]
         });
 
       const addingDocument = (idC, idU) =>
@@ -155,6 +162,8 @@ class FormOrderFSRG extends Component {
               symbol,
               details,
               closed,
+              currency,
+              exchangeRate,
               documentStatus,
               deliveryAddress,
               transport,
@@ -191,6 +200,8 @@ class FormOrderFSRG extends Component {
 
       this.props.clearInput();
       this.props.unactivateDetails();
+      this.props.fetchData();
+      this.props.data.refetch();
     }
   };
   render() {
@@ -242,9 +253,7 @@ class FormOrderFSRG extends Component {
                 <DayPickerInput
                   onDayChange={this.handleDayChange}
                   selectedDay={moment(dateOfRealisation).format("YYYY-MM-DD")}
-                  value={moment(dateOfRealisation)
-                    .add(3, "days")
-                    .format("YYYY-MM-DD")}
+                  value={moment(dateOfRealisation).format("YYYY-MM-DD")}
                   name="dateOfRealisation"
                 />
               </div>
@@ -447,14 +456,12 @@ const mapDispatchToProps = dispatch => {
     changeInput: (name, value) => dispatch(changeInput(name, value)),
     changeDate: (_date, value) => dispatch(changeDate(_date, value)),
     clearInput: () => dispatch(clearInput()),
-    unactivateDetails: () => dispatch(unactivateDetails())
+    unactivateDetails: () => dispatch(unactivateDetails()),
+    fetchData: () => dispatch(fetchData())
   };
 };
 
-const reduxWrapper = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
+const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
 
 const graphqlOrder = graphql(addOrderMutation, { name: "addOrderMutation" });
 const graphqlStretch = graphql(addStretchMutation, {

@@ -4,19 +4,17 @@ import { compose } from "redux";
 import moment from "moment";
 import { graphql } from "react-apollo";
 
-import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
 import { changePaginationMainView } from "../../ducks/interfaceMenu";
-import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
+import getOrdersQuery from "../../graphql/queries/getOrdersQuery";
 
 import { Table, Button, Segment, Pagination } from "semantic-ui-react";
-import "./MainView.css";
+import "./AcceptedOrderView.css";
 
 import DetailsView from "../DetailsView/DetailsView";
 
-class MainView extends Component {
+class AcceptedOrderView extends Component {
   componentDidMount() {
     this.props.changePagination(0);
-    this.props.fetchData();
   }
 
   handlePaginationChange = (event, { activePage }) => {
@@ -24,24 +22,16 @@ class MainView extends Component {
   };
 
   handleClick = (event, data) => {
-    const { activateDetails } = this.props;
-    const { id, name, kind } = data;
-    activateDetails(id, name, kind);
+    console.log(event.target);
   };
 
   render() {
-    const ordersAlreadyInDB = this.props.data.loading
-      ? []
-      : this.props.data.orders.map(order => order.itemId);
+    const userOrders = this.props.data.orders;
     const { pagination } = this.props;
-    const newOrders = this.props.datas;
-    const filteredOrders = newOrders.filter(order => {
-      return !ordersAlreadyInDB.includes(order.itemId);
-    });
     return (
-      <div className="mainview__container">
+      <div className="acceptedorder__container">
         <DetailsView />
-        {this.props.isLoadingData && this.props.data.loading ? (
+        {this.props.data.loading ? (
           <Segment loading color="grey">
             <div className="empty__container" />
           </Segment>
@@ -51,42 +41,37 @@ class MainView extends Component {
               <Table.Row>
                 <Table.HeaderCell>Data zamówienia</Table.HeaderCell>
                 <Table.HeaderCell>Klient</Table.HeaderCell>
-                <Table.HeaderCell>Nr</Table.HeaderCell>
+                <Table.HeaderCell>Zamówienie</Table.HeaderCell>
                 <Table.HeaderCell>Kod</Table.HeaderCell>
-                <Table.HeaderCell>Ilość</Table.HeaderCell>
-                <Table.HeaderCell>Cena</Table.HeaderCell>
                 <Table.HeaderCell>Wartość</Table.HeaderCell>
-                <Table.HeaderCell>Opcje</Table.HeaderCell>
+                <Table.HeaderCell>Data realizacji</Table.HeaderCell>
+                <Table.HeaderCell>Data wpłaty</Table.HeaderCell>
+                <Table.HeaderCell>Faktura</Table.HeaderCell>
+                <Table.HeaderCell>Status</Table.HeaderCell>
+                <Table.HeaderCell>Szczegóły</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {filteredOrders
+              {userOrders
                 .map(order => (
-                  <Table.Row key={order.itemId}>
+                  <Table.Row key={order.id}>
                     <Table.Cell singleLine>
-                      {moment(order.dateInsert).format("DD-MM-YYYY")}
+                      {moment(order.document.dateInsert).format("DD-MM-YYYY")}
                     </Table.Cell>
-                    <Table.Cell>{order.client}</Table.Cell>
-                    <Table.Cell>{order.signature}</Table.Cell>
+                    <Table.Cell>{order.document.client.name}</Table.Cell>
+                    <Table.Cell>{order.document.signature}</Table.Cell>
                     <Table.Cell>{order.code}</Table.Cell>
+                    <Table.Cell singleLine>{order.netValue}</Table.Cell>
                     <Table.Cell singleLine>
-                      {order.quantity} {order.unit}
+                      {order.document.dateOfRealisation}
                     </Table.Cell>
                     <Table.Cell singleLine>
-                      {order.price} {order.currency}
+                      {order.document.dateOfPay}
                     </Table.Cell>
-                    <Table.Cell singleLine>
-                      {order.netValue} {order.currency}
-                    </Table.Cell>
+                    <Table.Cell>{order.document.invoice}</Table.Cell>
+                    <Table.Cell>{"status"}</Table.Cell>
                     <Table.Cell>
-                      <Button
-                        id={order.itemId}
-                        name={order.type}
-                        kind={order.kind}
-                        onClick={this.handleClick}
-                      >
-                        Zadysponuj
-                      </Button>
+                      <Button onClick={this.handleClick}>Edytuj</Button>
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -94,10 +79,10 @@ class MainView extends Component {
             </Table.Body>
             <Table.Footer>
               <Table.Row>
-                <Table.HeaderCell textAlign="center" colSpan="8">
+                <Table.HeaderCell textAlign="center" colSpan="10">
                   <Pagination
                     defaultActivePage={1}
-                    totalPages={Math.ceil(filteredOrders.length / 10)}
+                    totalPages={Math.ceil(userOrders.length / 10)}
                     onPageChange={this.handlePaginationChange}
                   />
                 </Table.HeaderCell>
@@ -110,28 +95,19 @@ class MainView extends Component {
   }
 }
 
-MainView.defaultProps = {
-  isLoadingData: true
-};
-
 const mapStateToProps = state => {
   return {
-    datas: state.data.data,
-    isLoadingData: getDataLoading(state),
     pagination: state.interfaceMenu.paginationMain
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchData: () => dispatch(fetchData()),
-    changePagination: value => dispatch(changePaginationMainView(value)),
-    activateDetails: (id, name, kind) =>
-      dispatch(activateDetails(id, name, kind))
+    changePagination: value => dispatch(changePaginationMainView(value))
   };
 };
 
 const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
-const graphqlQuery = graphql(getOrdersItemid);
+const graphqlQuery = graphql(getOrdersQuery);
 
-export default compose(reduxWrapper, graphqlQuery)(MainView);
+export default compose(reduxWrapper, graphqlQuery)(AcceptedOrderView);

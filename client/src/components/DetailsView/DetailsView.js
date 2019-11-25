@@ -15,13 +15,14 @@ class DetailsView extends Component {
       <div
         className={active ? "details__container" : "details__container--hidden"}
       >
-        {active && (activeType === "TPD" && activeKind === "KT" ? (
-          <FormOrderTPD />
-        ) : activeType === "FS" && activeKind === "KT"  ? (
-          <FormOrderFSRG />
-        ) : (
-          <FormOrderPacking />)
-        )}
+        {active &&
+          (activeType === "TPD" && activeKind === "KT" ? (
+            <FormOrderTPD />
+          ) : activeType === "FS" && activeKind === "KT" ? (
+            <FormOrderFSRG />
+          ) : (
+            <FormOrderPacking />
+          ))}
       </div>
     );
   }
@@ -31,7 +32,7 @@ const mapStateToProps = state => {
   return {
     active: state.data.activeDetails,
     activeType: state.data.activeType,
-    activeKind:state.data.activeKind
+    activeKind: state.data.activeKind
   };
 };
 
@@ -41,7 +42,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DetailsView);
+export default connect(mapStateToProps, mapDispatchToProps)(DetailsView);
