@@ -7,6 +7,7 @@ import "./Dashboard.css";
 import DashboardMenu from "../DashboardMenu/DashboardMenu";
 import MainView from "../MainView/MainView";
 import AcceptedOrderView from "../AcceptedOrderView/AcceptedOrderView";
+import TapeProductionView from "../TapeProductionView/TapeProductionView";
 
 class Dashboard extends Component {
   render() {
@@ -14,10 +15,11 @@ class Dashboard extends Component {
     return (
       <div className="dashboard__container">
         <h1>Dashboard</h1>
-        <DashboardMenu />{" "}
-        <Segment attached="bottom">
+        <DashboardMenu />
+        <Segment attached="bottom" color="grey">
           {activeItem === "oczekujące" && <MainView />}
           {activeItem === "zlecone" && <AcceptedOrderView />}
+          {activeItem === "Produkcja Nadruk" && <TapeProductionView />}
         </Segment>
       </div>
     );

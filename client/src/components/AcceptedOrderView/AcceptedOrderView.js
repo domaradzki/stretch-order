@@ -32,11 +32,11 @@ class AcceptedOrderView extends Component {
       <div className="acceptedorder__container">
         <DetailsView />
         {this.props.data.loading ? (
-          <Segment loading>
+          <Segment loading color="grey">
             <div className="empty__container" />
           </Segment>
         ) : (
-          <Table celled>
+          <Table celled striped selectable inverted color="grey" key="grey">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Data zamówienia</Table.HeaderCell>
@@ -55,15 +55,19 @@ class AcceptedOrderView extends Component {
               {userOrders
                 .map(order => (
                   <Table.Row key={order.id}>
-                    <Table.Cell>
+                    <Table.Cell singleLine>
                       {moment(order.document.dateInsert).format("DD-MM-YYYY")}
                     </Table.Cell>
                     <Table.Cell>{order.document.client.name}</Table.Cell>
                     <Table.Cell>{order.document.signature}</Table.Cell>
                     <Table.Cell>{order.code}</Table.Cell>
-                    <Table.Cell>{order.netValue}</Table.Cell>
-                    <Table.Cell>{order.document.dateRealisation}</Table.Cell>
-                    <Table.Cell>{order.document.dateOfPay}</Table.Cell>
+                    <Table.Cell singleLine>{order.netValue}</Table.Cell>
+                    <Table.Cell singleLine>
+                      {order.document.dateOfRealisation}
+                    </Table.Cell>
+                    <Table.Cell singleLine>
+                      {order.document.dateOfPay}
+                    </Table.Cell>
                     <Table.Cell>{order.document.invoice}</Table.Cell>
                     <Table.Cell>{"status"}</Table.Cell>
                     <Table.Cell>

@@ -11,11 +11,11 @@ import moment from "moment";
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
 import { unactivateDetails, pickedOrder, fetchData } from "../../ducks/data";
 
-import addOrderMutation from "../../graphql/addOrderMutation";
-import addDocumentMutation from "../../graphql/addDocumentMutation";
-import addClientMutation from "../../graphql/addClientMutation";
-import addUserMutation from "../../graphql/addUserMutation";
-import addStretchMutation from "../../graphql/addStretchMutation.js";
+import addOrderMutation from "../../graphql/mutations/addOrderMutation";
+import addDocumentMutation from "../../graphql/mutations/addDocumentMutation";
+import addClientMutation from "../../graphql/mutations/addClientMutation";
+import addUserMutation from "../../graphql/mutations/addUserMutation";
+import addStretchMutation from "../../graphql/mutations/addStretchMutation";
 import isInDatabase from "../../graphql/queries/isInDatabase";
 import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 

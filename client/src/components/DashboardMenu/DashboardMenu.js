@@ -10,9 +10,8 @@ class DashboardMenu extends Component {
 
   render() {
     const activeItem = this.props.activeItem;
-
     return (
-      <Menu attached="top" tabular>
+      <Menu color="grey" inverted attached="top" tabular>
         <Menu.Item
           name="oczekujące"
           active={activeItem === "oczekujące"}
@@ -21,6 +20,11 @@ class DashboardMenu extends Component {
         <Menu.Item
           name="zlecone"
           active={activeItem === "zlecone"}
+          onClick={this.handleItemClick}
+        />
+        <Menu.Item
+          name="Produkcja Nadruk"
+          active={activeItem === "Produkcja Nadruk"}
           onClick={this.handleItemClick}
         />
         <Menu.Menu position="right">

@@ -42,11 +42,11 @@ class MainView extends Component {
       <div className="mainview__container">
         <DetailsView />
         {this.props.isLoadingData && this.props.data.loading ? (
-          <Segment loading>
+          <Segment loading color="grey">
             <div className="empty__container" />
           </Segment>
         ) : (
-          <Table celled>
+          <Table celled striped selectable inverted color="grey" key="grey">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Data zamówienia</Table.HeaderCell>
@@ -63,15 +63,21 @@ class MainView extends Component {
               {filteredOrders
                 .map(order => (
                   <Table.Row key={order.itemId}>
-                    <Table.Cell>
+                    <Table.Cell singleLine>
                       {moment(order.dateInsert).format("DD-MM-YYYY")}
                     </Table.Cell>
                     <Table.Cell>{order.client}</Table.Cell>
                     <Table.Cell>{order.signature}</Table.Cell>
                     <Table.Cell>{order.code}</Table.Cell>
-                    <Table.Cell>{order.quantity}</Table.Cell>
-                    <Table.Cell>{order.price}</Table.Cell>
-                    <Table.Cell>{order.netValue}</Table.Cell>
+                    <Table.Cell singleLine>
+                      {order.quantity} {order.unit}
+                    </Table.Cell>
+                    <Table.Cell singleLine>
+                      {order.price} {order.currency}
+                    </Table.Cell>
+                    <Table.Cell singleLine>
+                      {order.netValue} {order.currency}
+                    </Table.Cell>
                     <Table.Cell>
                       <Button
                         id={order.itemId}

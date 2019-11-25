@@ -24,12 +24,9 @@ class MainMenu extends Component {
 
   render() {
     const activeView = this.props.activeView;
-
     return (
-      <Menu>
-          <Menu.Item>
-          
-        </Menu.Item>
+      <Menu color="grey" inverted>
+        <Menu.Item></Menu.Item>
         <NavItem
           exact
           to="/"
@@ -91,7 +88,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MainMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);
