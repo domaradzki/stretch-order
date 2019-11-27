@@ -8,6 +8,7 @@ import DashboardMenu from "../DashboardMenu/DashboardMenu";
 import MainView from "../MainView/MainView";
 import AcceptedOrderView from "../AcceptedOrderView/AcceptedOrderView";
 import TapeProductionView from "../TapeProductionView/TapeProductionView";
+import StretchProductionView from "../StretchProductionView/StretchProductionView";
 
 class Dashboard extends Component {
   render() {
@@ -20,6 +21,7 @@ class Dashboard extends Component {
           {activeItem === "oczekujące" && <MainView />}
           {activeItem === "zlecone" && <AcceptedOrderView />}
           {activeItem === "Produkcja Nadruk" && <TapeProductionView />}
+          {activeItem === "Produkcja Stretch" && <StretchProductionView />}
         </Segment>
       </div>
     );
