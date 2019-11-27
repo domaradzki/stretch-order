@@ -4,6 +4,7 @@ import {
   GraphQLString,
   GraphQLInt
 } from "graphql";
+
 import OrderType from "../orders/orderType";
 import Order from "../../models/order";
 
