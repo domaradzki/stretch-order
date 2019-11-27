@@ -27,12 +27,17 @@ class DashboardMenu extends Component {
           active={activeItem === "Produkcja Nadruk"}
           onClick={this.handleItemClick}
         />
+        <Menu.Item
+          name="Produkcja Stretch"
+          active={activeItem === "Produkcja Stretch"}
+          onClick={this.handleItemClick}
+        />
         <Menu.Menu position="right">
           <Menu.Item>
             <Input
               transparent
               icon={{ name: "search", link: true }}
-              placeholder="Szukaj..."
+              placeholder="szukaj..."
             />
           </Menu.Item>
         </Menu.Menu>
