@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.7.1",
+    "@material-ui/icons": "^4.5.1",
     "apollo-boost": "^0.4.4",
     "body-parser": "^1.18.3",
+    "clsx": "^1.0.4",
     "express": "^4.17.1",
     "graphql": "^14.4.1",
     "joi": "^14.3.1",
@@ -19,11 +22,13 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.5",
+    "recharts": "^1.8.5",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.1"
+    "semantic-ui-react": "^0.88.1",
+    "typeface-roboto": "^0.0.75"
   },
   "devDependencies": {
     "react-scripts": "2.1.5"

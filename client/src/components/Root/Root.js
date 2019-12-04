@@ -4,7 +4,6 @@ import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import Dashboard from "../Dashboard/Dashboard";
 import MainMenu from "../MainMenu/MainMenu";
-import "./Root.css";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql"
@@ -15,11 +14,9 @@ class Root extends Component {
     return (
       <ApolloProvider client={client}>
         <Router>
-          <div className="router__container">
-            <MainMenu />
-            <Route component={Dashboard} />
-            <Route exact path="/dashboard" component={Dashboard} />
-          </div>
+          {/* <MainMenu /> */}
+          <Route component={Dashboard} />
+          <Route exact path="/dashboard" component={Dashboard} />
         </Router>
       </ApolloProvider>
     );
