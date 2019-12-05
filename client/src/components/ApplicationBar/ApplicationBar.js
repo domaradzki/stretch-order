@@ -38,8 +38,6 @@ const useStyles = makeStyles(theme => ({
 
 const ApplicationBar = ({ open, openDrawer }) => {
   const classes = useStyles();
-  console.log(open);
-  console.log(openDrawer);
   return (
     <AppBar
       position="absolute"

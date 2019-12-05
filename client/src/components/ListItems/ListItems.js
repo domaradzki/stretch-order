@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -15,54 +16,70 @@ import SettingsIcon from "@material-ui/icons/Settings";
 
 export const mainListItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AddCircleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Nowe" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Zlecone" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <InsertPhotoIcon />
-      </ListItemIcon>
-      <ListItemText primary="Nadruk" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <CameraRollIcon />
-      </ListItemIcon>
-      <ListItemText primary="Stretch" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LocalShippingIcon />
-      </ListItemIcon>
-      <ListItemText primary="Transport" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reporty" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <SettingsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Ustawienia" />
-    </ListItem>
+    <NavLink to="/">
+      <ListItem button>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+    </NavLink>
+    <NavLink to="/new">
+      <ListItem button>
+        <ListItemIcon>
+          <AddCircleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Nowe" />
+      </ListItem>
+    </NavLink>
+    <NavLink to="/orders">
+      <ListItem button>
+        <ListItemIcon>
+          <LayersIcon />
+        </ListItemIcon>
+        <ListItemText primary="Zlecone" />
+      </ListItem>
+    </NavLink>
+    <NavLink to="/tape">
+      <ListItem button>
+        <ListItemIcon>
+          <InsertPhotoIcon />
+        </ListItemIcon>
+        <ListItemText primary="Nadruk" />
+      </ListItem>
+    </NavLink>
+    <NavLink to="/stretch">
+      <ListItem button>
+        <ListItemIcon>
+          <CameraRollIcon />
+        </ListItemIcon>
+        <ListItemText primary="Stretch" />
+      </ListItem>
+    </NavLink>
+    <NavLink to="/transport">
+      <ListItem button>
+        <ListItemIcon>
+          <LocalShippingIcon />
+        </ListItemIcon>
+        <ListItemText primary="Transport" />
+      </ListItem>
+    </NavLink>
+    <NavLink to="/raports">
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Reporty" />
+      </ListItem>
+    </NavLink>
+    <NavLink to="/settings">
+      <ListItem button>
+        <ListItemIcon>
+          <SettingsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Ustawienia" />
+      </ListItem>
+    </NavLink>
   </div>
 );
 

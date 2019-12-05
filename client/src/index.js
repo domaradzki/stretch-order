@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import * as serviceWorker from "./serviceWorker";
-import Root from "./components/Root/Root";
+import Root from "./layouts/Root/Root";
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
