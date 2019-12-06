@@ -1,4 +1,11 @@
 import React, { Component } from "react";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableFooter from "@material-ui/core/TableFooter";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import moment from "moment";
@@ -8,7 +15,7 @@ import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
 import { changePaginationMainView } from "../../ducks/interfaceMenu";
 import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
-import { Table, Button, Segment, Pagination } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import "./MainView.css";
 
 import DetailsView from "../DetailsView/DetailsView";
@@ -19,8 +26,8 @@ class MainView extends Component {
     this.props.fetchData();
   }
 
-  handlePaginationChange = (event, { activePage }) => {
-    this.props.changePagination(activePage - 1);
+  handlePaginationChange = (event, { page }) => {
+    this.props.changePagination(page - 1);
   };
 
   handleClick = (event, data) => {
@@ -41,44 +48,40 @@ class MainView extends Component {
     return (
       <div className="mainview__container">
         <DetailsView />
-        {this.props.isLoadingData && this.props.data.loading ? (
-          <Segment loading color="grey">
-            <div className="empty__container" />
-          </Segment>
-        ) : (
-          <Table celled striped selectable inverted color="grey" key="grey">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Data zamówienia</Table.HeaderCell>
-                <Table.HeaderCell>Klient</Table.HeaderCell>
-                <Table.HeaderCell>Nr</Table.HeaderCell>
-                <Table.HeaderCell>Kod</Table.HeaderCell>
-                <Table.HeaderCell>Ilość</Table.HeaderCell>
-                <Table.HeaderCell>Cena</Table.HeaderCell>
-                <Table.HeaderCell>Wartość</Table.HeaderCell>
-                <Table.HeaderCell>Opcje</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
+        {!this.props.isLoadingData && !this.props.data.loading && (
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell variant="head">Data zamówienia</TableCell>
+                <TableCell variant="head">Klient</TableCell>
+                <TableCell variant="head">Nr</TableCell>
+                <TableCell variant="head">Kod</TableCell>
+                <TableCell variant="head">Ilość</TableCell>
+                <TableCell variant="head">Cena</TableCell>
+                <TableCell variant="head">Wartość</TableCell>
+                <TableCell variant="head">Opcje</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {filteredOrders
                 .map(order => (
-                  <Table.Row key={order.itemId}>
-                    <Table.Cell singleLine>
+                  <TableRow key={order.itemId}>
+                    <TableCell variant="body">
                       {moment(order.dateInsert).format("DD-MM-YYYY")}
-                    </Table.Cell>
-                    <Table.Cell>{order.client}</Table.Cell>
-                    <Table.Cell>{order.signature}</Table.Cell>
-                    <Table.Cell>{order.code}</Table.Cell>
-                    <Table.Cell singleLine>
+                    </TableCell>
+                    <TableCell variant="body">{order.client}</TableCell>
+                    <TableCell variant="body">{order.signature}</TableCell>
+                    <TableCell variant="body">{order.code}</TableCell>
+                    <TableCell variant="body">
                       {order.quantity} {order.unit}
-                    </Table.Cell>
-                    <Table.Cell singleLine>
+                    </TableCell>
+                    <TableCell variant="body">
                       {order.price} {order.currency}
-                    </Table.Cell>
-                    <Table.Cell singleLine>
+                    </TableCell>
+                    <TableCell variant="body">
                       {order.netValue} {order.currency}
-                    </Table.Cell>
-                    <Table.Cell>
+                    </TableCell>
+                    <TableCell variant="body">
                       <Button
                         id={order.itemId}
                         name={order.type}
@@ -87,22 +90,23 @@ class MainView extends Component {
                       >
                         Zadysponuj
                       </Button>
-                    </Table.Cell>
-                  </Table.Row>
+                    </TableCell>
+                  </TableRow>
                 ))
                 .slice(pagination, pagination + 10)}
-            </Table.Body>
-            <Table.Footer>
-              <Table.Row>
-                <Table.HeaderCell textAlign="center" colSpan="8">
-                  <Pagination
-                    defaultActivePage={1}
-                    totalPages={Math.ceil(filteredOrders.length / 10)}
-                    onPageChange={this.handlePaginationChange}
-                  />
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Footer>
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell align="center" variant="footer" colSpan="8">
+                  {/* <TablePagination
+                    page={1}
+                    rowsPerPage={10}
+                    count={Math.ceil(filteredOrders.length / 10)}
+                    onChangePage={this.handlePaginationChange}
+                  /> */}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
           </Table>
         )}
       </div>
