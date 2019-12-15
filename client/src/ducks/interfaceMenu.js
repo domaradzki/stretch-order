@@ -1,13 +1,15 @@
 // Action types
 const CHANGE_MENU = "CHANGE_MENU";
 const CHANGE_VIEW = "CHANGE_VIEW";
-const PAGINATION_MAINVIEW = "PAGINATION_MAINVIEW";
+const CHANGE_PAGE = "CHANGE_PAGE";
+const ROWS_PER_PAGE = "ROWS_PER_PAGE";
 
 // Initial Value
 const initialState = {
   activeItem: "Produkcja Nadruk",
   activeView: "dashboard",
-  paginationMain: 0
+  page: 0,
+  rowsPerPage: 5
 };
 
 // Reducer
@@ -23,10 +25,15 @@ export default function interfaceReducer(state = initialState, action) {
         ...state,
         activeView: action.name
       };
-    case PAGINATION_MAINVIEW:
+    case CHANGE_PAGE:
       return {
         ...state,
-        paginationMain: action.value * 10
+        page: action.value
+      };
+    case ROWS_PER_PAGE:
+      return {
+        ...state,
+        rowsPerPage: action.value
       };
     default:
       return state;
@@ -46,9 +53,15 @@ export const changeView = name => {
     name
   };
 };
-export const changePaginationMainView = value => {
+export const changePage = value => {
   return {
-    type: PAGINATION_MAINVIEW,
+    type: CHANGE_PAGE,
+    value
+  };
+};
+export const setRowsPerPage = value => {
+  return {
+    type: ROWS_PER_PAGE,
     value
   };
 };

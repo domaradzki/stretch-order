@@ -3,16 +3,16 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
-import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import moment from "moment";
 import { graphql } from "react-apollo";
 
 import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
-import { changePaginationMainView } from "../../ducks/interfaceMenu";
+import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 import { Button } from "semantic-ui-react";
@@ -22,12 +22,16 @@ import DetailsView from "../DetailsView/DetailsView";
 
 class MainView extends Component {
   componentDidMount() {
-    this.props.changePagination(0);
+    this.props.changePage(0);
     this.props.fetchData();
   }
 
-  handlePaginationChange = (event, { page }) => {
-    this.props.changePagination(page - 1);
+  handlePageChange = (event, newPage) => {
+    this.props.changePage(newPage);
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.props.setRowsPerPage(+event.target.value);
   };
 
   handleClick = (event, data) => {
@@ -40,16 +44,16 @@ class MainView extends Component {
     const ordersAlreadyInDB = this.props.data.loading
       ? []
       : this.props.data.orders.map(order => order.itemId);
-    const { pagination } = this.props;
+    const { page, rowsPerPage } = this.props;
     const newOrders = this.props.datas;
     const filteredOrders = newOrders.filter(order => {
       return !ordersAlreadyInDB.includes(order.itemId);
     });
     return (
-      <div className="mainview__container">
+      <Paper>
         <DetailsView />
         {!this.props.isLoadingData && !this.props.data.loading && (
-          <Table size="small">
+          <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 <TableCell variant="head">Data zamówienia</TableCell>
@@ -64,6 +68,7 @@ class MainView extends Component {
             </TableHead>
             <TableBody>
               {filteredOrders
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(order => (
                   <TableRow key={order.itemId}>
                     <TableCell variant="body">
@@ -92,24 +97,21 @@ class MainView extends Component {
                       </Button>
                     </TableCell>
                   </TableRow>
-                ))
-                .slice(pagination, pagination + 10)}
+                ))}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell align="center" variant="footer" colSpan="8">
-                  {/* <TablePagination
-                    page={1}
-                    rowsPerPage={10}
-                    count={Math.ceil(filteredOrders.length / 10)}
-                    onChangePage={this.handlePaginationChange}
-                  /> */}
-                </TableCell>
-              </TableRow>
-            </TableFooter>
           </Table>
         )}
-      </div>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 100]}
+          labelRowsPerPage="Pozycji na stronie"
+          component="div"
+          count={filteredOrders.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={this.handlePageChange}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+        />
+      </Paper>
     );
   }
 }
@@ -122,14 +124,16 @@ const mapStateToProps = state => {
   return {
     datas: state.data.data,
     isLoadingData: getDataLoading(state),
-    pagination: state.interfaceMenu.paginationMain
+    page: state.interfaceMenu.page,
+    rowsPerPage: state.interfaceMenu.rowsPerPage
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchData: () => dispatch(fetchData()),
-    changePagination: value => dispatch(changePaginationMainView(value)),
+    changePage: value => dispatch(changePage(value)),
+    setRowsPerPage: value => dispatch(setRowsPerPage(value)),
     activateDetails: (id, name, kind) =>
       dispatch(activateDetails(id, name, kind))
   };
