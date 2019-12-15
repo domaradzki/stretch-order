@@ -1,109 +1,131 @@
 import React, { Component } from "react";
+import Button from "@material-ui/core/Button";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import moment from "moment";
 import { graphql } from "react-apollo";
 
-import { changePaginationMainView } from "../../ducks/interfaceMenu";
+import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersQuery from "../../graphql/queries/getOrdersQuery";
 
-import { Table, Button, Segment, Pagination } from "semantic-ui-react";
 import "./AcceptedOrderView.css";
 
 import DetailsView from "../DetailsView/DetailsView";
 
 class AcceptedOrderView extends Component {
   componentDidMount() {
-    this.props.changePagination(0);
+    this.props.changePage(0);
   }
 
-  handlePaginationChange = (event, { activePage }) => {
-    this.props.changePagination(activePage - 1);
+  handlePageChange = (event, newPage) => {
+    this.props.changePage(newPage);
   };
 
-  handleClick = (event, data) => {
-    console.log(event.target);
+  handleChangeRowsPerPage = event => {
+    this.props.setRowsPerPage(+event.target.value);
+  };
+
+  handleClick = event => {
+    console.log(event.currentTarget);
   };
 
   render() {
     const userOrders = this.props.data.orders;
-    const { pagination } = this.props;
+    const { page, rowsPerPage } = this.props;
     return (
-      <div className="acceptedorder__container">
+      <Paper>
         <DetailsView />
-        {this.props.data.loading ? (
-          <Segment loading color="grey">
-            <div className="empty__container" />
-          </Segment>
-        ) : (
-          <Table celled striped selectable inverted color="grey" key="grey">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Data zamówienia</Table.HeaderCell>
-                <Table.HeaderCell>Klient</Table.HeaderCell>
-                <Table.HeaderCell>Zamówienie</Table.HeaderCell>
-                <Table.HeaderCell>Kod</Table.HeaderCell>
-                <Table.HeaderCell>Wartość</Table.HeaderCell>
-                <Table.HeaderCell>Data realizacji</Table.HeaderCell>
-                <Table.HeaderCell>Data wpłaty</Table.HeaderCell>
-                <Table.HeaderCell>Faktura</Table.HeaderCell>
-                <Table.HeaderCell>Status</Table.HeaderCell>
-                <Table.HeaderCell>Szczegóły</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {userOrders
-                .map(order => (
-                  <Table.Row key={order.id}>
-                    <Table.Cell singleLine>
-                      {moment(order.document.dateInsert).format("DD-MM-YYYY")}
-                    </Table.Cell>
-                    <Table.Cell>{order.document.client.name}</Table.Cell>
-                    <Table.Cell>{order.document.signature}</Table.Cell>
-                    <Table.Cell>{order.code}</Table.Cell>
-                    <Table.Cell singleLine>{order.netValue}</Table.Cell>
-                    <Table.Cell singleLine>
-                      {order.document.dateOfRealisation}
-                    </Table.Cell>
-                    <Table.Cell singleLine>
-                      {order.document.dateOfPay}
-                    </Table.Cell>
-                    <Table.Cell>{order.document.invoice}</Table.Cell>
-                    <Table.Cell>{"status"}</Table.Cell>
-                    <Table.Cell>
-                      <Button onClick={this.handleClick}>Edytuj</Button>
-                    </Table.Cell>
-                  </Table.Row>
-                ))
-                .slice(pagination, pagination + 10)}
-            </Table.Body>
-            <Table.Footer>
-              <Table.Row>
-                <Table.HeaderCell textAlign="center" colSpan="10">
-                  <Pagination
-                    defaultActivePage={1}
-                    totalPages={Math.ceil(userOrders.length / 10)}
-                    onPageChange={this.handlePaginationChange}
-                  />
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Footer>
-          </Table>
+        {!this.props.data.loading && (
+          <>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell variant="head">Data zamówienia</TableCell>
+                  <TableCell variant="head">Klient</TableCell>
+                  <TableCell variant="head">Zamówienie</TableCell>
+                  <TableCell variant="head">Kod</TableCell>
+                  <TableCell variant="head">Wartość</TableCell>
+                  <TableCell variant="head">Data realizacji</TableCell>
+                  <TableCell variant="head">Data wpłaty</TableCell>
+                  <TableCell variant="head">Faktura</TableCell>
+                  <TableCell variant="head">Status</TableCell>
+                  <TableCell variant="head">Szczegóły</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {userOrders
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(order => (
+                    <TableRow key={order.id}>
+                      <TableCell variant="body">
+                        {moment(order.document.dateInsert).format("DD-MM-YYYY")}
+                      </TableCell>
+                      <TableCell variant="body">
+                        {order.document.client.name}
+                      </TableCell>
+                      <TableCell variant="body">
+                        {order.document.signature}
+                      </TableCell>
+                      <TableCell variant="body">{order.code}</TableCell>
+                      <TableCell variant="body">{order.netValue}</TableCell>
+                      <TableCell variant="body">
+                        {order.document.dateOfRealisation}
+                      </TableCell>
+                      <TableCell variant="body">
+                        {order.document.dateOfPay}
+                      </TableCell>
+                      <TableCell variant="body">
+                        {order.document.invoice}
+                      </TableCell>
+                      <TableCell variant="body">{"status"}</TableCell>
+                      <TableCell variant="body">
+                        <Button
+                          onClick={this.handleClick}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Zadysponuj
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, 100]}
+              labelRowsPerPage="Pozycji na stronie"
+              component="div"
+              count={userOrders.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={this.handlePageChange}
+              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            />
+          </>
         )}
-      </div>
+      </Paper>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    pagination: state.interfaceMenu.paginationMain
+    page: state.interfaceMenu.page,
+    rowsPerPage: state.interfaceMenu.rowsPerPage
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    changePagination: value => dispatch(changePaginationMainView(value))
+    changePage: value => dispatch(changePage(value)),
+    setRowsPerPage: value => dispatch(setRowsPerPage(value))
   };
 };
 

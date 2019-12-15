@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -15,7 +16,6 @@ import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
-import { Button } from "semantic-ui-react";
 import "./MainView.css";
 
 import DetailsView from "../DetailsView/DetailsView";
@@ -34,9 +34,9 @@ class MainView extends Component {
     this.props.setRowsPerPage(+event.target.value);
   };
 
-  handleClick = (event, data) => {
+  handleClick = event => {
     const { activateDetails } = this.props;
-    const { id, name, kind } = data;
+    const { id, name, kind } = event.currentTarget;
     activateDetails(id, name, kind);
   };
 
@@ -92,6 +92,8 @@ class MainView extends Component {
                         name={order.type}
                         kind={order.kind}
                         onClick={this.handleClick}
+                        variant="contained"
+                        color="primary"
                       >
                         Zadysponuj
                       </Button>

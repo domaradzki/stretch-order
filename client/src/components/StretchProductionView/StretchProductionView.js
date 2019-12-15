@@ -1,102 +1,124 @@
 import React, { Component } from "react";
+import Button from "@material-ui/core/Button";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { graphql } from "react-apollo";
 
-import { changePaginationMainView } from "../../ducks/interfaceMenu";
+import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersStretchQuery from "../../graphql/queries/getOrdersStretchQuery";
-
-import { Table, Button, Segment, Pagination } from "semantic-ui-react";
-import "./StretchProductionView.css";
 
 class StretchProductionView extends Component {
   componentDidMount() {
-    this.props.changePagination(0);
+    this.props.changePage(0);
   }
 
-  handlePaginationChange = (event, { activePage }) => {
-    this.props.changePagination(activePage - 1);
+  handlePageChange = (event, newPage) => {
+    this.props.changePage(newPage);
   };
 
-  handleClick = (event, data) => {
-    console.log(event.target);
+  handleChangeRowsPerPage = event => {
+    this.props.setRowsPerPage(+event.target.value);
+  };
+
+  handleClick = event => {
+    console.log(event.currentTarget);
   };
 
   render() {
     console.log(this.props);
     const stretchOrders = this.props.data.stretches;
-    const { pagination } = this.props;
+    const { page, rowsPerPage } = this.props;
     return (
-      <div className="stretchproduction__container">
-        {this.props.data.loading ? (
-          <Segment loading color="blue">
-            <div className="empty__container" />
-          </Segment>
-        ) : (
-          <Table celled striped selectable inverted color="brown" key="brown">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Klient</Table.HeaderCell>
-                <Table.HeaderCell>Termin</Table.HeaderCell>
-                <Table.HeaderCell>Ilość</Table.HeaderCell>
-                <Table.HeaderCell>Waga netto</Table.HeaderCell>
-                <Table.HeaderCell>Tuleja</Table.HeaderCell>
-                <Table.HeaderCell>Waga brutto</Table.HeaderCell>
-                <Table.HeaderCell>Kolor</Table.HeaderCell>
-                <Table.HeaderCell>Grubość</Table.HeaderCell>
-                <Table.HeaderCell>Opcje</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {stretchOrders
-                .map(stretch => (
-                  <Table.Row key={stretch.id}>
-                    <Table.Cell>
-                      {stretch.order.document.client.name}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {stretch.order.document.dateOfRealisation}
-                    </Table.Cell>
-                    <Table.Cell>{stretch.order.quantity}</Table.Cell>
-                    <Table.Cell>{stretch.netWeight}</Table.Cell>
-                    <Table.Cell>{stretch.sleeve}</Table.Cell>
-                    <Table.Cell>{stretch.grossWeight}</Table.Cell>
-                    <Table.Cell>{stretch.stretchColor}</Table.Cell>
-                    <Table.Cell>{stretch.stretchThickness}</Table.Cell>
-                    <Table.Cell>
-                      <Button onClick={this.handleClick}>Pokaż</Button>
-                    </Table.Cell>
-                  </Table.Row>
-                ))
-                .slice(pagination, pagination + 10)}
-            </Table.Body>
-            <Table.Footer>
-              <Table.Row>
-                <Table.HeaderCell textAlign="center" colSpan="9">
-                  <Pagination
-                    defaultActivePage={1}
-                    totalPages={Math.ceil(stretchOrders.length / 10)}
-                    onPageChange={this.handlePaginationChange}
-                  />
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Footer>
-          </Table>
+      <Paper>
+        {!this.props.data.loading && (
+          <>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell variant="head">Klient</TableCell>
+                  <TableCell variant="head">Termin</TableCell>
+                  <TableCell variant="head">Ilość</TableCell>
+                  <TableCell variant="head">Waga netto</TableCell>
+                  <TableCell variant="head">Tuleja</TableCell>
+                  <TableCell variant="head">Waga brutto</TableCell>
+                  <TableCell variant="head">Kolor</TableCell>
+                  <TableCell variant="head">Grubość</TableCell>
+                  <TableCell variant="head">Opcje</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {stretchOrders
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(stretch => (
+                    <TableRow key={stretch.id}>
+                      <TableCell variant="body">
+                        {stretch.order.document.client.name}
+                      </TableCell>
+                      <TableCell variant="body">
+                        {stretch.order.document.dateOfRealisation}
+                      </TableCell>
+                      <TableCell variant="body">
+                        {stretch.order.quantity}
+                      </TableCell>
+                      <TableCell variant="body">{stretch.netWeight}</TableCell>
+                      <TableCell variant="body">{stretch.sleeve}</TableCell>
+                      <TableCell variant="body">
+                        {stretch.grossWeight}
+                      </TableCell>
+                      <TableCell variant="body">
+                        {stretch.stretchColor}
+                      </TableCell>
+                      <TableCell variant="body">
+                        {stretch.stretchThickness}
+                      </TableCell>
+                      <TableCell variant="body">
+                        <Button
+                          onClick={this.handleClick}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Pokaż
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, 100]}
+              labelRowsPerPage="Pozycji na stronie"
+              component="div"
+              count={stretchOrders.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={this.handlePageChange}
+              onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            />
+          </>
         )}
-      </div>
+      </Paper>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    pagination: state.interfaceMenu.paginationMain
+    page: state.interfaceMenu.page,
+    rowsPerPage: state.interfaceMenu.rowsPerPage
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    changePagination: value => dispatch(changePaginationMainView(value))
+    changePage: value => dispatch(changePage(value)),
+    setRowsPerPage: value => dispatch(setRowsPerPage(value))
   };
 };
 
