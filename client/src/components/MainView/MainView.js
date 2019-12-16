@@ -16,7 +16,8 @@ import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
-import "./MainView.css";
+import { styles } from "./MainView.style";
+import { withStyles } from "@material-ui/styles";
 
 import DetailsView from "../DetailsView/DetailsView";
 
@@ -44,7 +45,7 @@ class MainView extends Component {
     const ordersAlreadyInDB = this.props.data.loading
       ? []
       : this.props.data.orders.map(order => order.itemId);
-    const { page, rowsPerPage } = this.props;
+    const { page, rowsPerPage, classes } = this.props;
     const newOrders = this.props.datas;
     const filteredOrders = newOrders.filter(order => {
       return !ordersAlreadyInDB.includes(order.itemId);
@@ -71,19 +72,19 @@ class MainView extends Component {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(order => (
                   <TableRow key={order.itemId}>
-                    <TableCell variant="body">
+                    <TableCell variant="body" className={classes.tableCell}>
                       {moment(order.dateInsert).format("DD-MM-YYYY")}
                     </TableCell>
                     <TableCell variant="body">{order.client}</TableCell>
                     <TableCell variant="body">{order.signature}</TableCell>
                     <TableCell variant="body">{order.code}</TableCell>
-                    <TableCell variant="body">
+                    <TableCell variant="body" className={classes.tableCell}>
                       {order.quantity} {order.unit}
                     </TableCell>
-                    <TableCell variant="body">
+                    <TableCell variant="body" className={classes.tableCell}>
                       {order.price} {order.currency}
                     </TableCell>
-                    <TableCell variant="body">
+                    <TableCell variant="body" className={classes.tableCell}>
                       {order.netValue} {order.currency}
                     </TableCell>
                     <TableCell variant="body">
@@ -143,5 +144,6 @@ const mapDispatchToProps = dispatch => {
 
 const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
 const graphqlQuery = graphql(getOrdersItemid);
+const stylesComponent = withStyles(styles);
 
-export default compose(reduxWrapper, graphqlQuery)(MainView);
+export default compose(stylesComponent, reduxWrapper, graphqlQuery)(MainView);

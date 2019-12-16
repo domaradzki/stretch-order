@@ -23,7 +23,6 @@ import { withStyles } from "@material-ui/styles";
 class AcceptedOrderView extends Component {
   componentDidMount() {
     this.props.changePage(0);
-    console.log(styles);
   }
 
   handlePageChange = (event, newPage) => {
@@ -41,7 +40,6 @@ class AcceptedOrderView extends Component {
   render() {
     const userOrders = this.props.data.orders;
     const { page, rowsPerPage, classes } = this.props;
-    console.log(this.props);
     return (
       <Paper>
         <DetailsView />

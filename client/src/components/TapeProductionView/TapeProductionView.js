@@ -11,6 +11,9 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { graphql } from "react-apollo";
 
+import { styles } from "./TapeProductionView.style";
+import { withStyles } from "@material-ui/styles";
+
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersTapeQuery from "../../graphql/queries/getOrdersTapeQuery";
 
@@ -33,7 +36,7 @@ class TapeProductionView extends Component {
 
   render() {
     const tapeOrders = this.props.data.tapes;
-    const { page, rowsPerPage } = this.props;
+    const { page, rowsPerPage, classes } = this.props;
     return (
       <Paper>
         {!this.props.data.loading && (
@@ -65,11 +68,11 @@ class TapeProductionView extends Component {
                       <TableCell variant="body">{tape.roller}</TableCell>
                       <TableCell variant="body">{"seg"}</TableCell>
                       <TableCell variant="body">{"projectNR"}</TableCell>
-                      <TableCell variant="body">
+                      <TableCell variant="body" className={classes.tableCell}>
                         {tape.order.document.dateOfRealisation}
                       </TableCell>
-                      <TableCell variant="body">
-                        {tape.order.quantity}
+                      <TableCell variant="body" className={classes.tableCell}>
+                        {tape.order.quantity} {tape.order.unit}
                       </TableCell>
                       <TableCell variant="body">{tape.tapeLong}</TableCell>
                       <TableCell variant="body">{tape.tapeWidth}</TableCell>
@@ -121,5 +124,10 @@ const mapDispatchToProps = dispatch => {
 
 const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
 const graphqlQuery = graphql(getOrdersTapeQuery);
+const stylesComponent = withStyles(styles);
 
-export default compose(reduxWrapper, graphqlQuery)(TapeProductionView);
+export default compose(
+  stylesComponent,
+  reduxWrapper,
+  graphqlQuery
+)(TapeProductionView);

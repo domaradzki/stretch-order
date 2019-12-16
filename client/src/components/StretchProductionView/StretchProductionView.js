@@ -14,6 +14,9 @@ import { graphql } from "react-apollo";
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersStretchQuery from "../../graphql/queries/getOrdersStretchQuery";
 
+import { styles } from "./StretchProductionView.style";
+import { withStyles } from "@material-ui/styles";
+
 class StretchProductionView extends Component {
   componentDidMount() {
     this.props.changePage(0);
@@ -32,9 +35,8 @@ class StretchProductionView extends Component {
   };
 
   render() {
-    console.log(this.props);
     const stretchOrders = this.props.data.stretches;
-    const { page, rowsPerPage } = this.props;
+    const { page, rowsPerPage, classes } = this.props;
     return (
       <Paper>
         {!this.props.data.loading && (
@@ -61,15 +63,17 @@ class StretchProductionView extends Component {
                       <TableCell variant="body">
                         {stretch.order.document.client.name}
                       </TableCell>
-                      <TableCell variant="body">
+                      <TableCell variant="body" className={classes.tableCell}>
                         {stretch.order.document.dateOfRealisation}
                       </TableCell>
                       <TableCell variant="body">
-                        {stretch.order.quantity}
+                        {stretch.order.quantity} {stretch.order.unit}
                       </TableCell>
-                      <TableCell variant="body">{stretch.netWeight}</TableCell>
+                      <TableCell variant="body" className={classes.tableCell}>
+                        {stretch.netWeight}
+                      </TableCell>
                       <TableCell variant="body">{stretch.sleeve}</TableCell>
-                      <TableCell variant="body">
+                      <TableCell variant="body" className={classes.tableCell}>
                         {stretch.grossWeight}
                       </TableCell>
                       <TableCell variant="body">
@@ -124,5 +128,10 @@ const mapDispatchToProps = dispatch => {
 
 const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
 const graphqlQuery = graphql(getOrdersStretchQuery);
+const stylesComponent = withStyles(styles);
 
-export default compose(reduxWrapper, graphqlQuery)(StretchProductionView);
+export default compose(
+  stylesComponent,
+  reduxWrapper,
+  graphqlQuery
+)(StretchProductionView);

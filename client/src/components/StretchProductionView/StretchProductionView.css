@@ -1,9 +1,0 @@
-.stretchproduction__container {
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-.empty__container {
-  width: 85vw;
-  height: 20vw;
-}
