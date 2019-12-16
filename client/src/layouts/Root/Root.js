@@ -8,6 +8,7 @@ import MainView from "../MainView/MainView";
 import AcceptedOrderView from "../AcceptedOrderView/AcceptedOrderView";
 import TapeProductionView from "../TapeProductionView/TapeProductionView";
 import StretchProductionView from "../StretchProductionView/StretchProductionView";
+import Checkout from "../Checkout/Checkout";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql"
@@ -20,7 +21,8 @@ class Root extends Component {
         <Router>
           <Dashboard>
             <Route exact path="/" component={MainContainer} />
-            <Route path="/new" component={MainView} />
+            <Route exact path="/new" component={MainView} />
+            <Route path="/new/:orderId" component={Checkout} />
             <Route path="/orders" component={AcceptedOrderView} />
             <Route path="/tape" component={TapeProductionView} />
             <Route path="/stretch" component={StretchProductionView} />

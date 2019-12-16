@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -35,11 +36,12 @@ class MainView extends Component {
     this.props.setRowsPerPage(+event.target.value);
   };
 
-  handleClick = event => {
-    const { activateDetails } = this.props;
-    const { id, name, kind } = event.currentTarget;
-    activateDetails(id, name, kind);
-  };
+  // handleClick = event => {
+  //   event.prev
+  //   const { activateDetails } = this.props;
+  //   const { id, name, kind } = event.currentTarget;
+  //   activateDetails(id, name, kind);
+  // };
 
   render() {
     const ordersAlreadyInDB = this.props.data.loading
@@ -88,16 +90,18 @@ class MainView extends Component {
                       {order.netValue} {order.currency}
                     </TableCell>
                     <TableCell variant="body">
-                      <Button
-                        id={order.itemId}
-                        name={order.type}
-                        kind={order.kind}
-                        onClick={this.handleClick}
-                        variant="contained"
-                        color="primary"
-                      >
-                        Zadysponuj
-                      </Button>
+                      <Link to={`/new/${order.itemId}`}>
+                        <Button
+                          id={order.itemId}
+                          name={order.type}
+                          kind={order.kind}
+                          // onClick={this.handleClick}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Zadysponuj
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}
