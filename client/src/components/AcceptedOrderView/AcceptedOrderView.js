@@ -15,13 +15,15 @@ import { graphql } from "react-apollo";
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersQuery from "../../graphql/queries/getOrdersQuery";
 
-import "./AcceptedOrderView.css";
-
 import DetailsView from "../DetailsView/DetailsView";
+
+import { styles } from "./AcceptedOrderView.style";
+import { withStyles } from "@material-ui/styles";
 
 class AcceptedOrderView extends Component {
   componentDidMount() {
     this.props.changePage(0);
+    console.log(styles);
   }
 
   handlePageChange = (event, newPage) => {
@@ -38,7 +40,8 @@ class AcceptedOrderView extends Component {
 
   render() {
     const userOrders = this.props.data.orders;
-    const { page, rowsPerPage } = this.props;
+    const { page, rowsPerPage, classes } = this.props;
+    console.log(this.props);
     return (
       <Paper>
         <DetailsView />
@@ -64,7 +67,7 @@ class AcceptedOrderView extends Component {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(order => (
                     <TableRow key={order.id}>
-                      <TableCell variant="body">
+                      <TableCell variant="body" className={classes.tableCell}>
                         {moment(order.document.dateInsert).format("DD-MM-YYYY")}
                       </TableCell>
                       <TableCell variant="body">
@@ -74,11 +77,13 @@ class AcceptedOrderView extends Component {
                         {order.document.signature}
                       </TableCell>
                       <TableCell variant="body">{order.code}</TableCell>
-                      <TableCell variant="body">{order.netValue}</TableCell>
-                      <TableCell variant="body">
+                      <TableCell variant="body" className={classes.tableCell}>
+                        {order.netValue} {order.document.currency}
+                      </TableCell>
+                      <TableCell variant="body" className={classes.tableCell}>
                         {order.document.dateOfRealisation}
                       </TableCell>
-                      <TableCell variant="body">
+                      <TableCell variant="body" className={classes.tableCell}>
                         {order.document.dateOfPay}
                       </TableCell>
                       <TableCell variant="body">
@@ -131,5 +136,10 @@ const mapDispatchToProps = dispatch => {
 
 const reduxWrapper = connect(mapStateToProps, mapDispatchToProps);
 const graphqlQuery = graphql(getOrdersQuery);
+const stylesComponent = withStyles(styles);
 
-export default compose(reduxWrapper, graphqlQuery)(AcceptedOrderView);
+export default compose(
+  stylesComponent,
+  reduxWrapper,
+  graphqlQuery
+)(AcceptedOrderView);
