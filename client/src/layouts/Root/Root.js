@@ -4,10 +4,10 @@ import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import Dashboard from "../Dashboard/Dashboard";
 import MainContainer from "../MainContainer/MainContainer";
-import MainView from "../../components/MainView/MainView";
-import AcceptedOrderView from "../../components/AcceptedOrderView/AcceptedOrderView";
-import TapeProductionView from "../../components/TapeProductionView/TapeProductionView";
-import StretchProductionView from "../../components/StretchProductionView/StretchProductionView";
+import MainView from "../MainView/MainView";
+import AcceptedOrderView from "../AcceptedOrderView/AcceptedOrderView";
+import TapeProductionView from "../TapeProductionView/TapeProductionView";
+import StretchProductionView from "../StretchProductionView/StretchProductionView";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql"

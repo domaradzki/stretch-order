@@ -15,7 +15,7 @@ import { graphql } from "react-apollo";
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersQuery from "../../graphql/queries/getOrdersQuery";
 
-import DetailsView from "../DetailsView/DetailsView";
+import DetailsView from "../../components/DetailsView/DetailsView";
 
 import { styles } from "./AcceptedOrderView.style";
 import { withStyles } from "@material-ui/styles";

@@ -19,7 +19,7 @@ import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 import { styles } from "./MainView.style";
 import { withStyles } from "@material-ui/styles";
 
-import DetailsView from "../DetailsView/DetailsView";
+import DetailsView from "../../components/DetailsView/DetailsView";
 
 class MainView extends Component {
   componentDidMount() {
