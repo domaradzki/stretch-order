@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
@@ -6,7 +6,7 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import AddressForm from "../../components/AddressForm/AddressForm";
+import BasicInfoForm from "../../components/BasicInfoForm/BasicInfoForm";
 import PaymentForm from "../../components/PaymentForm/PaymentForm";
 import Review from "../../components/Review/Review";
 
@@ -39,7 +39,7 @@ const steps = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <AddressForm />;
+      return <BasicInfoForm />;
     case 1:
       return <PaymentForm />;
     case 2:
