@@ -7,7 +7,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import BasicInfoForm from "../../components/BasicInfoForm/BasicInfoForm";
-import PaymentForm from "../../components/PaymentForm/PaymentForm";
+import StretchForm from "../../components/StretchForm/StretchForm";
 import Review from "../../components/Review/Review";
 
 const useStyles = makeStyles(theme => ({
@@ -41,7 +41,7 @@ function getStepContent(step) {
     case 0:
       return <BasicInfoForm />;
     case 1:
-      return <PaymentForm />;
+      return <StretchForm />;
     case 2:
       return <Review />;
     default:
