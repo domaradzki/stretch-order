@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -159,6 +160,9 @@ export default function BasicInfoForm() {
               onChange={handleInputChange}
               value={input.price}
               type="number"
+              InputProps={{
+                endAdornment: <InputAdornment position="end">zł</InputAdornment>
+              }}
               fullWidth
               autoComplete="price"
             />
@@ -172,6 +176,9 @@ export default function BasicInfoForm() {
               onChange={handleInputChange}
               value={input.netValue}
               type="number"
+              InputProps={{
+                endAdornment: <InputAdornment position="end">zł</InputAdornment>
+              }}
               fullWidth
               autoComplete="net value"
             />
@@ -201,14 +208,6 @@ export default function BasicInfoForm() {
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={4}>
-            {/* <TextField
-              required
-              id="transport"
-              name="transport"
-              label="Transport"
-              fullWidth
-              autoComplete="transport"
-            /> */}
             <FormControl fullWidth required className={classes.formControl}>
               <InputLabel id="transportLabel">Transport</InputLabel>
               <Select
