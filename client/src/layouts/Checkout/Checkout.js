@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import BasicInfoForm from "../../components/BasicInfoForm/BasicInfoForm";
 import StretchForm from "../../components/StretchForm/StretchForm";
 import Review from "../../components/Review/Review";
+import TapeForm from "../../components/TapeForm/TapeForm";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -41,7 +42,7 @@ function getStepContent(step) {
     case 0:
       return <BasicInfoForm />;
     case 1:
-      return <StretchForm />;
+      return <TapeForm />;
     case 2:
       return <Review />;
     default:

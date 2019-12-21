@@ -5,6 +5,21 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 export default function StretchForm() {
+  const initialValues = {
+    sleeve: "",
+    stretchColor: "",
+    stretchThickness: "",
+    netWeight: "",
+    grossWeight: ""
+  };
+
+  const [input, setInput] = React.useState(initialValues);
+  const handleInputChange = event => {
+    setInput({
+      ...input,
+      [event.target.name]: event.target.value
+    });
+  };
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -17,6 +32,8 @@ export default function StretchForm() {
             id="sleeve"
             name="sleeve"
             label="Tuleja"
+            onChange={handleInputChange}
+            value={input.sleeve}
             type="number"
             InputProps={{
               endAdornment: <InputAdornment position="end">mm</InputAdornment>
@@ -30,6 +47,8 @@ export default function StretchForm() {
             id="stretchColor"
             name="stretchColor"
             label="Kolor folii"
+            onChange={handleInputChange}
+            value={input.stretchColor}
             type="text"
             fullWidth
           />
@@ -40,6 +59,8 @@ export default function StretchForm() {
             id="stretchThickness"
             name="stretchThickness"
             label="Grubość folii"
+            onChange={handleInputChange}
+            value={input.stretchThickness}
             type="text"
             InputProps={{
               endAdornment: <InputAdornment position="end">my</InputAdornment>
@@ -53,6 +74,8 @@ export default function StretchForm() {
             id="netWeight"
             name="netWeight"
             label="Waga netto"
+            onChange={handleInputChange}
+            value={input.netWeight}
             type="number"
             InputProps={{
               endAdornment: <InputAdornment position="end">kg</InputAdornment>
@@ -66,6 +89,8 @@ export default function StretchForm() {
             id="grossWeight"
             name="grossWeight"
             label="Waga brutto"
+            onChange={handleInputChange}
+            value={input.grossWeight}
             type="number"
             InputProps={{
               endAdornment: <InputAdornment position="end">kg</InputAdornment>
@@ -73,12 +98,6 @@ export default function StretchForm() {
             fullWidth
           />
         </Grid>
-        {/* <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-            label="Remember credit card details for next time"
-          />
-        </Grid> */}
       </Grid>
     </React.Fragment>
   );
