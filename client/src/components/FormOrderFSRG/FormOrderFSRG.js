@@ -9,7 +9,7 @@ import "react-day-picker/lib/style.css";
 import moment from "moment";
 
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
-import { unactivateDetails, pickedOrder, fetchData } from "../../ducks/data";
+import { unactivateDetails, activeOrder, fetchData } from "../../ducks/data";
 
 import addOrderMutation from "../../graphql/mutations/addOrderMutation";
 import addDocumentMutation from "../../graphql/mutations/addDocumentMutation";
@@ -21,18 +21,18 @@ import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 class FormOrderFSRG extends Component {
   async componentDidMount() {
-    const { pickedOrder } = this.props;
-    const detail2 = pickedOrder.postfix();
-    for (let key in pickedOrder) {
+    const { activeOrder } = this.props;
+    const detail2 = activeOrder.postfix();
+    for (let key in activeOrder) {
       if (key === "dateOfRealisation") {
-        this.props.changeDate(key, pickedOrder[key]());
+        this.props.changeDate(key, activeOrder[key]());
       }
-      if (pickedOrder.hasOwnProperty(key)) {
+      if (activeOrder.hasOwnProperty(key)) {
         key === "details"
-          ? this.props.changeInput(key, `${pickedOrder[key]} ${detail2}`)
-          : typeof pickedOrder[key] === "function"
-          ? this.props.changeInput(key, pickedOrder[key]())
-          : this.props.changeInput(key, pickedOrder[key]);
+          ? this.props.changeInput(key, `${activeOrder[key]} ${detail2}`)
+          : typeof activeOrder[key] === "function"
+          ? this.props.changeInput(key, activeOrder[key]())
+          : this.props.changeInput(key, activeOrder[key]);
       }
     }
     await this.props.data.refetch();
@@ -76,7 +76,7 @@ class FormOrderFSRG extends Component {
       deliveryAddress,
       trader,
       transport,
-      pickedOrder
+      activeOrder
     } = this.props;
     const {
       assortment,
@@ -94,7 +94,7 @@ class FormOrderFSRG extends Component {
       numberOfDocumentInvoice,
       companyId,
       documentId
-    } = pickedOrder;
+    } = activeOrder;
     if (!this.props.data.isLoading) {
       const isClient = this.props.data.client;
       const isUser = this.props.data.user;
@@ -447,7 +447,7 @@ const mapStateToProps = state => {
     grossWeight: state.orders.grossWeight,
     trader: state.orders.trader,
     deliveryAddress: state.orders.deliveryAddress,
-    pickedOrder: pickedOrder(state)
+    activeOrder: activeOrder(state)
   };
 };
 
@@ -481,8 +481,8 @@ const graphqlCheck = graphql(isInDatabase, {
   options: props => {
     return {
       variables: {
-        documentId: props.pickedOrder.documentId,
-        companyId: props.pickedOrder.companyId,
+        documentId: props.activeOrder.documentId,
+        companyId: props.activeOrder.companyId,
         name: props.trader
       }
     };

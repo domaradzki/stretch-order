@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function TapeForm({ activeOrder }) {
+export default function TransportForm({ activeOrder }) {
   const classes = useStyles();
 
   const initialValues = {

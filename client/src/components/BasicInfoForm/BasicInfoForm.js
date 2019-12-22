@@ -11,6 +11,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 
 import DateFnsUtils from "@date-io/date-fns";
+import plLocale from "date-fns/locale/pl";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
@@ -56,7 +57,7 @@ export default function BasicInfoForm() {
     });
   };
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={plLocale}>
       <React.Fragment>
         <Typography variant="h6" gutterBottom>
           Informacje podstawowe
@@ -244,14 +245,6 @@ export default function BasicInfoForm() {
               autoComplete="details"
             />
           </Grid>
-          {/* <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox color="secondary" name="saveAddress" value="yes" />
-            }
-            label="Use this address for payment details"
-          />
-        </Grid> */}
         </Grid>
       </React.Fragment>
     </MuiPickersUtilsProvider>

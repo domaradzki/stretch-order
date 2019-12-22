@@ -105,11 +105,9 @@ export const unactivateDetails = () => {
 
 // Selectors
 export const getDataLoading = state => state.data.isLoading;
-export const pickedOrder = state => {
-  const picked = state.data.data.filter(
-    order => order.itemId === state.data.activeOrder
-  );
-  const pickedOrder = picked.length === 1 ? picked[0] : {};
+export const activeOrder = (state, orderId) => {
+  const active = state.data.data.filter(order => order.itemId === orderId);
+  const activeOrder = active.length === 1 ? active[0] : {};
   const colors = {
     CZ: "czarna",
     CZARNA: "czarna",
@@ -126,8 +124,8 @@ export const pickedOrder = state => {
     BR: "brązowa"
   };
   let order = {};
-  if (pickedOrder.kind === "KT") {
-    const code = picked[0].code.toUpperCase();
+  if (activeOrder.kind === "KT") {
+    const code = active[0].code.toUpperCase();
     const productArray = code.split(" ");
     const productCode = productArray[0];
     const productSize = productArray[1];
@@ -152,7 +150,7 @@ export const pickedOrder = state => {
             }
           },
           dateOfRealisation: function() {
-            return moment(pickedOrder.dateInsert)
+            return moment(activeOrder.dateInsert)
               .add(3, "days")
               .format("YYYY-MM-DD");
           },
@@ -184,7 +182,7 @@ export const pickedOrder = state => {
           }
         },
         dateOfRealisation: function() {
-          return moment(pickedOrder.dateInsert)
+          return moment(activeOrder.dateInsert)
             .add(3, "days")
             .format("YYYY-MM-DD");
         },
@@ -215,7 +213,7 @@ export const pickedOrder = state => {
           }
         },
         dateOfRealisation: function() {
-          return moment(pickedOrder.dateInsert)
+          return moment(activeOrder.dateInsert)
             .add(3, "days")
             .format("YYYY-MM-DD");
         },
@@ -256,7 +254,7 @@ export const pickedOrder = state => {
           }
         },
         dateOfRealisation: function() {
-          return moment(pickedOrder.dateInsert)
+          return moment(activeOrder.dateInsert)
             .add(14, "days")
             .format("YYYY-MM-DD");
         },
@@ -271,8 +269,8 @@ export const pickedOrder = state => {
         }
       };
     }
-    return Object.assign(pickedOrder, order);
+    return Object.assign(activeOrder, order);
   } else {
-    return pickedOrder;
+    return activeOrder;
   }
 };

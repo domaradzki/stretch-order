@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
@@ -10,14 +10,17 @@ import BasicInfoForm from "../../components/BasicInfoForm/BasicInfoForm";
 import StretchForm from "../../components/StretchForm/StretchForm";
 import Review from "../../components/Review/Review";
 import TapeForm from "../../components/TapeForm/TapeForm";
+import TransportForm from "../../components/TransportForm/TransportForm";
+
+import { activeOrder } from "../../ducks/data";
+
+import { connect } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    // marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
     padding: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      // marginTop: theme.spacing(6),
       marginBottom: theme.spacing(6),
       padding: theme.spacing(3)
     }
@@ -37,22 +40,28 @@ const useStyles = makeStyles(theme => ({
 
 const steps = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
 
-function getStepContent(step) {
+function getStepContent(step, activeOrder, type, kind) {
   switch (step) {
     case 0:
-      return <BasicInfoForm />;
+      return <BasicInfoForm activeOrder={activeOrder} />;
     case 1:
-      return <TapeForm />;
+      return type === "TPD" && kind === "KT" ? (
+        <TapeForm activeOrder={activeOrder} />
+      ) : type === "FS" && kind === "KT" ? (
+        <StretchForm activeOrder={activeOrder} />
+      ) : (
+        <TransportForm activeOrder={activeOrder} />
+      );
     case 2:
-      return <Review />;
+      return <Review activeOrder={activeOrder} />;
     default:
       throw new Error("Unknown step");
   }
 }
 
-export default function Checkout() {
+function Checkout(props) {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -61,9 +70,10 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  // useEffect(() => {
-  //   const { orderId } = this.props.match.params;
-  // });
+  useEffect(() => {
+    // const { orderId } = props.match.params;
+    console.log(props.activeOrder);
+  });
 
   return (
     <React.Fragment>
@@ -92,7 +102,12 @@ export default function Checkout() {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep)}
+              {getStepContent(
+                activeStep,
+                props.activeOrder,
+                props.activeOrder.type,
+                props.activeOrder.kind
+              )}
               <div className={classes.buttons}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} className={classes.button}>
@@ -115,3 +130,11 @@ export default function Checkout() {
     </React.Fragment>
   );
 }
+const mapStateToProps = (state, props) => {
+  const { orderId } = props.match.params;
+  return {
+    activeOrder: activeOrder(state, orderId)
+  };
+};
+
+export default connect(mapStateToProps)(Checkout);

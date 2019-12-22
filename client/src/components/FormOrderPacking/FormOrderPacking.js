@@ -9,7 +9,7 @@ import "react-day-picker/lib/style.css";
 import moment from "moment";
 
 import { changeInput, changeDate, clearInput } from "../../ducks/orders";
-import { unactivateDetails, pickedOrder, fetchData } from "../../ducks/data";
+import { unactivateDetails, activeOrder, fetchData } from "../../ducks/data";
 
 import addOrderMutation from "../../graphql/mutations/addOrderMutation";
 import addDocumentMutation from "../../graphql/mutations/addDocumentMutation";
@@ -20,14 +20,14 @@ import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 class FormOrderPacking extends Component {
   async componentDidMount() {
-    const { pickedOrder } = this.props;
-    pickedOrder.dateOfRealisation = moment(pickedOrder.dateInsert)
+    const { activeOrder } = this.props;
+    activeOrder.dateOfRealisation = moment(activeOrder.dateInsert)
       .add(1, "days")
       .format("YYYY-MM-DD");
 
-    for (let key in pickedOrder) {
-      if (pickedOrder.hasOwnProperty(key)) {
-        this.props.changeInput(key, pickedOrder[key]);
+    for (let key in activeOrder) {
+      if (activeOrder.hasOwnProperty(key)) {
+        this.props.changeInput(key, activeOrder[key]);
       }
     }
     await this.props.data.refetch();
@@ -66,7 +66,7 @@ class FormOrderPacking extends Component {
       deliveryAddress,
       trader,
       transport,
-      pickedOrder
+      activeOrder
     } = this.props;
     const {
       assortment,
@@ -84,7 +84,7 @@ class FormOrderPacking extends Component {
       numberOfDocumentInvoice,
       companyId,
       documentId
-    } = pickedOrder;
+    } = activeOrder;
     if (!this.props.data.isLoading) {
       const isClient = this.props.data.client;
       const isUser = this.props.data.user;
@@ -358,7 +358,7 @@ const mapStateToProps = state => {
     dateOfRealisation: state.orders.dateOfRealisation,
     deliveryAddress: state.orders.deliveryAddress,
     trader: state.orders.trader,
-    pickedOrder: pickedOrder(state)
+    activeOrder: activeOrder(state)
   };
 };
 
@@ -389,8 +389,8 @@ const graphqlCheck = graphql(isInDatabase, {
   options: props => {
     return {
       variables: {
-        documentId: props.pickedOrder.documentId,
-        companyId: props.pickedOrder.companyId,
+        documentId: props.activeOrder.documentId,
+        companyId: props.activeOrder.companyId,
         name: props.trader
       }
     };
