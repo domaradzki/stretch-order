@@ -1,5 +1,5 @@
 import "date-fns";
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function BasicInfoForm() {
+export default function BasicInfoForm({ activeOrder }) {
   const classes = useStyles();
 
   const initialValues = {
@@ -56,6 +56,25 @@ export default function BasicInfoForm() {
       [event.target.name]: event.target.value
     });
   };
+  useEffect(() => {
+    const {
+      client,
+      quantity,
+      price,
+      netValue,
+      details,
+      deliveryAddress
+    } = activeOrder;
+    setInput({
+      ...input,
+      client,
+      quantity,
+      price,
+      netValue,
+      details,
+      deliveryAddress
+    });
+  });
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={plLocale}>
       <React.Fragment>
@@ -234,7 +253,6 @@ export default function BasicInfoForm() {
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
-              required
               id="details"
               name="details"
               label="Uwagi"

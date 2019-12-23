@@ -51,6 +51,7 @@ export default function TapeForm({ activeOrder }) {
       [event.target.name]: event.target.value
     });
   };
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -205,7 +206,6 @@ export default function TapeForm({ activeOrder }) {
         </Grid>
         <Grid item xs={12} md={3}>
           <TextField
-            required
             id="color2"
             name="color2"
             label="Kolor 2"
@@ -217,7 +217,6 @@ export default function TapeForm({ activeOrder }) {
         </Grid>
         <Grid item xs={12} md={3}>
           <TextField
-            required
             id="color3"
             name="color3"
             label="Kolor 3"

@@ -63,7 +63,8 @@ function Checkout(props) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
 
-  const handleNext = () => {
+  const handleNext = event => {
+    event.preventDefault();
     setActiveStep(activeStep + 1);
   };
 
@@ -101,7 +102,7 @@ function Checkout(props) {
               </Typography>
             </React.Fragment>
           ) : (
-            <React.Fragment>
+            <form onSubmit={handleNext}>
               {getStepContent(
                 activeStep,
                 props.activeOrder,
@@ -117,13 +118,13 @@ function Checkout(props) {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleNext}
+                  type="submit"
                   className={classes.button}
                 >
                   {activeStep === steps.length - 1 ? "Potwierdź" : "Dalej"}
                 </Button>
               </div>
-            </React.Fragment>
+            </form>
           )}
         </React.Fragment>
       </Paper>
