@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
@@ -12,6 +12,7 @@ import Review from "../../components/Review/Review";
 import TapeForm from "../../components/TapeForm/TapeForm";
 import TransportForm from "../../components/TransportForm/TransportForm";
 
+import addDays from "date-fns/addDays";
 import { activeOrder } from "../../ducks/data";
 
 import { connect } from "react-redux";
@@ -40,20 +41,20 @@ const useStyles = makeStyles(theme => ({
 
 const steps = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
 
-function getStepContent(step, activeOrder, type, kind) {
+function getStepContent(step, dataOrder, type, kind) {
   switch (step) {
     case 0:
-      return <BasicInfoForm activeOrder={activeOrder} />;
+      return <BasicInfoForm dataOrder={dataOrder} />;
     case 1:
       return type === "TPD" && kind === "KT" ? (
-        <TapeForm activeOrder={activeOrder} />
+        <TapeForm dataOrder={dataOrder} />
       ) : type === "FS" && kind === "KT" ? (
-        <StretchForm activeOrder={activeOrder} />
+        <StretchForm dataOrder={dataOrder} />
       ) : (
-        <TransportForm activeOrder={activeOrder} />
+        <TransportForm dataOrder={dataOrder} />
       );
     case 2:
-      return <Review activeOrder={activeOrder} />;
+      return <Review dataOrder={dataOrder} />;
     default:
       throw new Error("Unknown step");
   }
@@ -71,10 +72,30 @@ function Checkout(props) {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  useEffect(() => {
-    // const { orderId } = props.match.params;
-    console.log(props.activeOrder);
-  });
+
+  const { activeOrder } = props;
+  console.log(activeOrder);
+  const dataOrder = {
+    ...activeOrder,
+    grossWeight:
+      typeof activeOrder.grossWeight === "function"
+        ? activeOrder.grossWeight()
+        : activeOrder.grossWeight,
+    stretchColor:
+      typeof activeOrder.stretchColor === "function"
+        ? activeOrder.stretchColor()
+        : activeOrder.stretchColor,
+    details:
+      typeof activeOrder.postfix === "function"
+        ? `${activeOrder.details} ${activeOrder.postfix()}`
+        : activeOrder.details,
+    dateOfRealisation:
+      activeOrder.type === "TPD" && activeOrder.kind === "KT"
+        ? addDays(new Date(activeOrder.dateInsert), 14)
+        : activeOrder.type === "FS" && activeOrder.kind === "KT"
+        ? addDays(new Date(activeOrder.dateInsert), 3)
+        : addDays(new Date(activeOrder.dateInsert), 2)
+  };
 
   return (
     <React.Fragment>
@@ -105,9 +126,9 @@ function Checkout(props) {
             <form onSubmit={handleNext}>
               {getStepContent(
                 activeStep,
-                props.activeOrder,
-                props.activeOrder.type,
-                props.activeOrder.kind
+                dataOrder,
+                dataOrder.type,
+                dataOrder.kind
               )}
               <div className={classes.buttons}>
                 {activeStep !== 0 && (

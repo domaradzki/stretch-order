@@ -1,5 +1,5 @@
 import "date-fns";
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -23,25 +23,27 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function BasicInfoForm({ activeOrder }) {
+export default function BasicInfoForm({ dataOrder }) {
   const classes = useStyles();
 
   const initialValues = {
-    client: "",
-    quantity: "",
-    price: "",
-    netValue: "",
-    details: "",
-    deliveryAddress: "",
+    client: dataOrder.client,
+    quantity: dataOrder.quantity,
+    price: dataOrder.price,
+    netValue: dataOrder.netValue,
+    details: dataOrder.details,
+    deliveryAddress: dataOrder.deliveryAddress,
     transport: "",
     margin: ""
   };
 
-  const [dateInsert, setInsertDate] = React.useState(new Date());
+  const [dateInsert, setInsertDate] = React.useState(dataOrder.dateInsert);
   const handleInsertDateChange = date => {
     setInsertDate(date);
   };
-  const [dateOfRealisation, setDateOfRealisation] = React.useState(new Date());
+  const [dateOfRealisation, setDateOfRealisation] = React.useState(
+    dataOrder.dateOfRealisation
+  );
   const handleDateOfRealisationChange = date => {
     setDateOfRealisation(date);
   };
@@ -56,25 +58,25 @@ export default function BasicInfoForm({ activeOrder }) {
       [event.target.name]: event.target.value
     });
   };
-  useEffect(() => {
-    const {
-      client,
-      quantity,
-      price,
-      netValue,
-      details,
-      deliveryAddress
-    } = activeOrder;
-    setInput({
-      ...input,
-      client,
-      quantity,
-      price,
-      netValue,
-      details,
-      deliveryAddress
-    });
-  });
+  // useEffect(() => {
+  //   const {
+  //     client,
+  //     quantity,
+  //     price,
+  //     netValue,
+  //     details,
+  //     deliveryAddress
+  //   } = dataOrder;
+  //   setInput({
+  //     ...input,
+  //     client,
+  //     quantity,
+  //     price,
+  //     netValue,
+  //     details,
+  //     deliveryAddress
+  //   });
+  // });
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={plLocale}>
       <React.Fragment>
