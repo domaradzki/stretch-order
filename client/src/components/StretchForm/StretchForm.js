@@ -4,22 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
-export default function StretchForm() {
-  const initialValues = {
-    sleeve: "",
-    stretchColor: "",
-    stretchThickness: "",
-    netWeight: "",
-    grossWeight: ""
-  };
-
-  const [input, setInput] = React.useState(initialValues);
-  const handleInputChange = event => {
-    setInput({
-      ...input,
-      [event.target.name]: event.target.value
-    });
-  };
+export default function StretchForm({ input, handleInputChange }) {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>

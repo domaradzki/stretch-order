@@ -5,7 +5,6 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
@@ -23,34 +22,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function TapeForm({ activeOrder }) {
+export default function TapeForm({
+  input,
+  handleInputChange,
+  handleDateChange
+}) {
   const classes = useStyles();
-
-  const initialValues = {
-    printName: "",
-    tapeLong: "",
-    tapeWidth: "",
-    tapeThickness: "",
-    tapeColor: "",
-    numberOfColors: "",
-    glue: "",
-    roller: "",
-    color1: "",
-    color2: "",
-    color3: ""
-  };
-
-  const [dateOfAcceptation, setDateOfAcceptation] = React.useState(null);
-  const handleDateOfAcceptationChange = date => {
-    setDateOfAcceptation(date);
-  };
-  const [input, setInput] = React.useState(initialValues);
-  const handleInputChange = event => {
-    setInput({
-      ...input,
-      [event.target.name]: event.target.value
-    });
-  };
 
   return (
     <React.Fragment>
@@ -79,9 +56,9 @@ export default function TapeForm({ activeOrder }) {
               id="dateOfAcceptation"
               name="dateOfAcceptation"
               helperText="Data akceptacji"
-              value={dateOfAcceptation}
+              value={input.dateOfAcceptation}
               type="text"
-              onChange={handleDateOfAcceptationChange}
+              onChange={handleDateChange("dateOfAcceptation")}
               KeyboardButtonProps={{
                 "aria-label": "change date"
               }}
@@ -149,6 +126,7 @@ export default function TapeForm({ activeOrder }) {
           <FormControl fullWidth required className={classes.formControl}>
             <InputLabel id="rollerLabel">Wałek</InputLabel>
             <Select
+              native
               labelId="rollerLabel"
               id="roller"
               name="roller"
@@ -157,14 +135,12 @@ export default function TapeForm({ activeOrder }) {
               onChange={handleInputChange}
               className={classes.selectEmpty}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={144}>144</MenuItem>
-              <MenuItem value={180}>180</MenuItem>
-              <MenuItem value={244}>244</MenuItem>
-              <MenuItem value={306}>306</MenuItem>
-              <MenuItem value={438}>438</MenuItem>
+              <option />
+              <option value={144}>144</option>
+              <option value={180}>180</option>
+              <option value={244}>244</option>
+              <option value={306}>306</option>
+              <option value={438}>438</option>
             </Select>
           </FormControl>
         </Grid>
@@ -188,7 +164,7 @@ export default function TapeForm({ activeOrder }) {
             label="Ilość kolorów"
             onChange={handleInputChange}
             value={input.numberOfColors}
-            type="text"
+            type="number"
             fullWidth
           />
         </Grid>
@@ -204,28 +180,32 @@ export default function TapeForm({ activeOrder }) {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={3}>
-          <TextField
-            id="color2"
-            name="color2"
-            label="Kolor 2"
-            onChange={handleInputChange}
-            value={input.color2}
-            type="text"
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <TextField
-            id="color3"
-            name="color3"
-            label="Kolor 3"
-            onChange={handleInputChange}
-            value={input.color3}
-            type="text"
-            fullWidth
-          />
-        </Grid>
+        {input.numberOfColors >= 2 && (
+          <Grid item xs={12} md={3}>
+            <TextField
+              id="color2"
+              name="color2"
+              label="Kolor 2"
+              onChange={handleInputChange}
+              value={input.color2}
+              type="text"
+              fullWidth
+            />
+          </Grid>
+        )}
+        {input.numberOfColors === 3 && (
+          <Grid item xs={12} md={3}>
+            <TextField
+              id="color3"
+              name="color3"
+              label="Kolor 3"
+              onChange={handleInputChange}
+              value={input.color3}
+              type="text"
+              fullWidth
+            />
+          </Grid>
+        )}
       </Grid>
     </React.Fragment>
   );

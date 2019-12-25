@@ -36,13 +36,6 @@ class MainView extends Component {
     this.props.setRowsPerPage(+event.target.value);
   };
 
-  // handleClick = event => {
-  //   event.prev
-  //   const { activateDetails } = this.props;
-  //   const { id, name, kind } = event.currentTarget;
-  //   activateDetails(id, name, kind);
-  // };
-
   render() {
     const ordersAlreadyInDB = this.props.data.loading
       ? []

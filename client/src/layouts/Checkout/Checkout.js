@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
@@ -14,8 +15,6 @@ import TransportForm from "../../components/TransportForm/TransportForm";
 
 import addDays from "date-fns/addDays";
 import { activeOrder } from "../../ducks/data";
-
-import { connect } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -41,20 +40,37 @@ const useStyles = makeStyles(theme => ({
 
 const steps = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
 
-function getStepContent(step, dataOrder, type, kind) {
+function getStepContent(
+  step,
+  input,
+  type,
+  kind,
+  handleInputChange,
+  handleDateChange
+) {
   switch (step) {
     case 0:
-      return <BasicInfoForm dataOrder={dataOrder} />;
+      return (
+        <BasicInfoForm
+          input={input}
+          handleInputChange={handleInputChange}
+          handleDateChange={handleDateChange}
+        />
+      );
     case 1:
       return type === "TPD" && kind === "KT" ? (
-        <TapeForm dataOrder={dataOrder} />
+        <TapeForm
+          input={input}
+          handleInputChange={handleInputChange}
+          handleDateChange={handleDateChange}
+        />
       ) : type === "FS" && kind === "KT" ? (
-        <StretchForm dataOrder={dataOrder} />
+        <StretchForm input={input} handleInputChange={handleInputChange} />
       ) : (
-        <TransportForm dataOrder={dataOrder} />
+        <TransportForm input={input} handleInputChange={handleInputChange} />
       );
     case 2:
-      return <Review dataOrder={dataOrder} />;
+      return <Review input={input} />;
     default:
       throw new Error("Unknown step");
   }
@@ -69,14 +85,18 @@ function Checkout(props) {
     setActiveStep(activeStep + 1);
   };
 
-  const handleBack = () => {
+  const handleBack = event => {
+    event.preventDefault();
     setActiveStep(activeStep - 1);
   };
-
   const { activeOrder } = props;
-  console.log(activeOrder);
+
   const dataOrder = {
     ...activeOrder,
+    tapeColor:
+      typeof activeOrder.tapeColor === "function"
+        ? activeOrder.tapeColor()
+        : activeOrder.tapeColor,
     grossWeight:
       typeof activeOrder.grossWeight === "function"
         ? activeOrder.grossWeight()
@@ -97,6 +117,55 @@ function Checkout(props) {
         : addDays(new Date(activeOrder.dateInsert), 2)
   };
 
+  const initialValues = {
+    client: dataOrder.client,
+    quantity: dataOrder.quantity,
+    price: dataOrder.price,
+    netValue: dataOrder.netValue,
+    details: dataOrder.details,
+    deliveryAddress: dataOrder.deliveryAddress,
+    transport: "",
+    margin: "",
+    dateInsert: dataOrder.dateInsert,
+    dateOfRealisation: dataOrder.dateOfRealisation,
+    dateOfPay: null,
+    sleeve: "" || dataOrder.sleeve,
+    stretchColor: "" || dataOrder.stretchColor,
+    stretchThickness: "" || dataOrder.stretchThickness,
+    netWeight: "" || dataOrder.netWeight,
+    grossWeight: "" || dataOrder.grossWeight,
+    printName: "" || dataOrder.printName,
+    tapeLong: "" || dataOrder.tapeLong,
+    tapeWidth: "" || dataOrder.tapeWidth,
+    tapeThickness: "" || dataOrder.tapeThickness,
+    tapeColor: "" || dataOrder.tapeColor,
+    numberOfColors: "" || dataOrder.numberOfColors,
+    glue: "" || dataOrder.glue,
+    roller: "" || dataOrder.roller,
+    dateOfAcceptation: null,
+    printName: "",
+    roller: "",
+    color1: "",
+    color2: "",
+    color3: ""
+  };
+
+  const [input, setInput] = React.useState(initialValues);
+  const handleInputChange = event => {
+    setInput({
+      ...input,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const handleDateChange = inputDate => date => {
+    setInput({
+      ...input,
+      [inputDate]: date
+    });
+  };
+  console.log(activeOrder);
+  console.log(input);
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
@@ -126,9 +195,11 @@ function Checkout(props) {
             <form onSubmit={handleNext}>
               {getStepContent(
                 activeStep,
-                dataOrder,
+                input,
                 dataOrder.type,
-                dataOrder.kind
+                dataOrder.kind,
+                handleInputChange,
+                handleDateChange
               )}
               <div className={classes.buttons}>
                 {activeStep !== 0 && (
