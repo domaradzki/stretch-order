@@ -42,6 +42,7 @@ const steps = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
 function getStepContent(
   step,
   input,
+  dataOrder,
   type,
   kind,
   handleInputChange,
@@ -72,7 +73,7 @@ function getStepContent(
     } else handleSkipStep();
   }
   if (step === 2) {
-    return <Review input={input} />;
+    return <Review input={input} data={dataOrder} />;
   }
 }
 
@@ -133,17 +134,17 @@ function Checkout(props) {
     dateInsert: dataOrder.dateInsert,
     dateOfRealisation: dataOrder.dateOfRealisation,
     dateOfPay: null,
-    sleeve: "" || dataOrder.sleeve,
-    stretchColor: "" || dataOrder.stretchColor,
-    stretchThickness: "" || dataOrder.stretchThickness,
-    netWeight: "" || dataOrder.netWeight,
-    grossWeight: "" || dataOrder.grossWeight,
-    tapeLong: "" || dataOrder.tapeLong,
-    tapeWidth: "" || dataOrder.tapeWidth,
-    tapeThickness: "" || dataOrder.tapeThickness,
-    tapeColor: "" || dataOrder.tapeColor,
-    numberOfColors: "" || dataOrder.numberOfColors,
-    glue: "" || dataOrder.glue,
+    sleeve: dataOrder.sleeve,
+    stretchColor: dataOrder.stretchColor,
+    stretchThickness: dataOrder.stretchThickness,
+    netWeight: dataOrder.netWeight,
+    grossWeight: dataOrder.grossWeight,
+    tapeLong: dataOrder.tapeLong,
+    tapeWidth: dataOrder.tapeWidth,
+    tapeThickness: dataOrder.tapeThickness,
+    tapeColor: dataOrder.tapeColor,
+    numberOfColors: dataOrder.numberOfColors,
+    glue: dataOrder.glue,
     printName: "",
     roller: "",
     dateOfAcceptation: null,
@@ -166,8 +167,8 @@ function Checkout(props) {
       [inputDate]: date
     });
   };
-  console.log(activeOrder);
-  console.log(input);
+  console.log(dataOrder);
+
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
@@ -198,6 +199,7 @@ function Checkout(props) {
               {getStepContent(
                 activeStep,
                 input,
+                dataOrder,
                 dataOrder.type,
                 dataOrder.kind,
                 handleInputChange,

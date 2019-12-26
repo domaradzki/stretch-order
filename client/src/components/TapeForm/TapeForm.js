@@ -180,7 +180,7 @@ export default function TapeForm({
             fullWidth
           />
         </Grid>
-        {input.numberOfColors >= 2 && (
+        {+input.numberOfColors >= 2 && (
           <Grid item xs={12} md={3}>
             <TextField
               id="color2"
@@ -193,7 +193,7 @@ export default function TapeForm({
             />
           </Grid>
         )}
-        {input.numberOfColors === 3 && (
+        {+input.numberOfColors === 3 && (
           <Grid item xs={12} md={3}>
             <TextField
               id="color3"
