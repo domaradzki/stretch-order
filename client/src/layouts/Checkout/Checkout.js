@@ -11,7 +11,6 @@ import BasicInfoForm from "../../components/BasicInfoForm/BasicInfoForm";
 import StretchForm from "../../components/StretchForm/StretchForm";
 import Review from "../../components/Review/Review";
 import TapeForm from "../../components/TapeForm/TapeForm";
-import TransportForm from "../../components/TransportForm/TransportForm";
 
 import addDays from "date-fns/addDays";
 import { activeOrder } from "../../ducks/data";
@@ -46,33 +45,34 @@ function getStepContent(
   type,
   kind,
   handleInputChange,
-  handleDateChange
+  handleDateChange,
+  handleSkipStep
 ) {
-  switch (step) {
-    case 0:
+  if (step === 0) {
+    return (
+      <BasicInfoForm
+        input={input}
+        handleInputChange={handleInputChange}
+        handleDateChange={handleDateChange}
+      />
+    );
+  } else if (step === 1) {
+    if (type === "TPD" && kind === "KT") {
       return (
-        <BasicInfoForm
-          input={input}
-          handleInputChange={handleInputChange}
-          handleDateChange={handleDateChange}
-        />
-      );
-    case 1:
-      return type === "TPD" && kind === "KT" ? (
         <TapeForm
           input={input}
           handleInputChange={handleInputChange}
           handleDateChange={handleDateChange}
         />
-      ) : type === "FS" && kind === "KT" ? (
-        <StretchForm input={input} handleInputChange={handleInputChange} />
-      ) : (
-        <TransportForm input={input} handleInputChange={handleInputChange} />
       );
-    case 2:
-      return <Review input={input} />;
-    default:
-      throw new Error("Unknown step");
+    } else if (type === "FS" && kind === "KT") {
+      return (
+        <StretchForm input={input} handleInputChange={handleInputChange} />
+      );
+    } else handleSkipStep();
+  }
+  if (step === 2) {
+    return <Review input={input} />;
   }
 }
 
@@ -82,6 +82,10 @@ function Checkout(props) {
 
   const handleNext = event => {
     event.preventDefault();
+    setActiveStep(activeStep + 1);
+  };
+
+  const handleSkipStep = () => {
     setActiveStep(activeStep + 1);
   };
 
@@ -134,17 +138,15 @@ function Checkout(props) {
     stretchThickness: "" || dataOrder.stretchThickness,
     netWeight: "" || dataOrder.netWeight,
     grossWeight: "" || dataOrder.grossWeight,
-    printName: "" || dataOrder.printName,
     tapeLong: "" || dataOrder.tapeLong,
     tapeWidth: "" || dataOrder.tapeWidth,
     tapeThickness: "" || dataOrder.tapeThickness,
     tapeColor: "" || dataOrder.tapeColor,
     numberOfColors: "" || dataOrder.numberOfColors,
     glue: "" || dataOrder.glue,
-    roller: "" || dataOrder.roller,
-    dateOfAcceptation: null,
     printName: "",
     roller: "",
+    dateOfAcceptation: null,
     color1: "",
     color2: "",
     color3: ""
@@ -199,7 +201,8 @@ function Checkout(props) {
                 dataOrder.type,
                 dataOrder.kind,
                 handleInputChange,
-                handleDateChange
+                handleDateChange,
+                handleSkipStep
               )}
               <div className={classes.buttons}>
                 {activeStep !== 0 && (
