@@ -207,9 +207,16 @@ function Checkout(props) {
                 handleSkipStep
               )}
               <div className={classes.buttons}>
-                {activeStep !== 0 && (
+                {activeStep !== 0 ? (
                   <Button onClick={handleBack} className={classes.button}>
                     Powrót
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => props.history.goBack()}
+                    className={classes.button}
+                  >
+                    Anuluj
                   </Button>
                 )}
                 <Button
