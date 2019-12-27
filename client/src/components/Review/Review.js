@@ -15,9 +15,6 @@ const useStyles = makeStyles(theme => ({
   listItem: {
     padding: theme.spacing(1, 0)
   },
-  card: {
-    minWidth: 275
-  },
   dividerFullWidth: {
     margin: `5px 0 0 ${theme.spacing(2)}px`
   },

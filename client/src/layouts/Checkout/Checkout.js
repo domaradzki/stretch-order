@@ -37,17 +37,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const steps = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
+const stepsProduct = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
+const stepsTransportOnly = ["Informacje ogólne", "Weryfikacja"];
 
 function getStepContent(
   step,
+  stepsLength,
   input,
   dataOrder,
   type,
   kind,
   handleInputChange,
-  handleDateChange,
-  handleSkipStep
+  handleDateChange
 ) {
   if (step === 0) {
     return (
@@ -58,7 +59,7 @@ function getStepContent(
       />
     );
   } else if (step === 1) {
-    if (type === "TPD" && kind === "KT") {
+    if (kind === "KT" && type === "TPD") {
       return (
         <TapeForm
           input={input}
@@ -66,13 +67,14 @@ function getStepContent(
           handleDateChange={handleDateChange}
         />
       );
-    } else if (type === "FS" && kind === "KT") {
+    }
+    if (kind === "KT" && type === "FS") {
       return (
         <StretchForm input={input} handleInputChange={handleInputChange} />
       );
-    } else handleSkipStep();
+    }
   }
-  if (step === 2) {
+  if (step === stepsLength - 1) {
     return <Review input={input} data={dataOrder} />;
   }
 }
@@ -83,10 +85,6 @@ function Checkout(props) {
 
   const handleNext = event => {
     event.preventDefault();
-    setActiveStep(activeStep + 1);
-  };
-
-  const handleSkipStep = () => {
     setActiveStep(activeStep + 1);
   };
 
@@ -167,7 +165,11 @@ function Checkout(props) {
       [inputDate]: date
     });
   };
-  console.log(dataOrder);
+  const steps =
+    dataOrder.kind === "KT" &&
+    (dataOrder.type === "FS" || dataOrder.type === "TPD")
+      ? stepsProduct
+      : stepsTransportOnly;
 
   return (
     <React.Fragment>
@@ -198,13 +200,13 @@ function Checkout(props) {
             <form onSubmit={handleNext}>
               {getStepContent(
                 activeStep,
+                steps.length,
                 input,
                 dataOrder,
                 dataOrder.type,
                 dataOrder.kind,
                 handleInputChange,
-                handleDateChange,
-                handleSkipStep
+                handleDateChange
               )}
               <div className={classes.buttons}>
                 {activeStep !== 0 ? (
