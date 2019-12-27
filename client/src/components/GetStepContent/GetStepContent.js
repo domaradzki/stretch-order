@@ -1,19 +1,19 @@
 import React from "react";
-import BasicInfoForm from "../components/BasicInfoForm/BasicInfoForm";
-import StretchForm from "../components/StretchForm/StretchForm";
-import Review from "../components/Review/Review";
-import TapeForm from "../components/TapeForm/TapeForm";
+import BasicInfoForm from "../../components/BasicInfoForm/BasicInfoForm";
+import StretchForm from "../../components/StretchForm/StretchForm";
+import Review from "../../components/Review/Review";
+import TapeForm from "../../components/TapeForm/TapeForm";
 
-export default function getStepContent(
+const GetStepContent = ({
   step,
   stepsLength,
   input,
-  dataOrder,
+  activeOrder,
   type,
   kind,
   handleInputChange,
   handleDateChange
-) {
+}) => {
   if (step === 0) {
     return (
       <BasicInfoForm
@@ -39,6 +39,8 @@ export default function getStepContent(
     }
   }
   if (step === stepsLength - 1) {
-    return <Review input={input} data={dataOrder} />;
+    return <Review input={input} data={activeOrder} />;
   }
-}
+};
+
+export default GetStepContent;

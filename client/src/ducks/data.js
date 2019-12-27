@@ -1,4 +1,5 @@
 import { getDataPromise } from "../services";
+import addDays from "date-fns/addDays";
 
 // Action types
 const FETCH_DATA_REQUEST = "FETCH_DATA_REQUEST";
@@ -248,8 +249,32 @@ export const activeOrder = (state, orderId) => {
         }
       };
     }
-    return Object.assign(activeOrder, order);
+    const dataOrder = {
+      ...order,
+      tapeColor:
+        typeof order.tapeColor === "function"
+          ? order.tapeColor()
+          : order.tapeColor,
+      grossWeight:
+        typeof order.grossWeight === "function"
+          ? order.grossWeight()
+          : order.grossWeight,
+      stretchColor:
+        typeof order.stretchColor === "function"
+          ? order.stretchColor()
+          : order.stretchColor,
+      postfix:
+        typeof order.postfix === "function" ? order.postfix() : order.postfix,
+      dateOfRealisation:
+        order.productCode === "TPD" || order.productCode === "TPD32"
+          ? addDays(new Date(activeOrder.dateInsert), 14)
+          : addDays(new Date(activeOrder.dateInsert), 3)
+    };
+    return Object.assign(activeOrder, dataOrder);
   } else {
-    return activeOrder;
+    return {
+      ...activeOrder,
+      dateOfRealisation: addDays(new Date(activeOrder.dateInsert), 2)
+    };
   }
 };
