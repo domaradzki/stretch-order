@@ -7,13 +7,11 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import BasicInfoForm from "../../components/BasicInfoForm/BasicInfoForm";
-import StretchForm from "../../components/StretchForm/StretchForm";
-import Review from "../../components/Review/Review";
-import TapeForm from "../../components/TapeForm/TapeForm";
+import getStepContent from "../../services/getStep";
 
 import addDays from "date-fns/addDays";
 import { activeOrder } from "../../ducks/data";
+import NewOrderSuccess from "../../components/NewOrderSuccess/NewOrderSuccess";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -39,45 +37,6 @@ const useStyles = makeStyles(theme => ({
 
 const stepsProduct = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
 const stepsTransportOnly = ["Informacje ogólne", "Weryfikacja"];
-
-function getStepContent(
-  step,
-  stepsLength,
-  input,
-  dataOrder,
-  type,
-  kind,
-  handleInputChange,
-  handleDateChange
-) {
-  if (step === 0) {
-    return (
-      <BasicInfoForm
-        input={input}
-        handleInputChange={handleInputChange}
-        handleDateChange={handleDateChange}
-      />
-    );
-  } else if (step === 1) {
-    if (kind === "KT" && type === "TPD") {
-      return (
-        <TapeForm
-          input={input}
-          handleInputChange={handleInputChange}
-          handleDateChange={handleDateChange}
-        />
-      );
-    }
-    if (kind === "KT" && type === "FS") {
-      return (
-        <StretchForm input={input} handleInputChange={handleInputChange} />
-      );
-    }
-  }
-  if (step === stepsLength - 1) {
-    return <Review input={input} data={dataOrder} />;
-  }
-}
 
 function Checkout(props) {
   const classes = useStyles();
@@ -186,16 +145,7 @@ function Checkout(props) {
         </Stepper>
         <React.Fragment>
           {activeStep === steps.length ? (
-            <React.Fragment>
-              <Typography variant="h5" gutterBottom>
-                Sukces!!!
-              </Typography>
-              <Typography variant="subtitle1">
-                Twoje zamówienie zostało poprawnie dodane. Możesz je
-                monitorować, lub edytować w zakładce zlecone, gdzie znajdziesz
-                wszystkie swoje zamówienia.
-              </Typography>
-            </React.Fragment>
+            <NewOrderSuccess />
           ) : (
             <form onSubmit={handleNext}>
               {getStepContent(
