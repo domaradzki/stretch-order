@@ -100,7 +100,14 @@ function Checkout(props) {
     (activeOrder.type === "FS" || activeOrder.type === "TPD")
       ? stepsProduct
       : stepsTransportOnly;
-  console.log(props);
+
+  const handleAddOrder = event => {
+    event.preventDefault();
+    console.log(activeOrder);
+    console.log(input);
+    setActiveStep(activeStep + 1);
+  };
+
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
@@ -127,6 +134,7 @@ function Checkout(props) {
                 steps={steps}
                 activeStep={activeStep}
                 handleBack={handleBack}
+                handleAddOrder={handleAddOrder}
                 history={props.history}
               />
             </form>

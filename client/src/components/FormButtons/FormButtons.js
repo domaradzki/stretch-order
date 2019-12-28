@@ -13,7 +13,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const FormButtons = ({ steps, activeStep, handleBack, history }) => {
+const FormButtons = ({
+  steps,
+  activeStep,
+  handleBack,
+  handleAddOrder,
+  history
+}) => {
   const classes = useStyles();
   return (
     <div className={classes.buttons}>
@@ -26,14 +32,25 @@ const FormButtons = ({ steps, activeStep, handleBack, history }) => {
           Anuluj
         </Button>
       )}
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        className={classes.button}
-      >
-        {activeStep === steps.length - 1 ? "Potwierdź" : "Dalej"}
-      </Button>
+      {activeStep === steps.length - 1 ? (
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={handleAddOrder}
+        >
+          Potwierdź
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          className={classes.button}
+        >
+          Dalej
+        </Button>
+      )}
     </div>
   );
 };
