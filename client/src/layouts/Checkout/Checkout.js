@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { compose } from "redux";
 import { connect } from "react-redux";
+import { graphql } from "react-apollo";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -9,6 +11,13 @@ import NewOrderSuccess from "../../components/NewOrderSuccess/NewOrderSuccess";
 import GetStepContent from "../../components/GetStepContent/GetStepContent";
 import FormStepper from "../../components/FormStepper/FormStepper";
 import FormButtons from "../../components/FormButtons/FormButtons";
+
+import addOrderMutation from "../../graphql/mutations/addOrderMutation";
+import addDocumentMutation from "../../graphql/mutations/addDocumentMutation";
+import addClientMutation from "../../graphql/mutations/addClientMutation";
+import addUserMutation from "../../graphql/mutations/addUserMutation";
+import isInDatabase from "../../graphql/queries/isInDatabase";
+// import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -127,11 +136,42 @@ function Checkout(props) {
     </React.Fragment>
   );
 }
+
 const mapStateToProps = (state, props) => {
   const { orderId } = props.match.params;
   return {
     activeOrder: activeOrder(state, orderId)
   };
 };
+const reduxWrapper = connect(mapStateToProps);
 
-export default connect(mapStateToProps)(Checkout);
+const graphqlOrder = graphql(addOrderMutation, { name: "addOrderMutation" });
+const graphqlDocument = graphql(addDocumentMutation, {
+  name: "addDocumentMutation"
+});
+const graphqlClient = graphql(addClientMutation, {
+  name: "addClientMutation"
+});
+const graphqlUser = graphql(addUserMutation, {
+  name: "addUserMutation"
+});
+
+const graphqlCheck = graphql(isInDatabase, {
+  options: props => {
+    return {
+      variables: {
+        documentId: props.activeOrder.documentId,
+        companyId: props.activeOrder.companyId,
+        name: props.activeOrder.trader
+      }
+    };
+  }
+});
+export default compose(
+  reduxWrapper,
+  graphqlOrder,
+  graphqlDocument,
+  graphqlClient,
+  graphqlUser,
+  graphqlCheck
+)(Checkout);

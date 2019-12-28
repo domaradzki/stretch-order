@@ -5,17 +5,11 @@ import addDays from "date-fns/addDays";
 const FETCH_DATA_REQUEST = "FETCH_DATA_REQUEST";
 const FETCH_DATA_SUCCESS = "FETCH_DATA_SUCCESS";
 const FETCH_DATA_FAILURE = "FETCH_DATA_FAILURE";
-const ACTIVATE_DETAILS = "ACTIVATE_DETAILS";
-const UNACTIVATE_DETAILS = "UNACTIVATE_DETAILS";
 
 // Initial Value
 const initialState = {
   isLoading: false,
   error: null,
-  activeOrder: "",
-  activeType: "",
-  activeKind: "",
-  activeDetails: false,
   data: []
 };
 
@@ -40,21 +34,6 @@ export default function dataReducer(state = initialState, action) {
         isLoading: false,
         error: null,
         data: action.data
-      };
-    case ACTIVATE_DETAILS:
-      return {
-        ...state,
-        activeDetails: true,
-        activeOrder: action.id,
-        activeType: action.name,
-        activeKind: action.kind
-      };
-    case UNACTIVATE_DETAILS:
-      return {
-        ...state,
-        activeDetails: false,
-        activeOrder: "",
-        activeType: ""
       };
     default:
       return state;
@@ -85,21 +64,6 @@ export const fetchData = () => {
         //  console.log(error)
         dispatch(fetchDataFailure(error));
       });
-  };
-};
-
-export const activateDetails = (id, name, kind) => {
-  return {
-    type: ACTIVATE_DETAILS,
-    id,
-    name,
-    kind
-  };
-};
-
-export const unactivateDetails = () => {
-  return {
-    type: UNACTIVATE_DETAILS
   };
 };
 

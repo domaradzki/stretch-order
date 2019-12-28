@@ -15,8 +15,6 @@ import { graphql } from "react-apollo";
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersQuery from "../../graphql/queries/getOrdersQuery";
 
-import DetailsView from "../../components/DetailsView/DetailsView";
-
 import { styles } from "./AcceptedOrderView.style";
 import { withStyles } from "@material-ui/styles";
 
@@ -42,7 +40,6 @@ class AcceptedOrderView extends Component {
     const { page, rowsPerPage, classes } = this.props;
     return (
       <Paper>
-        <DetailsView />
         {!this.props.data.loading && (
           <>
             <Table stickyHeader aria-label="sticky table">
