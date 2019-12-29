@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
+import { graphqlUploadExpress } from "graphql-upload";
 import { GraphQLSchema } from "graphql";
 import mutation from "./schema/mutations";
 import query from "./schema/queries";
@@ -19,6 +20,7 @@ const schema = new GraphQLSchema({ query, mutation });
 
 app.use(
   "/graphql",
+  graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 3 }),
   graphqlHTTP({
     schema,
     graphiql: true
