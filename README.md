@@ -2,23 +2,22 @@
 ## Intro
 
 Aplikacja do zarzadania zamówieniami z programu Insert. 
-Przekazanie zamówień na produkcję i obliczanie prowizji handlowca.
+Głowne funkcje to
+1. Przekazywanie zamówień jako zlecenie na produkcję;
+2. Zlecanie wysyłki gotowych towarów do magazynu;
+3. Obliczanie prowizji handlowca.
+4. Raporty sprzedaży
+5. Raporty produkcji
 
 ### Dashboard
 
-Aplikacja bazuje na zamówieniach od klienta wprowadzonych w programie Gestor/Subiekt firmy Insert.
-Pobiera zamówienia z MSSQL i wczytuje do aplikacji w sekcji Dashboard
-
-Każdy handlowiec posiada swój login i widok ze swoimi zamówieniami.
-
-Po wczytaniu danych, zamówienia zostaną wyświetlone w zakładce nowe
-
-Każde zamówienie posiada 
-- niezbędne dane do dalszego procesu obróbki 
-- możliwość zlecenia produkcyjnego (TPD, FS)
-- mozliwość nadania priorytetu produkcyjnego i terminu
-- możliwość zlecenia wysyłki dla pakowacza
-- dodanie poziomu marży przy sprzedaży
+- Aplikacja bazuje na zamówieniach od klienta wprowadzonych w programie Gestor/Subiekt firmy Insert.
+- Wysyła zapytanie do bazy danych na serwerze z programem i wyświetla gotowe zamówienia do interakcji z handlowcem.
+- Zalogowany handlowiece rozdysponowuje swoje zlecenia na trasport oraz produkcję.
+- Dodane zamówienia zapisane są lokalnie w bazie danych MongoDB
+- Zamówienie zleceone na produkcję widnieją w zależności od rodzaju towaru: w zakładce Produkcja Nadruk lub zakładce Produkcja Folia
+- Zamówienia gotowe do wysyłki widnieją w zakłądce Transport
+- Zamówienia w zakładce handlowca posiadają daty rezlizacji, płatności i status
 
 Po wykonianiu działania produkcja/wysyłka zamówienie zmieni status i będzie widoczne w zakładce Zlecone/Wysyłka
 
