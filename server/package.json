@@ -17,6 +17,7 @@
     "eslint-plugin-prettier": "^3.1.0",
     "express": "^4.17.1",
     "express-graphql": "^0.8.0",
+    "fs": "^0.0.1-security",
     "graphql": "^14.3.1",
     "graphql-upload": "^9.0.0",
     "knex": "^0.20.2",
@@ -25,6 +26,7 @@
     "mssql": "^5.1.0",
     "nodemon": "^2.0.1",
     "prettier": "^1.19.1",
+    "promises-all": "^1.0.0",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5"
   },

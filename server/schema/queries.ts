@@ -5,6 +5,7 @@ import userQueries from "./users/queries";
 import clientQueries from "./clients/queries";
 import tapeQueries from "./tapes/queries";
 import stretchQueries from "./stretches/queries";
+import fileQueries from "./files/queries";
 
 const query = new GraphQLObjectType({
   name: "Query",
@@ -14,7 +15,8 @@ const query = new GraphQLObjectType({
     ...userQueries,
     ...clientQueries,
     ...tapeQueries,
-    ...stretchQueries
+    ...stretchQueries,
+    ...fileQueries
   }
 });
 
