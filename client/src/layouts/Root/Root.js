@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import ApolloClient from "apollo-boost";
+import ApolloClient from "apollo-boost-upload";
 import { ApolloProvider } from "react-apollo";
 import Dashboard from "../Dashboard/Dashboard";
 import MainContainer from "../MainContainer/MainContainer";

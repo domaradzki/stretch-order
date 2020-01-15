@@ -1,41 +1,34 @@
-import { GraphQLNonNull, GraphQLList } from "graphql";
+import * as fs from "fs";
+import * as path from "path";
+import { GraphQLString, GraphQLNonNull } from "graphql";
 import { GraphQLUpload } from "graphql-upload";
 import FileType from "./fileType";
-import * as PromiseAll from "promises-all";
-
-// import Tape from "../../models/tape";
-// import { FileInterface } from "../../types/fileType";
+import File from "../../models/file";
+import { FileInterface } from "../../types/fileType";
 
 const fileMutations = {
   singleUpload: {
-    description: "Stores a single file.",
-    type: GraphQLNonNull(FileType),
+    type: FileType,
     args: {
-      file: {
-        description: "File to store.",
-        type: GraphQLNonNull(GraphQLUpload)
-      }
+      // filename: { type: new GraphQLNonNull(GraphQLString) },
+      // mimetype: { type: new GraphQLNonNull(GraphQLString) },
+      // encoding: { type: new GraphQLNonNull(GraphQLString) },
+      file: { type: GraphQLUpload }
     },
-    resolve: (parent, { file }, { storeUpload }) => storeUpload(file)
-  },
-  multipleUpload: {
-    description: "Stores multiple files.",
-    type: GraphQLNonNull(GraphQLList(GraphQLNonNull(FileType))),
-    args: {
-      files: {
-        description: "Files to store.",
-        type: GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLUpload)))
+    async resolve(parent, args) {
+      const { filename, mimetype, createReadStream } = await args.file;
+      // const file = new File({
+      //   filename: args.filename,
+      //   mimetype: args.mimetype,
+      //   encoding: args.encoding
+      // });
+      const isFolder = fs.existsSync(`./uploadFiles`);
+      if (!isFolder) {
+        fs.mkdirSync(`./uploadFiles`);
       }
-    },
-    async resolve(parent, { files }, { storeUpload }) {
-      const { resolve, reject } = await PromiseAll.all(files.map(storeUpload));
-
-      if (reject.length)
-        reject.forEach(({ name, message }) =>
-          console.error(`${name}: ${message}`)
-        );
-
-      return resolve;
+      const filestream = await createReadStream();
+      filestream.pipe(fs.createWriteStream(`./uploadFiles/${filename}`));
+      return args.file;
     }
   }
 };

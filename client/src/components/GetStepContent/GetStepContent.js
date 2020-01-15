@@ -12,7 +12,8 @@ const GetStepContent = ({
   type,
   kind,
   handleInputChange,
-  handleDateChange
+  handleDateChange,
+  handleChangeFile
 }) => {
   if (step === 0) {
     return (
@@ -29,6 +30,7 @@ const GetStepContent = ({
           input={input}
           handleInputChange={handleInputChange}
           handleDateChange={handleDateChange}
+          handleChangeFile={handleChangeFile}
         />
       );
     }

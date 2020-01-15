@@ -8,6 +8,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/pickers": "^3.2.8",
     "apollo-boost": "^0.4.4",
+    "apollo-boost-upload": "^1.0.1",
     "body-parser": "^1.18.3",
     "clsx": "^1.0.4",
     "date-fns": "^2.8.1",

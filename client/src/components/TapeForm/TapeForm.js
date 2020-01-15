@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
 export default function TapeForm({
   input,
   handleInputChange,
-  handleDateChange
+  handleDateChange,
+  handleChangeFile
 }) {
   const classes = useStyles();
 
@@ -35,6 +36,9 @@ export default function TapeForm({
         Parametry taśmy z nadrukiem
       </Typography>
       <Grid container spacing={3}>
+        <Grid item xs={12} md={12}>
+          <input type="file" required onChange={handleChangeFile} />
+        </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
