@@ -19,6 +19,7 @@ const getOrdersTapeQuery = gql`
       order {
         id
         quantity
+        unit
         document {
           id
           dateOfRealisation

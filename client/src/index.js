@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { theme } from "../src/assets/styles/theme";
+import "typeface-roboto";
 import "semantic-ui-css/semantic.min.css";
 import "./index.css";
 
@@ -7,13 +10,14 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import * as serviceWorker from "./serviceWorker";
-import Root from './components/Root/Root';
-
+import Root from "./layouts/Root/Root";
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Root />
-  </Provider>,
+  <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <Root />
+    </Provider>
+  </ThemeProvider>,
   document.getElementById("root")
 );
 

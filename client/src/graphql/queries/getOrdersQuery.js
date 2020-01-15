@@ -12,6 +12,7 @@ const getOrdersQuery = gql`
         dateInsert
         dateOfPay
         dateOfRealisation
+        currency
         invoice
         client {
           name
