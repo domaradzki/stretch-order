@@ -5,7 +5,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
@@ -23,60 +22,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function BasicInfoForm({ dataOrder }) {
+export default function BasicInfoForm({
+  input,
+  handleInputChange,
+  handleDateChange
+}) {
   const classes = useStyles();
 
-  const initialValues = {
-    client: dataOrder.client,
-    quantity: dataOrder.quantity,
-    price: dataOrder.price,
-    netValue: dataOrder.netValue,
-    details: dataOrder.details,
-    deliveryAddress: dataOrder.deliveryAddress,
-    transport: "",
-    margin: ""
-  };
-
-  const [dateInsert, setInsertDate] = React.useState(dataOrder.dateInsert);
-  const handleInsertDateChange = date => {
-    setInsertDate(date);
-  };
-  const [dateOfRealisation, setDateOfRealisation] = React.useState(
-    dataOrder.dateOfRealisation
-  );
-  const handleDateOfRealisationChange = date => {
-    setDateOfRealisation(date);
-  };
-  const [dateOfPay, setDateOfPay] = React.useState(null);
-  const handleDateOfPayChange = date => {
-    setDateOfPay(date);
-  };
-  const [input, setInput] = React.useState(initialValues);
-  const handleInputChange = event => {
-    setInput({
-      ...input,
-      [event.target.name]: event.target.value
-    });
-  };
-  // useEffect(() => {
-  //   const {
-  //     client,
-  //     quantity,
-  //     price,
-  //     netValue,
-  //     details,
-  //     deliveryAddress
-  //   } = dataOrder;
-  //   setInput({
-  //     ...input,
-  //     client,
-  //     quantity,
-  //     price,
-  //     netValue,
-  //     details,
-  //     deliveryAddress
-  //   });
-  // });
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={plLocale}>
       <React.Fragment>
@@ -106,9 +58,9 @@ export default function BasicInfoForm({ dataOrder }) {
               id="dateInsert"
               name="dateInsert"
               helperText="Data zamówienia"
-              value={dateInsert}
+              value={input.dateInsert}
               type="text"
-              onChange={handleInsertDateChange}
+              onChange={handleDateChange("dateInsert")}
               KeyboardButtonProps={{
                 "aria-label": "change date"
               }}
@@ -123,9 +75,9 @@ export default function BasicInfoForm({ dataOrder }) {
               id="dateOfRealisation"
               name="dateOfRealisation"
               helperText="Data realizacji"
-              value={dateOfRealisation}
+              value={input.dateOfRealisation}
               type="text"
-              onChange={handleDateOfRealisationChange}
+              onChange={handleDateChange("dateOfRealisation")}
               KeyboardButtonProps={{
                 "aria-label": "change date"
               }}
@@ -152,9 +104,9 @@ export default function BasicInfoForm({ dataOrder }) {
               id="dateOfPay"
               name="dateOfPay"
               helperText="Data płatności"
-              value={dateOfPay}
+              value={input.dateOfPay}
               type="text"
-              onChange={handleDateOfPayChange}
+              onChange={handleDateChange("dateOfPay")}
               KeyboardButtonProps={{
                 "aria-label": "change date"
               }}
@@ -209,6 +161,7 @@ export default function BasicInfoForm({ dataOrder }) {
             <FormControl fullWidth required className={classes.formControl}>
               <InputLabel id="marginLabel">Marża</InputLabel>
               <Select
+                native
                 labelId="marginLabel"
                 id="margin"
                 name="margin"
@@ -217,15 +170,14 @@ export default function BasicInfoForm({ dataOrder }) {
                 onChange={handleInputChange}
                 className={classes.selectEmpty}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={0}>0</MenuItem>
-                <MenuItem value={0.25}>0.25</MenuItem>
-                <MenuItem value={0.5}>0.5</MenuItem>
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
+                <option />
+
+                <option value={0}>0</option>
+                <option value={0.25}>0.25</option>
+                <option value={0.5}>0.5</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
               </Select>
             </FormControl>
           </Grid>
@@ -233,6 +185,7 @@ export default function BasicInfoForm({ dataOrder }) {
             <FormControl fullWidth required className={classes.formControl}>
               <InputLabel id="transportLabel">Transport</InputLabel>
               <Select
+                native
                 labelId="transportLabel"
                 id="transport"
                 name="transport"
@@ -241,15 +194,13 @@ export default function BasicInfoForm({ dataOrder }) {
                 onChange={handleInputChange}
                 className={classes.selectEmpty}
               >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="Goodmark">Goodmark</MenuItem>
-                <MenuItem value="Odbiór własny">Odbiór własny</MenuItem>
-                <MenuItem value="Paczka">Paczka</MenuItem>
-                <MenuItem value="Półpaleta">Półpaleta</MenuItem>
-                <MenuItem value="Paleta euro">Paleta euro</MenuItem>
-                <MenuItem value="Paleta max">Paleta max</MenuItem>
+                <option />
+                <option value="Goodmark">Goodmark</option>
+                <option value="Odbiór własny">Odbiór własny</option>
+                <option value="Paczka">Paczka</option>
+                <option value="Półpaleta">Półpaleta</option>
+                <option value="Paleta euro">Paleta euro</option>
+                <option value="Paleta max">Paleta max</option>
               </Select>
             </FormControl>
           </Grid>

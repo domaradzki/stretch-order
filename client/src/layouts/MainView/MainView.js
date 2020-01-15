@@ -13,14 +13,12 @@ import { compose } from "redux";
 import moment from "moment";
 import { graphql } from "react-apollo";
 
-import { fetchData, getDataLoading, activateDetails } from "../../ducks/data";
+import { fetchData, getDataLoading } from "../../ducks/data";
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
 import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 import { styles } from "./MainView.style";
 import { withStyles } from "@material-ui/styles";
-
-import DetailsView from "../../components/DetailsView/DetailsView";
 
 class MainView extends Component {
   componentDidMount() {
@@ -36,13 +34,6 @@ class MainView extends Component {
     this.props.setRowsPerPage(+event.target.value);
   };
 
-  // handleClick = event => {
-  //   event.prev
-  //   const { activateDetails } = this.props;
-  //   const { id, name, kind } = event.currentTarget;
-  //   activateDetails(id, name, kind);
-  // };
-
   render() {
     const ordersAlreadyInDB = this.props.data.loading
       ? []
@@ -54,7 +45,6 @@ class MainView extends Component {
     });
     return (
       <Paper>
-        <DetailsView />
         {!this.props.isLoadingData && !this.props.data.loading && (
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -140,9 +130,7 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchData: () => dispatch(fetchData()),
     changePage: value => dispatch(changePage(value)),
-    setRowsPerPage: value => dispatch(setRowsPerPage(value)),
-    activateDetails: (id, name, kind) =>
-      dispatch(activateDetails(id, name, kind))
+    setRowsPerPage: value => dispatch(setRowsPerPage(value))
   };
 };
 

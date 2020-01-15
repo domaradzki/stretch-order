@@ -1,21 +1,25 @@
 import React, { useState } from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { graphql } from "react-apollo";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import BasicInfoForm from "../../components/BasicInfoForm/BasicInfoForm";
-import StretchForm from "../../components/StretchForm/StretchForm";
-import Review from "../../components/Review/Review";
-import TapeForm from "../../components/TapeForm/TapeForm";
-import TransportForm from "../../components/TransportForm/TransportForm";
 
-import addDays from "date-fns/addDays";
 import { activeOrder } from "../../ducks/data";
+import NewOrderSuccess from "../../components/NewOrderSuccess/NewOrderSuccess";
+import GetStepContent from "../../components/GetStepContent/GetStepContent";
+import FormStepper from "../../components/FormStepper/FormStepper";
+import FormButtons from "../../components/FormButtons/FormButtons";
 
-import { connect } from "react-redux";
+import addOrderMutation from "../../graphql/mutations/addOrderMutation";
+import addDocumentMutation from "../../graphql/mutations/addDocumentMutation";
+import addClientMutation from "../../graphql/mutations/addClientMutation";
+import addUserMutation from "../../graphql/mutations/addUserMutation";
+import addTapeMutation from "../../graphql/mutations/addTapeMutation";
+import addStretchMutation from "../../graphql/mutations/addStretchMutation";
+import isInDatabase from "../../graphql/queries/isInDatabase";
+import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -25,40 +29,11 @@ const useStyles = makeStyles(theme => ({
       marginBottom: theme.spacing(6),
       padding: theme.spacing(3)
     }
-  },
-  stepper: {
-    padding: theme.spacing(3, 0, 5)
-  },
-  buttons: {
-    display: "flex",
-    justifyContent: "flex-end"
-  },
-  button: {
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1)
   }
 }));
 
-const steps = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
-
-function getStepContent(step, dataOrder, type, kind) {
-  switch (step) {
-    case 0:
-      return <BasicInfoForm dataOrder={dataOrder} />;
-    case 1:
-      return type === "TPD" && kind === "KT" ? (
-        <TapeForm dataOrder={dataOrder} />
-      ) : type === "FS" && kind === "KT" ? (
-        <StretchForm dataOrder={dataOrder} />
-      ) : (
-        <TransportForm dataOrder={dataOrder} />
-      );
-    case 2:
-      return <Review dataOrder={dataOrder} />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
+const stepsProduct = ["Informacje ogólne", "Parametry produktu", "Weryfikacja"];
+const stepsTransportOnly = ["Informacje ogólne", "Weryfikacja"];
 
 function Checkout(props) {
   const classes = useStyles();
@@ -69,82 +44,276 @@ function Checkout(props) {
     setActiveStep(activeStep + 1);
   };
 
-  const handleBack = () => {
+  const handleBack = event => {
+    event.preventDefault();
     setActiveStep(activeStep - 1);
   };
-
   const { activeOrder } = props;
-  console.log(activeOrder);
-  const dataOrder = {
-    ...activeOrder,
-    grossWeight:
-      typeof activeOrder.grossWeight === "function"
-        ? activeOrder.grossWeight()
-        : activeOrder.grossWeight,
-    stretchColor:
-      typeof activeOrder.stretchColor === "function"
-        ? activeOrder.stretchColor()
-        : activeOrder.stretchColor,
-    details:
-      typeof activeOrder.postfix === "function"
-        ? `${activeOrder.details} ${activeOrder.postfix()}`
-        : activeOrder.details,
-    dateOfRealisation:
-      activeOrder.type === "TPD" && activeOrder.kind === "KT"
-        ? addDays(new Date(activeOrder.dateInsert), 14)
-        : activeOrder.type === "FS" && activeOrder.kind === "KT"
-        ? addDays(new Date(activeOrder.dateInsert), 3)
-        : addDays(new Date(activeOrder.dateInsert), 2)
+
+  const initialValues = {
+    client: activeOrder.client,
+    quantity: activeOrder.quantity,
+    price: activeOrder.price,
+    netValue: activeOrder.netValue,
+    details: `${activeOrder.details} ${
+      activeOrder.postfix ? activeOrder.postfix : ""
+    }`,
+    deliveryAddress: activeOrder.deliveryAddress,
+    transport: "",
+    margin: "",
+    dateInsert: activeOrder.dateInsert,
+    dateOfRealisation: activeOrder.dateOfRealisation,
+    dateOfPay: null,
+    sleeve: activeOrder.sleeve,
+    stretchColor: activeOrder.stretchColor,
+    stretchThickness: activeOrder.stretchThickness,
+    netWeight: activeOrder.netWeight,
+    grossWeight: activeOrder.grossWeight,
+    tapeLong: activeOrder.tapeLong,
+    tapeWidth: activeOrder.tapeWidth,
+    tapeThickness: activeOrder.tapeThickness,
+    tapeColor: activeOrder.tapeColor,
+    numberOfColors: activeOrder.numberOfColors,
+    glue: activeOrder.glue,
+    printName: "",
+    roller: "",
+    dateOfAcceptation: null,
+    color1: "",
+    color2: "",
+    color3: ""
   };
 
+  const [input, setInput] = React.useState(initialValues);
+  const handleInputChange = event => {
+    setInput({
+      ...input,
+      [event.target.name]: event.target.value
+    });
+  };
+
+  const handleDateChange = inputDate => date => {
+    setInput({
+      ...input,
+      [inputDate]: date
+    });
+  };
+  const steps =
+    activeOrder.kind === "KT" &&
+    (activeOrder.type === "FS" || activeOrder.type === "TPD")
+      ? stepsProduct
+      : stepsTransportOnly;
+
+  const handleAddOrder = event => {
+    event.preventDefault();
+    const data = Object.assign(activeOrder, input);
+    const {
+      client,
+      quantity,
+      price,
+      netValue,
+      details,
+      dateInsert,
+      invoice,
+      dateOfPay,
+      dateOfRealisation,
+      deliveryAddress,
+      trader,
+      transport,
+      assortment,
+      signature,
+      documentStatus,
+      closed,
+      symbol,
+      itemId,
+      code,
+      kind,
+      type,
+      unit,
+      currency,
+      exchangeRate,
+      numberOfDocumentInvoice,
+      companyId,
+      documentId,
+      sleeve,
+      stretchColor,
+      stretchThickness,
+      netWeight,
+      grossWeight,
+      printName,
+      tapeLong,
+      tapeWidth,
+      tapeThickness,
+      tapeColor,
+      numberOfColors,
+      glue,
+      roller,
+      color1,
+      color2,
+      color3,
+      dateOfAcceptation
+    } = data;
+    if (!props.data.isLoading) {
+      const isClient = props.data.client;
+      const isUser = props.data.user;
+      const isDocument = props.data.document;
+      const isTapeProduct = kind === "KT" && type === "TPD";
+      const isStretchProduct = kind === "KT" && type === "FS";
+      const addingClient = () =>
+        props
+          .addClientMutation({
+            variables: {
+              name: client,
+              companyId
+            }
+          })
+          .then(res => res.data.addClient.id);
+
+      const addingUser = () =>
+        props
+          .addUserMutation({
+            variables: {
+              name: trader
+            }
+          })
+          .then(res => res.data.addUser.id);
+
+      const addingTape = async () =>
+        await props
+          .addTapeMutation({
+            variables: {
+              printName,
+              dateOfAcceptation,
+              numberOfColors,
+              color1,
+              color2,
+              color3,
+              glue,
+              roller,
+              tapeColor,
+              tapeLong,
+              tapeThickness,
+              tapeWidth
+            }
+          })
+          .then(res => res.data.addTape.id);
+
+      const addingStretch = async () =>
+        await props
+          .addStretchMutation({
+            variables: {
+              sleeve,
+              stretchColor,
+              stretchThickness,
+              netWeight,
+              grossWeight
+            }
+          })
+          .then(res => res.data.addStretch.id);
+
+      const addingOrder = async (idDoc, idProduct) =>
+        await props.addOrderMutation({
+          variables: {
+            itemId,
+            name: assortment,
+            code,
+            kind,
+            type,
+            quantity,
+            unit,
+            price,
+            netValue,
+            documentId: idDoc,
+            productId: idProduct
+          },
+          refetchQueries: [{ query: getOrdersItemid }]
+        });
+
+      const addingDocument = (idC, idU) =>
+        props
+          .addDocumentMutation({
+            variables: {
+              documentId,
+              dateInsert,
+              dateOfPay,
+              dateOfRealisation,
+              signature,
+              symbol,
+              details,
+              closed,
+              currency,
+              exchangeRate,
+              documentStatus,
+              deliveryAddress,
+              transport,
+              numberOfDocumentInvoice,
+              invoice,
+              clientId: idC,
+              userId: idU
+            }
+          })
+          .then(res => res.data.addDocument.id);
+
+      const promiseIfNoClient = async () =>
+        isClient ? isClient.id : await addingClient();
+
+      const promiseIfNoUser = async () =>
+        isUser ? isUser.id : await addingUser();
+
+      const promiseIfNoDocument = async (idC, idU) =>
+        isDocument ? isDocument.id : await addingDocument(idC, idU);
+
+      const addingProduct = isTapeProduct
+        ? addingTape()
+        : isStretchProduct
+        ? addingStretch()
+        : null;
+
+      Promise.all([promiseIfNoClient(), promiseIfNoUser(), addingProduct])
+        .then(result => {
+          return {
+            clientId: result[0],
+            userId: result[1],
+            productId: result[2]
+          };
+        })
+        .then(res => {
+          promiseIfNoDocument(res.clientId, res.userId).then(r => {
+            addingOrder(r, res.productId);
+          });
+        });
+    }
+    setActiveStep(activeStep + 1);
+  };
+  console.log(props);
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
         <Typography component="h1" variant="h4" align="center">
           Kontrola zamówienia
         </Typography>
-        <Stepper activeStep={activeStep} className={classes.stepper}>
-          {steps.map(label => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+        <FormStepper steps={steps} activeStep={activeStep} />
         <React.Fragment>
           {activeStep === steps.length ? (
-            <React.Fragment>
-              <Typography variant="h5" gutterBottom>
-                Sukces!!!
-              </Typography>
-              <Typography variant="subtitle1">
-                Twoje zamówienie zostało poprawnie dodane. Możesz je
-                monitorować, lub edytować w zakładce zlecone, gdzie znajdziesz
-                wszystkie swoje zamówienia.
-              </Typography>
-            </React.Fragment>
+            <NewOrderSuccess />
           ) : (
             <form onSubmit={handleNext}>
-              {getStepContent(
-                activeStep,
-                dataOrder,
-                dataOrder.type,
-                dataOrder.kind
-              )}
-              <div className={classes.buttons}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} className={classes.button}>
-                    Powrót
-                  </Button>
-                )}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  className={classes.button}
-                >
-                  {activeStep === steps.length - 1 ? "Potwierdź" : "Dalej"}
-                </Button>
-              </div>
+              <GetStepContent
+                step={activeStep}
+                stepsLength={steps.length}
+                input={input}
+                activeOrder={activeOrder}
+                type={activeOrder.type}
+                kind={activeOrder.kind}
+                handleInputChange={handleInputChange}
+                handleDateChange={handleDateChange}
+              />
+              <FormButtons
+                steps={steps}
+                activeStep={activeStep}
+                handleBack={handleBack}
+                handleAddOrder={handleAddOrder}
+                history={props.history}
+              />
             </form>
           )}
         </React.Fragment>
@@ -152,11 +321,48 @@ function Checkout(props) {
     </React.Fragment>
   );
 }
+
 const mapStateToProps = (state, props) => {
   const { orderId } = props.match.params;
   return {
     activeOrder: activeOrder(state, orderId)
   };
 };
+const reduxWrapper = connect(mapStateToProps);
 
-export default connect(mapStateToProps)(Checkout);
+const graphqlOrder = graphql(addOrderMutation, { name: "addOrderMutation" });
+const graphqlDocument = graphql(addDocumentMutation, {
+  name: "addDocumentMutation"
+});
+const graphqlClient = graphql(addClientMutation, {
+  name: "addClientMutation"
+});
+const graphqlUser = graphql(addUserMutation, {
+  name: "addUserMutation"
+});
+const graphqlTape = graphql(addTapeMutation, { name: "addTapeMutation" });
+const graphqlStretch = graphql(addStretchMutation, {
+  name: "addStretchMutation"
+});
+
+const graphqlCheck = graphql(isInDatabase, {
+  options: props => {
+    return {
+      variables: {
+        documentId: props.activeOrder.documentId,
+        companyId: props.activeOrder.companyId,
+        name: props.activeOrder.trader
+      }
+    };
+  }
+});
+export default compose(
+  reduxWrapper,
+  graphqlOrder,
+  graphqlDocument,
+  graphqlClient,
+  graphqlUser,
+  graphqlTape,
+  graphqlStretch,
+  graphqlCheck
+)(Checkout);

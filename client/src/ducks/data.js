@@ -1,20 +1,15 @@
 import { getDataPromise } from "../services";
+import addDays from "date-fns/addDays";
 
 // Action types
 const FETCH_DATA_REQUEST = "FETCH_DATA_REQUEST";
 const FETCH_DATA_SUCCESS = "FETCH_DATA_SUCCESS";
 const FETCH_DATA_FAILURE = "FETCH_DATA_FAILURE";
-const ACTIVATE_DETAILS = "ACTIVATE_DETAILS";
-const UNACTIVATE_DETAILS = "UNACTIVATE_DETAILS";
 
 // Initial Value
 const initialState = {
   isLoading: false,
   error: null,
-  activeOrder: "",
-  activeType: "",
-  activeKind: "",
-  activeDetails: false,
   data: []
 };
 
@@ -39,21 +34,6 @@ export default function dataReducer(state = initialState, action) {
         isLoading: false,
         error: null,
         data: action.data
-      };
-    case ACTIVATE_DETAILS:
-      return {
-        ...state,
-        activeDetails: true,
-        activeOrder: action.id,
-        activeType: action.name,
-        activeKind: action.kind
-      };
-    case UNACTIVATE_DETAILS:
-      return {
-        ...state,
-        activeDetails: false,
-        activeOrder: "",
-        activeType: ""
       };
     default:
       return state;
@@ -84,21 +64,6 @@ export const fetchData = () => {
         //  console.log(error)
         dispatch(fetchDataFailure(error));
       });
-  };
-};
-
-export const activateDetails = (id, name, kind) => {
-  return {
-    type: ACTIVATE_DETAILS,
-    id,
-    name,
-    kind
-  };
-};
-
-export const unactivateDetails = () => {
-  return {
-    type: UNACTIVATE_DETAILS
   };
 };
 
@@ -248,8 +213,32 @@ export const activeOrder = (state, orderId) => {
         }
       };
     }
-    return Object.assign(activeOrder, order);
+    const dataOrder = {
+      ...order,
+      tapeColor:
+        typeof order.tapeColor === "function"
+          ? order.tapeColor()
+          : order.tapeColor,
+      grossWeight:
+        typeof order.grossWeight === "function"
+          ? order.grossWeight()
+          : order.grossWeight,
+      stretchColor:
+        typeof order.stretchColor === "function"
+          ? order.stretchColor()
+          : order.stretchColor,
+      postfix:
+        typeof order.postfix === "function" ? order.postfix() : order.postfix,
+      dateOfRealisation:
+        order.productCode === "TPD" || order.productCode === "TPD32"
+          ? addDays(new Date(activeOrder.dateInsert), 14)
+          : addDays(new Date(activeOrder.dateInsert), 3)
+    };
+    return Object.assign(activeOrder, dataOrder);
   } else {
-    return activeOrder;
+    return {
+      ...activeOrder,
+      dateOfRealisation: addDays(new Date(activeOrder.dateInsert), 2)
+    };
   }
 };

@@ -5,6 +5,7 @@ import userMutations from "./users/mutations";
 import clientMutations from "./clients/mutations";
 import tapeMutations from "./tapes/mutations";
 import stretchMutations from "./stretches/mutations";
+import uploadMutations from "./uploads/mutations";
 
 const mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -14,7 +15,8 @@ const mutation = new GraphQLObjectType({
     ...userMutations,
     ...clientMutations,
     ...tapeMutations,
-    ...stretchMutations
+    ...stretchMutations,
+    ...uploadMutations
   }
 });
 
