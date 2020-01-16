@@ -105,8 +105,10 @@ function Checkout(props) {
       ...input,
       file: URL.createObjectURL(target.files[0])
     });
-    // const file = target.files[0];
-    // props.singleUploadFile({ variables: { file } });
+    const file = target.files[0];
+    props
+      .singleUploadFile({ variables: { file } })
+      .then(res => res.data.singleUpload.id);
   };
 
   const steps =
@@ -296,6 +298,7 @@ function Checkout(props) {
     }
     setActiveStep(activeStep + 1);
   };
+  console.log(props);
   return (
     <React.Fragment>
       <Paper className={classes.paper}>

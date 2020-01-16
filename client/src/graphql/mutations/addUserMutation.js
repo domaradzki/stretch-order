@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "apollo-boost-upload";
 
 const addUserMutation = gql`
   mutation($name: String!, $email: String, $login: String, $password: String) {

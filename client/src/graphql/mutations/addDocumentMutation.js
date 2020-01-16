@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "apollo-boost-upload";
 
 const addDocumentMutation = gql`
   mutation(
