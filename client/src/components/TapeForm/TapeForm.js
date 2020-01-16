@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
+import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
@@ -19,13 +20,17 @@ import {
 const useStyles = makeStyles(theme => ({
   formControl: {
     minWidth: 120
+  },
+  input: {
+    display: "none"
   }
 }));
 
 export default function TapeForm({
   input,
   handleInputChange,
-  handleDateChange
+  handleDateChange,
+  handleChangeFile
 }) {
   const classes = useStyles();
 
@@ -206,6 +211,28 @@ export default function TapeForm({
             />
           </Grid>
         )}
+        <Grid item xs={12} md={6}>
+          <input
+            accept="image/*"
+            className={classes.input}
+            id="contained-button-file"
+            multiple
+            type="file"
+            onChange={handleChangeFile}
+          />
+          <label htmlFor="contained-button-file">
+            <Button variant="contained" color="primary" component="span">
+              Wgraj plik
+            </Button>
+          </label>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <img
+            src={input.file}
+            width="100%"
+            alt={input.file ? "Projekt" : ""}
+          />
+        </Grid>
       </Grid>
     </React.Fragment>
   );

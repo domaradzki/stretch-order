@@ -47,7 +47,6 @@ function connectMongoDB() {
     useFindAndModify: false,
     useUnifiedTopology: true
   });
-
   mongoose.connection
     .once("open", function() {
       console.log("Connection to MongoDB has been made!");

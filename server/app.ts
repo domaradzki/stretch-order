@@ -5,6 +5,7 @@ import { GraphQLSchema } from "graphql";
 import mutation from "./schema/mutations";
 import query from "./schema/queries";
 import * as cors from "cors";
+
 import { connectDB, connectMongoDB, getDataFromApi } from "./connection";
 
 connectDB();
@@ -20,7 +21,7 @@ const schema = new GraphQLSchema({ query, mutation });
 
 app.use(
   "/graphql",
-  graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 3 }),
+  graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
   graphqlHTTP({
     schema,
     graphiql: true

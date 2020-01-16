@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from "apollo-boost-upload";
 
 const isInDatabase = gql`
   query($documentId: Int!, $companyId: Int!, $name: String!) {

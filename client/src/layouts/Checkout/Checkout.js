@@ -20,6 +20,7 @@ import addTapeMutation from "../../graphql/mutations/addTapeMutation";
 import addStretchMutation from "../../graphql/mutations/addStretchMutation";
 import isInDatabase from "../../graphql/queries/isInDatabase";
 import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
+import singleUploadFile from "../../graphql/mutations/singleUploadFile";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -80,7 +81,8 @@ function Checkout(props) {
     dateOfAcceptation: null,
     color1: "",
     color2: "",
-    color3: ""
+    color3: "",
+    file: null
   };
 
   const [input, setInput] = React.useState(initialValues);
@@ -97,6 +99,18 @@ function Checkout(props) {
       [inputDate]: date
     });
   };
+
+  const handleChangeFile = ({ target }) => {
+    setInput({
+      ...input,
+      file: URL.createObjectURL(target.files[0])
+    });
+    const file = target.files[0];
+    props
+      .singleUploadFile({ variables: { file } })
+      .then(res => res.data.singleUpload.id);
+  };
+
   const steps =
     activeOrder.kind === "KT" &&
     (activeOrder.type === "FS" || activeOrder.type === "TPD")
@@ -306,6 +320,7 @@ function Checkout(props) {
                 kind={activeOrder.kind}
                 handleInputChange={handleInputChange}
                 handleDateChange={handleDateChange}
+                handleChangeFile={handleChangeFile}
               />
               <FormButtons
                 steps={steps}
@@ -344,6 +359,9 @@ const graphqlTape = graphql(addTapeMutation, { name: "addTapeMutation" });
 const graphqlStretch = graphql(addStretchMutation, {
   name: "addStretchMutation"
 });
+const graphqlFile = graphql(singleUploadFile, {
+  name: "singleUploadFile"
+});
 
 const graphqlCheck = graphql(isInDatabase, {
   options: props => {
@@ -364,5 +382,6 @@ export default compose(
   graphqlUser,
   graphqlTape,
   graphqlStretch,
+  graphqlFile,
   graphqlCheck
 )(Checkout);
