@@ -14,25 +14,19 @@ const fileMutations = {
   singleUpload: {
     type: FileType,
     args: {
-      // filename: { type: new GraphQLNonNull(GraphQLString) },
-      // mimetype: { type: new GraphQLNonNull(GraphQLString) },
-      // encoding: { type: new GraphQLNonNull(GraphQLString) },
       file: { type: GraphQLUpload }
     },
     async resolve(parent, args) {
       const { filename, mimetype, createReadStream } = await args.file;
-      // const file = new File({
-      //   filename: args.filename,
-      //   mimetype: args.mimetype,
-      //   encoding: args.encoding
-      // });
       const isFolder = fs.existsSync(`./uploadFiles`);
       if (!isFolder) {
         fs.mkdirSync(`./uploadFiles`);
       }
       const filestream = await createReadStream();
       filestream.pipe(fs.createWriteStream(`./uploadFiles/${filename}`));
-      const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db);
+      const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+        bucketName: "files"
+      });
       const uploadStream = bucket.openUploadStream(filename);
       await new Promise((resolve, reject) => {
         filestream
@@ -40,6 +34,7 @@ const fileMutations = {
           .on("error", reject)
           .on("finish", resolve);
       });
+      console.log(args.file);
       return args.file;
     }
   }

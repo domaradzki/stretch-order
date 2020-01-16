@@ -81,7 +81,8 @@ function Checkout(props) {
     dateOfAcceptation: null,
     color1: "",
     color2: "",
-    color3: ""
+    color3: "",
+    file: null
   };
 
   const [input, setInput] = React.useState(initialValues);
@@ -100,12 +101,12 @@ function Checkout(props) {
   };
 
   const handleChangeFile = ({ target }) => {
-    const file = target.files[0];
-    console.log(file);
-    // console.log(event.target);
-    // console.log(event.target.files[0]);
-    // console.log(event.target.validity.valid);
-    props.singleUploadFile({ variables: { file } });
+    setInput({
+      ...input,
+      file: URL.createObjectURL(target.files[0])
+    });
+    // const file = target.files[0];
+    // props.singleUploadFile({ variables: { file } });
   };
 
   const steps =
@@ -295,7 +296,6 @@ function Checkout(props) {
     }
     setActiveStep(activeStep + 1);
   };
-  console.log(props);
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
