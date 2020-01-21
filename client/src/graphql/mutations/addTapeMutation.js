@@ -3,7 +3,7 @@ import { gql } from "apollo-boost-upload";
 const addTapeMutation = gql`
   mutation(
     $printName: String!
-    $dateOfAcceptation: String!
+    $dateOfAcceptation: String
     $numberOfColors: String!
     $color1: String!
     $color2: String

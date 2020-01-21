@@ -215,12 +215,13 @@ export default function TapeForm({
           <input
             accept="image/*"
             className={classes.input}
-            id="contained-button-file"
+            id="fileX"
+            name="imageFile"
             multiple
             type="file"
             onChange={handleChangeFile}
           />
-          <label htmlFor="contained-button-file">
+          <label htmlFor="fileX">
             <Button variant="contained" color="primary" component="span">
               Wgraj plik
             </Button>

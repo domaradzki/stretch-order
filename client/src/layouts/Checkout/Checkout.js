@@ -107,8 +107,8 @@ function Checkout(props) {
     });
     const file = target.files[0];
     await props.singleUploadFile({ variables: { file } }).then(res => {
-      console.log(res);
-      return res.data.singleUpload.id;
+      console.log(file);
+      // return res.data.singleUpload.id;
     });
   };
 
@@ -166,8 +166,10 @@ function Checkout(props) {
       color2,
       color3,
       dateOfAcceptation
+      // file
     } = data;
     if (!props.data.isLoading) {
+      // props.singleUploadFile({ variables: { file } }); multer testing
       const isClient = props.data.client;
       const isUser = props.data.user;
       const isDocument = props.data.document;
@@ -311,7 +313,11 @@ function Checkout(props) {
           {activeStep === steps.length ? (
             <NewOrderSuccess />
           ) : (
-            <form onSubmit={handleNext}>
+            <form
+              onSubmit={handleNext}
+              encType="multipart/form-data"
+              method="POST"
+            >
               <GetStepContent
                 step={activeStep}
                 stepsLength={steps.length}
