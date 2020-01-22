@@ -8,7 +8,7 @@ import * as cors from "cors";
 
 import { connectDB, connectMongoDB, getDataFromApi } from "./connection";
 
-connectDB();
+// connectDB(); commented as we have temporary json file to for develop
 connectMongoDB();
 
 const app = express();

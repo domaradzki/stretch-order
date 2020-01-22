@@ -100,15 +100,16 @@ function Checkout(props) {
     });
   };
 
-  const handleChangeFile = ({ target }) => {
+  const handleChangeFile = async ({ target }) => {
     setInput({
       ...input,
       file: URL.createObjectURL(target.files[0])
     });
     const file = target.files[0];
-    props
-      .singleUploadFile({ variables: { file } })
-      .then(res => res.data.singleUpload.id);
+    await props.singleUploadFile({ variables: { file } }).then(res => {
+      console.log(res);
+      return res.data.singleUpload.id;
+    });
   };
 
   const steps =
