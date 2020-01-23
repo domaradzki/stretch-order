@@ -21,6 +21,7 @@ const fileQueries = {
         })
         .on("finish", function() {
           console.log("done!");
+          console.log(bucket);
           process.exit(0);
         });
     }
