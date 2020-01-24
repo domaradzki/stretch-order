@@ -1,11 +1,8 @@
 import * as fs from "fs";
-import * as mongoose from "mongoose";
 import { GraphQLUpload } from "graphql-upload";
-import * as multer from "multer";
 
 import File from "../../models/file";
 import FileType from "./fileType";
-import { GraphQLString } from "graphql";
 
 const fileMutations = {
   singleUpload: {
@@ -15,18 +12,21 @@ const fileMutations = {
     },
     async resolve(parent, args) {
       const { filename, mimetype, createReadStream } = await args.file;
-      const isFolder = fs.existsSync(`./uploadFiles`);
+      const filenameNoExtention = filename.split(".")[0];
+      const folderProject = filenameNoExtention.split(" ")[0];
+      const isFolder = fs.existsSync(`./Projects/${folderProject}`);
       if (!isFolder) {
-        fs.mkdirSync(`./uploadFiles`);
+        fs.mkdirSync(`./Projects/${folderProject}`, { recursive: true });
       }
+
+      const path = `./Projects/${folderProject}/${filename}`;
       const filestream = await createReadStream();
-      filestream.pipe(fs.createWriteStream(`./uploadFiles/${filename}`));
-      // store an img in binary in mongo
-      const file = new File();
-      file.img.data = fs.readFileSync(`./uploadFiles/${filename}`);
-      file.img.contentType = mimetype;
-      file.path = `/uploadFiles/`;
-      file.filename = filename;
+      filestream.pipe(fs.createWriteStream(path));
+      const file = new File({
+        contentType: mimetype,
+        path: `/Projects/${folderProject}/${filename}`,
+        filename: filename
+      });
       return file.save();
     }
   }

@@ -5,7 +5,7 @@ const singleUploadFile = gql`
     singleUpload(file: $file) {
       id
       filename
-      mimetype
+      path
     }
   }
 `;
