@@ -14,7 +14,8 @@ const tapeSchema = new Schema({
   tapeColor: String,
   tapeLong: Number,
   tapeThickness: Number,
-  tapeWidth: Number
+  tapeWidth: Number,
+  projectId: String
 });
 
 const Tape = mongoose.model<TapeInterface>("Tape", tapeSchema);
