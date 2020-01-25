@@ -14,7 +14,7 @@ const addTapeMutation = gql`
     $tapeLong: Int!
     $tapeThickness: Int!
     $tapeWidth: Int!
-    $projectId: String
+    $projectId: ID
   ) {
     addTape(
       printName: $printName

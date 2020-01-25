@@ -4,4 +4,5 @@ export interface FileInterface extends Document {
   filename: String;
   path: String;
   contentType: String;
+  favicon: String;
 }

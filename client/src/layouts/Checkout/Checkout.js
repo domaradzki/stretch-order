@@ -103,13 +103,13 @@ function Checkout(props) {
   const handleChangeFile = async ({ target }) => {
     setInput({
       ...input,
-      file: URL.createObjectURL(target.files[0])
+      file: target.files[0] //URL.createObjectURL(target.files[0])
     });
-    const file = target.files[0];
-    await props.singleUploadFile({ variables: { file } }).then(res => {
-      console.log(file);
-      // return res.data.singleUpload.id;
-    });
+    // const file = target.files[0];
+    // await props.singleUploadFile({ variables: { file } }).then(res => {
+    //   console.log(file);
+    //   // return res.data.singleUpload.id;
+    // });
   };
 
   const steps =
@@ -165,8 +165,8 @@ function Checkout(props) {
       color1,
       color2,
       color3,
-      dateOfAcceptation
-      // file
+      dateOfAcceptation,
+      file
     } = data;
     if (!props.data.isLoading) {
       // props.singleUploadFile({ variables: { file } }); multer testing
@@ -175,6 +175,12 @@ function Checkout(props) {
       const isDocument = props.data.document;
       const isTapeProduct = kind === "KT" && type === "TPD";
       const isStretchProduct = kind === "KT" && type === "FS";
+
+      const addingTapeProject = () =>
+        props
+          .singleUploadFile({ variables: { file } })
+          .then(res => res.data.singleUpload.id);
+
       const addingClient = () =>
         props
           .addClientMutation({
@@ -194,7 +200,7 @@ function Checkout(props) {
           })
           .then(res => res.data.addUser.id);
 
-      const addingTape = async () =>
+      const addingTape = async projectId =>
         await props
           .addTapeMutation({
             variables: {
@@ -209,7 +215,8 @@ function Checkout(props) {
               tapeColor,
               tapeLong,
               tapeThickness,
-              tapeWidth
+              tapeWidth,
+              projectId
             }
           })
           .then(res => res.data.addTape.id);
@@ -280,7 +287,7 @@ function Checkout(props) {
         isDocument ? isDocument.id : await addingDocument(idC, idU);
 
       const addingProduct = isTapeProduct
-        ? addingTape()
+        ? addingTapeProject().then(res => addingTape(res))
         : isStretchProduct
         ? addingStretch()
         : null;

@@ -18,14 +18,15 @@ const fileMutations = {
       if (!isFolder) {
         fs.mkdirSync(`./Projects/${folderProject}`, { recursive: true });
       }
-
-      const path = `./Projects/${folderProject}/${filename}`;
+      const path = `/Projects/${folderProject}/${filename}`;
+      const favicon = `/Projects/${folderProject}/${filenameNoExtention}.gif`;
       const filestream = await createReadStream();
-      filestream.pipe(fs.createWriteStream(path));
+      filestream.pipe(fs.createWriteStream(`.${path}`));
       const file = new File({
         contentType: mimetype,
-        path: `/Projects/${folderProject}/${filename}`,
-        filename: filename
+        path,
+        filename,
+        favicon
       });
       return file.save();
     }

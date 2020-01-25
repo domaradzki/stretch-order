@@ -229,7 +229,7 @@ export default function TapeForm({
         </Grid>
         <Grid item xs={12} md={6}>
           <img
-            src={input.file}
+            src={input.file ? URL.createObjectURL(input.file) : null}
             width="100%"
             alt={input.file ? "Projekt" : ""}
           />
