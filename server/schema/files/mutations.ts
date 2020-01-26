@@ -12,14 +12,14 @@ const fileMutations = {
     },
     async resolve(parent, args) {
       const { filename, mimetype, createReadStream } = await args.file;
-      const filenameNoExtention = filename.split(".")[0];
-      const folderProject = filenameNoExtention.split(" ")[0];
+      const splitSign = filename.match(/.\d+/);
+      const folderProject = filename.split(splitSign[0])[0];
       const isFolder = fs.existsSync(`./Projects/${folderProject}`);
       if (!isFolder) {
         fs.mkdirSync(`./Projects/${folderProject}`, { recursive: true });
       }
       const path = `/Projects/${folderProject}/${filename}`;
-      const favicon = `/Projects/${folderProject}/${filenameNoExtention}.gif`;
+      const favicon = path.replace("jpg", "gif");
       const filestream = await createReadStream();
       filestream.pipe(fs.createWriteStream(`.${path}`));
       const file = new File({
