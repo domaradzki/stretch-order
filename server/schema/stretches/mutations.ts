@@ -41,7 +41,7 @@ const stretchMutations = {
       stretchColor: { type: new GraphQLNonNull(GraphQLString) },
       stretchThickness: { type: new GraphQLNonNull(GraphQLInt) }
     },
-    resolve(parent, args) {
+    resolve(parent, args: StretchInterface) {
       return Stretch.findByIdAndUpdate(
         { _id: args.id },
         {
@@ -63,7 +63,7 @@ const stretchMutations = {
     args: {
       id: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: StretchInterface) {
       return Stretch.findByIdAndDelete(args.id)
         .then((stretch: any) => {
           stretch.remove();

@@ -32,7 +32,7 @@ const userMutations = {
       login: { type: GraphQLString },
       password: { type: GraphQLString }
     },
-    resolve(parent, args) {
+    resolve(parent, args: UserInterface) {
       return User.findByIdAndUpdate(
         { _id: args.id },
         {
@@ -53,7 +53,7 @@ const userMutations = {
     args: {
       id: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: UserInterface) {
       return User.findByIdAndDelete(args.id)
         .then((user: any) => {
           user.remove();

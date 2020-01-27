@@ -5,6 +5,7 @@ export interface DocumentInterface extends Document {
   dateInsert: String;
   dateOfPay: String;
   dateOfRealisation: String;
+  paymentMethod: String;
   signature: String;
   symbol: String;
   details: String;

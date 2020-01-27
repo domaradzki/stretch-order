@@ -26,7 +26,7 @@ const clientMutations = {
       name: { type: GraphQLString },
       companyId: { type: GraphQLInt }
     },
-    resolve(parent, args) {
+    resolve(parent, args: ClientInterface) {
       return Client.findByIdAndUpdate(
         { _id: args.id },
         {
@@ -45,7 +45,7 @@ const clientMutations = {
     args: {
       id: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: ClientInterface) {
       return Client.findByIdAndDelete(args.id)
         .then((client: any) => {
           client.remove();
