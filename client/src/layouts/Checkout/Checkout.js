@@ -62,6 +62,7 @@ function Checkout(props) {
     deliveryAddress: activeOrder.deliveryAddress,
     transport: "",
     margin: "",
+    paymentMethod: "",
     dateInsert: activeOrder.dateInsert,
     dateOfRealisation: activeOrder.dateOfRealisation,
     dateOfPay: null,
@@ -103,13 +104,8 @@ function Checkout(props) {
   const handleChangeFile = async ({ target }) => {
     setInput({
       ...input,
-      file: target.files[0] //URL.createObjectURL(target.files[0])
+      file: target.files[0]
     });
-    // const file = target.files[0];
-    // await props.singleUploadFile({ variables: { file } }).then(res => {
-    //   console.log(file);
-    //   // return res.data.singleUpload.id;
-    // });
   };
 
   const steps =
@@ -131,6 +127,7 @@ function Checkout(props) {
       invoice,
       dateOfPay,
       dateOfRealisation,
+      paymentMethod,
       deliveryAddress,
       trader,
       transport,
@@ -169,7 +166,6 @@ function Checkout(props) {
       file
     } = data;
     if (!props.data.isLoading) {
-      // props.singleUploadFile({ variables: { file } }); multer testing
       const isClient = props.data.client;
       const isUser = props.data.user;
       const isDocument = props.data.document;
@@ -260,6 +256,7 @@ function Checkout(props) {
               dateInsert,
               dateOfPay,
               dateOfRealisation,
+              paymentMethod,
               signature,
               symbol,
               details,
@@ -308,7 +305,6 @@ function Checkout(props) {
     }
     setActiveStep(activeStep + 1);
   };
-  console.log(props);
   return (
     <React.Fragment>
       <Paper className={classes.paper}>

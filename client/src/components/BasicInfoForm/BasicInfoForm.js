@@ -112,7 +112,7 @@ export default function BasicInfoForm({
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <TextField
               required
               id="quantity"
@@ -125,7 +125,7 @@ export default function BasicInfoForm({
               autoComplete="quantity"
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <TextField
               required
               id="price"
@@ -141,7 +141,7 @@ export default function BasicInfoForm({
               autoComplete="price"
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <TextField
               required
               id="netValue"
@@ -156,6 +156,28 @@ export default function BasicInfoForm({
               fullWidth
               autoComplete="net value"
             />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <FormControl fullWidth required className={classes.formControl}>
+              <InputLabel id="paymentMethodLabel">Sposób płatności</InputLabel>
+              <Select
+                native
+                labelId="paymentMethodLabel"
+                id="paymentMethod"
+                name="paymentMethod"
+                value={input.paymentMethod}
+                type="text"
+                onChange={handleInputChange}
+                className={classes.selectEmpty}
+              >
+                <option />
+                <option value="Termin">Termin</option>
+                <option value="Pobranie">Pobranie</option>
+                <option value="Gotówka">Gotówka</option>
+                <option value="Proforma">Proforma</option>
+                <option value="Proforma zapłacona">Proforma zapłacona</option>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={4}>
             <FormControl fullWidth required className={classes.formControl}>

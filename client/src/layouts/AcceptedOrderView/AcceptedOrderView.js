@@ -9,7 +9,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import moment from "moment";
 import { graphql } from "react-apollo";
 
 import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
@@ -63,7 +62,7 @@ class AcceptedOrderView extends Component {
                   .map(order => (
                     <TableRow key={order.id}>
                       <TableCell variant="body" className={classes.tableCell}>
-                        {moment(order.document.dateInsert).format("DD-MM-YYYY")}
+                        {order.document.dateInsert}
                       </TableCell>
                       <TableCell variant="body">
                         {order.document.client.name}
