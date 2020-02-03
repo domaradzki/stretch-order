@@ -1,16 +1,16 @@
-import { GraphQLList, GraphQLObjectType, GraphQLID } from "graphql";
+import { GraphQLList, GraphQLID } from "graphql";
 
 import FileType from "./fileType";
 import File from "../../models/file";
 
 const fileQueries = {
-  uploads: {
+  files: {
     type: new GraphQLList(FileType),
     resolve(parent, args) {
       return File.find({});
     }
   },
-  upload: {
+  file: {
     type: FileType,
     args: { id: { type: GraphQLID } },
     resolve(parent, args) {

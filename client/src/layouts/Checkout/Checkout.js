@@ -62,6 +62,7 @@ function Checkout(props) {
     deliveryAddress: activeOrder.deliveryAddress,
     transport: "",
     margin: "",
+    paymentMethod: "",
     dateInsert: activeOrder.dateInsert,
     dateOfRealisation: activeOrder.dateOfRealisation,
     dateOfPay: null,
@@ -103,12 +104,7 @@ function Checkout(props) {
   const handleChangeFile = async ({ target }) => {
     setInput({
       ...input,
-      file: URL.createObjectURL(target.files[0])
-    });
-    const file = target.files[0];
-    await props.singleUploadFile({ variables: { file } }).then(res => {
-      console.log(res);
-      return res.data.singleUpload.id;
+      file: target.files[0]
     });
   };
 
@@ -131,6 +127,7 @@ function Checkout(props) {
       invoice,
       dateOfPay,
       dateOfRealisation,
+      paymentMethod,
       deliveryAddress,
       trader,
       transport,
@@ -165,7 +162,8 @@ function Checkout(props) {
       color1,
       color2,
       color3,
-      dateOfAcceptation
+      dateOfAcceptation,
+      file
     } = data;
     if (!props.data.isLoading) {
       const isClient = props.data.client;
@@ -173,6 +171,12 @@ function Checkout(props) {
       const isDocument = props.data.document;
       const isTapeProduct = kind === "KT" && type === "TPD";
       const isStretchProduct = kind === "KT" && type === "FS";
+
+      const addingTapeProject = () =>
+        props
+          .singleUploadFile({ variables: { file } })
+          .then(res => res.data.singleUpload.id);
+
       const addingClient = () =>
         props
           .addClientMutation({
@@ -192,7 +196,7 @@ function Checkout(props) {
           })
           .then(res => res.data.addUser.id);
 
-      const addingTape = async () =>
+      const addingTape = async projectId =>
         await props
           .addTapeMutation({
             variables: {
@@ -207,7 +211,8 @@ function Checkout(props) {
               tapeColor,
               tapeLong,
               tapeThickness,
-              tapeWidth
+              tapeWidth,
+              projectId
             }
           })
           .then(res => res.data.addTape.id);
@@ -251,6 +256,7 @@ function Checkout(props) {
               dateInsert,
               dateOfPay,
               dateOfRealisation,
+              paymentMethod,
               signature,
               symbol,
               details,
@@ -278,7 +284,7 @@ function Checkout(props) {
         isDocument ? isDocument.id : await addingDocument(idC, idU);
 
       const addingProduct = isTapeProduct
-        ? addingTape()
+        ? addingTapeProject().then(res => addingTape(res))
         : isStretchProduct
         ? addingStretch()
         : null;
@@ -299,7 +305,6 @@ function Checkout(props) {
     }
     setActiveStep(activeStep + 1);
   };
-  console.log(props);
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
@@ -311,7 +316,11 @@ function Checkout(props) {
           {activeStep === steps.length ? (
             <NewOrderSuccess />
           ) : (
-            <form onSubmit={handleNext}>
+            <form
+              onSubmit={handleNext}
+              encType="multipart/form-data"
+              method="POST"
+            >
               <GetStepContent
                 step={activeStep}
                 stepsLength={steps.length}

@@ -22,6 +22,7 @@ const DocumentType = new GraphQLObjectType({
     dateInsert: { type: GraphQLString },
     dateOfPay: { type: GraphQLString },
     dateOfRealisation: { type: GraphQLString },
+    paymentMethod: { type: GraphQLString },
     signature: { type: GraphQLString },
     symbol: { type: GraphQLString },
     details: { type: GraphQLString },

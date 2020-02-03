@@ -58,7 +58,7 @@ const orderMutations = {
       documentId: { type: GraphQLID },
       productId: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: OrderInterface) {
       return Order.findByIdAndUpdate(
         { _id: args.id },
         {
@@ -87,7 +87,7 @@ const orderMutations = {
     args: {
       id: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: OrderInterface) {
       return Order.findByIdAndDelete(args.id)
         .then((order: any) => {
           order.remove();

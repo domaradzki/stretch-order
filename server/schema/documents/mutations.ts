@@ -20,6 +20,7 @@ const documentMutations = {
       dateOfPay: { type: GraphQLString },
       dateOfRealisation: { type: GraphQLString },
       signature: { type: new GraphQLNonNull(GraphQLString) },
+      paymentMethod: { type: new GraphQLNonNull(GraphQLString) },
       symbol: { type: new GraphQLNonNull(GraphQLString) },
       details: { type: GraphQLString },
       closed: { type: new GraphQLNonNull(GraphQLBoolean) },
@@ -39,6 +40,7 @@ const documentMutations = {
         dateInsert: args.dateInsert,
         dateOfPay: args.dateOfPay,
         dateOfRealisation: args.dateOfRealisation,
+        paymentMethod: args.paymentMethod,
         signature: args.signature,
         symbol: args.symbol,
         details: args.details,
@@ -64,6 +66,7 @@ const documentMutations = {
       dateInsert: { type: GraphQLString },
       dateOfPay: { type: GraphQLString },
       dateOfRealisation: { type: GraphQLString },
+      paymentMethod: { type: GraphQLString },
       signature: { type: GraphQLString },
       symbol: { type: GraphQLString },
       details: { type: GraphQLString },
@@ -78,7 +81,7 @@ const documentMutations = {
       clientId: { type: GraphQLID },
       userId: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: DocumentInterface) {
       return Document.findByIdAndUpdate(
         { _id: args.id },
         {
@@ -87,6 +90,7 @@ const documentMutations = {
             dateInsert: args.dateInsert,
             dateOfPay: args.dateOfPay,
             dateOfRealisation: args.dateOfRealisation,
+            paymentMethod: args.paymentMethod,
             signature: args.signature,
             symbol: args.symbol,
             details: args.details,
@@ -113,7 +117,7 @@ const documentMutations = {
     args: {
       id: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: DocumentInterface) {
       return Document.findByIdAndDelete(args.id)
         .then((document: any) => {
           document.remove();

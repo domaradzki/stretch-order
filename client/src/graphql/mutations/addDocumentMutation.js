@@ -6,6 +6,7 @@ const addDocumentMutation = gql`
     $dateInsert: String!
     $dateOfPay: String
     $dateOfRealisation: String
+    $paymentMethod: String!
     $signature: String!
     $symbol: String!
     $details: String
@@ -25,6 +26,7 @@ const addDocumentMutation = gql`
       dateInsert: $dateInsert
       dateOfPay: $dateOfPay
       dateOfRealisation: $dateOfRealisation
+      paymentMethod: $paymentMethod
       signature: $signature
       symbol: $symbol
       details: $details
@@ -44,6 +46,7 @@ const addDocumentMutation = gql`
       dateInsert
       dateOfPay
       dateOfRealisation
+      paymentMethod
       signature
       symbol
       details

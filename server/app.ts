@@ -2,9 +2,11 @@ import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
 import { graphqlUploadExpress } from "graphql-upload";
 import { GraphQLSchema } from "graphql";
+import * as multer from "multer";
+import * as cors from "cors";
+
 import mutation from "./schema/mutations";
 import query from "./schema/queries";
-import * as cors from "cors";
 
 import { connectDB, connectMongoDB, getDataFromApi } from "./connection";
 
@@ -24,7 +26,16 @@ app.use(
   graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
   graphqlHTTP({
     schema,
-    graphiql: true
+    graphiql: true,
+    customFormatErrorFn(err) {
+      if (!err.originalError) {
+        return err;
+      }
+      const data = err.originalError.data;
+      const message = err.message || "An error occurred.";
+      const code = err.originalError.code || 500;
+      return { message: message, status: code, data: data };
+    }
   })
 );
 

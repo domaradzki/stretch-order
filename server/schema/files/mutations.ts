@@ -1,8 +1,7 @@
 import * as fs from "fs";
-import * as mongoose from "mongoose";
-
 import { GraphQLUpload } from "graphql-upload";
 
+import File from "../../models/file";
 import FileType from "./fileType";
 
 const fileMutations = {
@@ -13,24 +12,23 @@ const fileMutations = {
     },
     async resolve(parent, args) {
       const { filename, mimetype, createReadStream } = await args.file;
-      const isFolder = fs.existsSync(`./uploadFiles`);
+      const splitSign = filename.match(/.\d+/);
+      const folderProject = filename.split(splitSign[0])[0];
+      const isFolder = fs.existsSync(`./Projects/${folderProject}`);
       if (!isFolder) {
-        fs.mkdirSync(`./uploadFiles`);
+        fs.mkdirSync(`./Projects/${folderProject}`, { recursive: true });
       }
+      const path = `/Projects/${folderProject}/${filename}`;
+      const favicon = path.replace("jpg", "gif");
       const filestream = await createReadStream();
-      filestream.pipe(fs.createWriteStream(`./uploadFiles/${filename}`));
-      const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-        bucketName: "projects"
+      filestream.pipe(fs.createWriteStream(`.${path}`));
+      const file = new File({
+        contentType: mimetype,
+        path,
+        filename,
+        favicon
       });
-      const uploadStream = bucket.openUploadStream(filename);
-      await new Promise((resolve, reject) => {
-        filestream
-          .pipe(uploadStream)
-          .on("error", reject)
-          .on("finish", resolve);
-      });
-      const res = await args.file;
-      return { ...res, id: uploadStream.id };
+      return file.save();
     }
   }
 };

@@ -13,4 +13,5 @@ export interface TapeInterface extends Document {
   tapeLong: Number;
   tapeThickness: Number;
   tapeWidth: Number;
+  projectId: String;
 }

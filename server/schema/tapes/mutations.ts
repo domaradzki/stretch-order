@@ -9,7 +9,7 @@ const tapeMutations = {
     type: TapeType,
     args: {
       printName: { type: new GraphQLNonNull(GraphQLString) },
-      dateOfAcceptation: { type: new GraphQLNonNull(GraphQLString) },
+      dateOfAcceptation: { type: GraphQLString },
       numberOfColors: { type: new GraphQLNonNull(GraphQLString) },
       color1: { type: new GraphQLNonNull(GraphQLString) },
       color2: { type: GraphQLString },
@@ -19,7 +19,8 @@ const tapeMutations = {
       tapeColor: { type: new GraphQLNonNull(GraphQLString) },
       tapeLong: { type: new GraphQLNonNull(GraphQLInt) },
       tapeThickness: { type: new GraphQLNonNull(GraphQLInt) },
-      tapeWidth: { type: new GraphQLNonNull(GraphQLInt) }
+      tapeWidth: { type: new GraphQLNonNull(GraphQLInt) },
+      projectId: { type: GraphQLID }
     },
     resolve(parent, args: TapeInterface) {
       const tape = new Tape({
@@ -34,7 +35,8 @@ const tapeMutations = {
         tapeColor: args.tapeColor,
         tapeLong: args.tapeLong,
         tapeThickness: args.tapeThickness,
-        tapeWidth: args.tapeWidth
+        tapeWidth: args.tapeWidth,
+        projectId: args.projectId
       });
       return tape.save();
     }
@@ -54,9 +56,10 @@ const tapeMutations = {
       tapeColor: { type: new GraphQLNonNull(GraphQLString) },
       tapeLong: { type: new GraphQLNonNull(GraphQLInt) },
       tapeThickness: { type: new GraphQLNonNull(GraphQLInt) },
-      tapeWidth: { type: new GraphQLNonNull(GraphQLInt) }
+      tapeWidth: { type: new GraphQLNonNull(GraphQLInt) },
+      projectId: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: TapeInterface) {
       return Tape.findByIdAndUpdate(
         { _id: args.id },
         {
@@ -72,7 +75,8 @@ const tapeMutations = {
             tapeColor: args.tapeColor,
             tapeLong: args.tapeLong,
             tapeThickness: args.tapeThickness,
-            tapeWidth: args.tapeWidth
+            tapeWidth: args.tapeWidth,
+            projectId: args.projectId
           }
         }
       )
@@ -85,7 +89,7 @@ const tapeMutations = {
     args: {
       id: { type: GraphQLID }
     },
-    resolve(parent, args) {
+    resolve(parent, args: TapeInterface) {
       return Tape.findByIdAndDelete(args.id)
         .then((tape: any) => {
           tape.remove();

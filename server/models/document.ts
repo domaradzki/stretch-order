@@ -6,6 +6,7 @@ const documentSchema = new mongoose.Schema({
   dateInsert: String,
   dateOfPay: String,
   dateOfRealisation: String,
+  paymentMethod: String,
   signature: String,
   symbol: String,
   details: String,

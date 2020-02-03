@@ -2,6 +2,7 @@ import { GraphQLID, GraphQLList } from "graphql";
 
 import OrderType from "./orderType";
 import Order from "../../models/order";
+import { OrderInterface } from "../../types/orderType";
 
 const orderQueries = {
   orders: {
@@ -13,7 +14,7 @@ const orderQueries = {
   order: {
     type: OrderType,
     args: { id: { type: GraphQLID } },
-    resolve(parent, args) {
+    resolve(parent, args: OrderInterface) {
       return Order.findById(args.id);
     }
   }

@@ -7,6 +7,8 @@ import {
 
 import OrderType from "../orders/orderType";
 import Order from "../../models/order";
+import FileType from "../files/fileType";
+import File from "../../models/file";
 
 const TapeType = new GraphQLObjectType({
   name: "Tape",
@@ -24,10 +26,17 @@ const TapeType = new GraphQLObjectType({
     tapeLong: { type: GraphQLInt },
     tapeThickness: { type: GraphQLInt },
     tapeWidth: { type: GraphQLInt },
+    projectId: { type: GraphQLID },
     order: {
       type: OrderType,
       resolve(parent, args) {
         return Order.findOne({ productId: parent.id });
+      }
+    },
+    project: {
+      type: FileType,
+      resolve(parent, args) {
+        return File.findOne({ id: parent.projectId });
       }
     }
   })
