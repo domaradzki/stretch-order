@@ -1,5 +1,5 @@
-export const styles = theme => ({
+export const styles = (theme) => ({
   tableCell: {
-    whiteSpace: "nowrap"
-  }
+    whiteSpace: 'nowrap',
+  },
 });

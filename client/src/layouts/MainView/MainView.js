@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { graphql } from "react-apollo";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { graphql } from 'react-apollo';
 
-import { fetchData, getDataLoading } from "../../ducks/data";
-import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
-import getOrdersItemid from "../../graphql/queries/getOrdersItemid";
+import { fetchData, getDataLoading } from '../../ducks/data';
+import { changePage, setRowsPerPage } from '../../ducks/interfaceMenu';
+import getOrdersItemid from '../../graphql/queries/getOrdersItemid';
 
-import { styles } from "./MainView.style";
-import { withStyles } from "@material-ui/styles";
+import { styles } from './MainView.style';
+import { withStyles } from '@material-ui/styles';
 
 class MainView extends Component {
   componentDidMount() {
@@ -29,17 +29,17 @@ class MainView extends Component {
     this.props.changePage(newPage);
   };
 
-  handleChangeRowsPerPage = event => {
+  handleChangeRowsPerPage = (event) => {
     this.props.setRowsPerPage(+event.target.value);
   };
 
   render() {
     const ordersAlreadyInDB = this.props.data.loading
       ? []
-      : this.props.data.orders.map(order => order.itemId);
+      : this.props.data.orders.map((order) => order.itemId);
     const { page, rowsPerPage, classes } = this.props;
     const newOrders = this.props.datas;
-    const filteredOrders = newOrders.filter(order => {
+    const filteredOrders = newOrders.filter((order) => {
       return !ordersAlreadyInDB.includes(order.itemId);
     });
     return (
@@ -61,7 +61,7 @@ class MainView extends Component {
             <TableBody>
               {filteredOrders
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(order => (
+                .map((order) => (
                   <TableRow key={order.itemId}>
                     <TableCell variant="body" className={classes.tableCell}>
                       {order.dateInsert}
@@ -113,23 +113,23 @@ class MainView extends Component {
 }
 
 MainView.defaultProps = {
-  isLoadingData: true
+  isLoadingData: true,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     datas: state.data.data,
     isLoadingData: getDataLoading(state),
     page: state.interfaceMenu.page,
-    rowsPerPage: state.interfaceMenu.rowsPerPage
+    rowsPerPage: state.interfaceMenu.rowsPerPage,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: () => dispatch(fetchData()),
-    changePage: value => dispatch(changePage(value)),
-    setRowsPerPage: value => dispatch(setRowsPerPage(value))
+    changePage: (value) => dispatch(changePage(value)),
+    setRowsPerPage: (value) => dispatch(setRowsPerPage(value)),
   };
 };
 

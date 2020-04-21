@@ -1,5 +1,6 @@
 import { getDataPromise } from "../services";
-import addDays from "date-fns/addDays";
+// import addDays from "date-fns/addDays";
+import { addDays } from 'date-fns'
 
 // Action types
 const FETCH_DATA_REQUEST = "FETCH_DATA_REQUEST";
