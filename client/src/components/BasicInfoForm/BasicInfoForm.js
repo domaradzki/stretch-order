@@ -1,31 +1,31 @@
-import "date-fns";
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
+import 'date-fns';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
 
-import DateFnsUtils from "@date-io/date-fns";
-import plLocale from "date-fns/locale/pl";
+import DateFnsUtils from '@date-io/date-fns';
+import plLocale from 'date-fns/locale/pl';
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker
-} from "@material-ui/pickers";
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   formControl: {
-    minWidth: 120
-  }
+    minWidth: 120,
+  },
 }));
 
 export default function BasicInfoForm({
   input,
   handleInputChange,
-  handleDateChange
+  handleDateChange,
 }) {
   const classes = useStyles();
 
@@ -60,9 +60,9 @@ export default function BasicInfoForm({
               helperText="Data zamówienia"
               value={input.dateInsert}
               type="text"
-              onChange={handleDateChange("dateInsert")}
+              onChange={handleDateChange('dateInsert')}
               KeyboardButtonProps={{
-                "aria-label": "change date"
+                'aria-label': 'change date',
               }}
             />
           </Grid>
@@ -77,9 +77,9 @@ export default function BasicInfoForm({
               helperText="Data realizacji"
               value={input.dateOfRealisation}
               type="text"
-              onChange={handleDateChange("dateOfRealisation")}
+              onChange={handleDateChange('dateOfRealisation')}
               KeyboardButtonProps={{
-                "aria-label": "change date"
+                'aria-label': 'change date',
               }}
             />
           </Grid>
@@ -106,9 +106,9 @@ export default function BasicInfoForm({
               helperText="Data płatności"
               value={input.dateOfPay}
               type="text"
-              onChange={handleDateChange("dateOfPay")}
+              onChange={handleDateChange('dateOfPay')}
               KeyboardButtonProps={{
-                "aria-label": "change date"
+                'aria-label': 'change date',
               }}
             />
           </Grid>
@@ -123,6 +123,11 @@ export default function BasicInfoForm({
               type="number"
               fullWidth
               autoComplete="quantity"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">{input.unit}</InputAdornment>
+                ),
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
@@ -135,7 +140,9 @@ export default function BasicInfoForm({
               value={input.price}
               type="number"
               InputProps={{
-                endAdornment: <InputAdornment position="end">zł</InputAdornment>
+                endAdornment: (
+                  <InputAdornment position="end">zł</InputAdornment>
+                ),
               }}
               fullWidth
               autoComplete="price"
@@ -151,7 +158,9 @@ export default function BasicInfoForm({
               value={input.netValue}
               type="number"
               InputProps={{
-                endAdornment: <InputAdornment position="end">zł</InputAdornment>
+                endAdornment: (
+                  <InputAdornment position="end">zł</InputAdornment>
+                ),
               }}
               fullWidth
               autoComplete="net value"

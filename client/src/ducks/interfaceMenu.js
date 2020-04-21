@@ -1,11 +1,11 @@
 // Action types
-const CHANGE_PAGE = "CHANGE_PAGE";
-const ROWS_PER_PAGE = "ROWS_PER_PAGE";
+const CHANGE_PAGE = 'CHANGE_PAGE';
+const ROWS_PER_PAGE = 'ROWS_PER_PAGE';
 
 // Initial Value
 const initialState = {
   page: 0,
-  rowsPerPage: 5
+  rowsPerPage: 10,
 };
 
 // Reducer
@@ -14,12 +14,12 @@ export default function interfaceReducer(state = initialState, action) {
     case CHANGE_PAGE:
       return {
         ...state,
-        page: action.value
+        page: action.value,
       };
     case ROWS_PER_PAGE:
       return {
         ...state,
-        rowsPerPage: action.value
+        rowsPerPage: action.value,
       };
     default:
       return state;
@@ -27,16 +27,16 @@ export default function interfaceReducer(state = initialState, action) {
 }
 
 // Action creators
-export const changePage = value => {
+export const changePage = (value) => {
   return {
     type: CHANGE_PAGE,
-    value
+    value,
   };
 };
-export const setRowsPerPage = value => {
+export const setRowsPerPage = (value) => {
   return {
     type: ROWS_PER_PAGE,
-    value
+    value,
   };
 };
 

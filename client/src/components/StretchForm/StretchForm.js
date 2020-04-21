@@ -1,8 +1,8 @@
-import React from "react";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 export default function StretchForm({ input, handleInputChange }) {
   return (
@@ -21,7 +21,7 @@ export default function StretchForm({ input, handleInputChange }) {
             value={input.sleeve}
             type="number"
             InputProps={{
-              endAdornment: <InputAdornment position="end">mm</InputAdornment>
+              endAdornment: <InputAdornment position="end">g</InputAdornment>,
             }}
             fullWidth
           />
@@ -48,7 +48,7 @@ export default function StretchForm({ input, handleInputChange }) {
             value={input.stretchThickness}
             type="text"
             InputProps={{
-              endAdornment: <InputAdornment position="end">my</InputAdornment>
+              endAdornment: <InputAdornment position="end">my</InputAdornment>,
             }}
             fullWidth
           />
@@ -63,7 +63,7 @@ export default function StretchForm({ input, handleInputChange }) {
             value={input.netWeight}
             type="number"
             InputProps={{
-              endAdornment: <InputAdornment position="end">kg</InputAdornment>
+              endAdornment: <InputAdornment position="end">kg</InputAdornment>,
             }}
             fullWidth
           />
@@ -78,7 +78,7 @@ export default function StretchForm({ input, handleInputChange }) {
             value={input.grossWeight}
             type="number"
             InputProps={{
-              endAdornment: <InputAdornment position="end">kg</InputAdornment>
+              endAdornment: <InputAdornment position="end">kg</InputAdornment>,
             }}
             fullWidth
           />
