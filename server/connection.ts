@@ -19,7 +19,7 @@ async function connectDB(retries = 5) {
       console.log(`Connection from KNEX has been established successfully.`);
       break;
     } catch (error) {
-      console.error("Couldn't connect to DB: ", error);
+      console.error("Couldn't connect to DB ");
 
       retries -= 1;
       console.log(`retries left: ${retries}`);
@@ -52,7 +52,7 @@ function connectMongoDB() {
       console.log("Connection to MongoDB has been made!");
     })
     .on("error", function(error) {
-      console.log("Connection error: ", error);
+      console.log("Connection error: ");
     });
 }
 

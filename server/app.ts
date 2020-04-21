@@ -2,7 +2,6 @@ import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
 import { graphqlUploadExpress } from "graphql-upload";
 import { GraphQLSchema } from "graphql";
-import * as multer from "multer";
 import * as cors from "cors";
 
 import mutation from "./schema/mutations";
@@ -10,7 +9,7 @@ import query from "./schema/queries";
 
 import { connectDB, connectMongoDB, getDataFromApi } from "./connection";
 
-// connectDB(); commented as we have temporary json file to for develop
+// connectDB(); //commented as we have temporary json file to for develop
 connectMongoDB();
 
 const app = express();

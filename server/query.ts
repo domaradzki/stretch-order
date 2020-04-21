@@ -48,7 +48,7 @@ const sqlQuery = `SELECT d.id AS documentId
           ON asortyment.Grupa_Id = grupa.Id
 	  LEFT OUTER JOIN [Nexo_Goodmarks].[ModelDanychContainer].[DokumentDokument] faktura
           ON faktura.DokumentyRealizowane_Id = d.Id
-          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2019-09-01')
+          WHERE (d.Symbol = 'ZK' or d.Symbol = 'FP') and (d.DataWprowadzenia >= '2020-04-01')
           ORDER BY d.Id DESC`;
 
 export default sqlQuery;

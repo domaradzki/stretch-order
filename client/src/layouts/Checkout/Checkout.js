@@ -172,10 +172,10 @@ function Checkout(props) {
       const isTapeProduct = kind === "KT" && type === "TPD";
       const isStretchProduct = kind === "KT" && type === "FS";
 
-      const addingTapeProject = () =>
+      const addingTapeProject = () => file ? 
         props
           .singleUploadFile({ variables: { file } })
-          .then(res => res.data.singleUpload.id);
+          .then(res => res.data.singleUpload.id) : Promise.resolve(null)
 
       const addingClient = () =>
         props
@@ -291,6 +291,7 @@ function Checkout(props) {
 
       Promise.all([promiseIfNoClient(), promiseIfNoUser(), addingProduct])
         .then(result => {
+          console.log('result',result)
           return {
             clientId: result[0],
             userId: result[1],
@@ -305,6 +306,7 @@ function Checkout(props) {
     }
     setActiveStep(activeStep + 1);
   };
+  console.log(props)
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
