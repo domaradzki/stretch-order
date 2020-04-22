@@ -13,7 +13,7 @@ const fileMutations = {
     async resolve(parent, args) {
       const { filename, mimetype, createReadStream } = await args.file;
       const splitSign = filename.match(/.\d+/);
-      const folderProject = filename.split(splitSign[0])[0];
+      const folderProject = splitSign ? filename.split(splitSign[0])[0] : filename.slice(0,-4);
       const isFolder = fs.existsSync(`./Projects/${folderProject}`);
       if (!isFolder) {
         fs.mkdirSync(`./Projects/${folderProject}`, { recursive: true });
