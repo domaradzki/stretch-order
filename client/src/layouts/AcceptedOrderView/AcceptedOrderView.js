@@ -1,21 +1,22 @@
-import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { graphql } from "react-apollo";
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { graphql } from 'react-apollo';
+import format from 'date-fns/format';
 
-import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
-import getOrdersQuery from "../../graphql/queries/getOrdersQuery";
+import { changePage, setRowsPerPage } from '../../ducks/interfaceMenu';
+import getOrdersQuery from '../../graphql/queries/getOrdersQuery';
 
-import { styles } from "./AcceptedOrderView.style";
-import { withStyles } from "@material-ui/styles";
+import { styles } from './AcceptedOrderView.style';
+import { withStyles } from '@material-ui/styles';
 
 class AcceptedOrderView extends Component {
   componentDidMount() {
@@ -26,11 +27,11 @@ class AcceptedOrderView extends Component {
     this.props.changePage(newPage);
   };
 
-  handleChangeRowsPerPage = event => {
+  handleChangeRowsPerPage = (event) => {
     this.props.setRowsPerPage(+event.target.value);
   };
 
-  handleClick = event => {
+  handleClick = (event) => {
     console.log(event.currentTarget);
   };
 
@@ -59,10 +60,13 @@ class AcceptedOrderView extends Component {
               <TableBody>
                 {userOrders
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(order => (
+                  .map((order) => (
                     <TableRow key={order.id}>
                       <TableCell variant="body" className={classes.tableCell}>
-                        {order.document.dateInsert}
+                        {format(
+                          new Date(order.document.dateInsert),
+                          'dd/MM/yyyy'
+                        )}
                       </TableCell>
                       <TableCell variant="body">
                         {order.document.client.name}
@@ -75,15 +79,22 @@ class AcceptedOrderView extends Component {
                         {order.netValue} {order.document.currency}
                       </TableCell>
                       <TableCell variant="body" className={classes.tableCell}>
-                        {order.document.dateOfRealisation}
+                        {format(
+                          new Date(order.document.dateOfRealisation),
+                          'dd/MM/yyyy'
+                        )}
                       </TableCell>
                       <TableCell variant="body" className={classes.tableCell}>
-                        {order.document.dateOfPay}
+                        {order.document.dateOfPay &&
+                          format(
+                            new Date(order.document.dateOfPay),
+                            'dd/MM/yyyy'
+                          )}
                       </TableCell>
                       <TableCell variant="body">
                         {order.document.invoice}
                       </TableCell>
-                      <TableCell variant="body">{"status"}</TableCell>
+                      <TableCell variant="body">{'status'}</TableCell>
                       <TableCell variant="body">
                         <Button
                           onClick={this.handleClick}
@@ -114,17 +125,17 @@ class AcceptedOrderView extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     page: state.interfaceMenu.page,
-    rowsPerPage: state.interfaceMenu.rowsPerPage
+    rowsPerPage: state.interfaceMenu.rowsPerPage,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    changePage: value => dispatch(changePage(value)),
-    setRowsPerPage: value => dispatch(setRowsPerPage(value))
+    changePage: (value) => dispatch(changePage(value)),
+    setRowsPerPage: (value) => dispatch(setRowsPerPage(value)),
   };
 };
 

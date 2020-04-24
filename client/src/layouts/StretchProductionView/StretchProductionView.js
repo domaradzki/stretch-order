@@ -1,21 +1,22 @@
-import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { graphql } from "react-apollo";
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { graphql } from 'react-apollo';
+import format from 'date-fns/format';
 
-import { changePage, setRowsPerPage } from "../../ducks/interfaceMenu";
-import getOrdersStretchQuery from "../../graphql/queries/getOrdersStretchQuery";
+import { changePage, setRowsPerPage } from '../../ducks/interfaceMenu';
+import getOrdersStretchQuery from '../../graphql/queries/getOrdersStretchQuery';
 
-import { styles } from "./StretchProductionView.style";
-import { withStyles } from "@material-ui/styles";
+import { styles } from './StretchProductionView.style';
+import { withStyles } from '@material-ui/styles';
 
 class StretchProductionView extends Component {
   componentDidMount() {
@@ -26,11 +27,11 @@ class StretchProductionView extends Component {
     this.props.changePage(newPage);
   };
 
-  handleChangeRowsPerPage = event => {
+  handleChangeRowsPerPage = (event) => {
     this.props.setRowsPerPage(+event.target.value);
   };
 
-  handleClick = event => {
+  handleClick = (event) => {
     console.log(event.currentTarget);
   };
 
@@ -58,13 +59,17 @@ class StretchProductionView extends Component {
               <TableBody>
                 {stretchOrders
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(stretch => (
+                  .map((stretch) => (
                     <TableRow key={stretch.id}>
                       <TableCell variant="body">
                         {stretch.order.document.client.name}
                       </TableCell>
                       <TableCell variant="body" className={classes.tableCell}>
-                        {stretch.order.document.dateOfRealisation}
+                        {stretch.order.document.dateOfRealisation &&
+                          format(
+                            new Date(stretch.order.document.dateOfRealisation),
+                            'dd/MM/yyyy'
+                          )}
                       </TableCell>
                       <TableCell variant="body">
                         {stretch.order.quantity} {stretch.order.unit}
@@ -112,17 +117,17 @@ class StretchProductionView extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     page: state.interfaceMenu.page,
-    rowsPerPage: state.interfaceMenu.rowsPerPage
+    rowsPerPage: state.interfaceMenu.rowsPerPage,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    changePage: value => dispatch(changePage(value)),
-    setRowsPerPage: value => dispatch(setRowsPerPage(value))
+    changePage: (value) => dispatch(changePage(value)),
+    setRowsPerPage: (value) => dispatch(setRowsPerPage(value)),
   };
 };
 

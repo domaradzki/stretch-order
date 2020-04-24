@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { graphql } from 'react-apollo';
+import format from 'date-fns/format';
 
 import { fetchData, getDataLoading } from '../../ducks/data';
 import { changePage, setRowsPerPage } from '../../ducks/interfaceMenu';
@@ -64,7 +65,7 @@ class MainView extends Component {
                 .map((order) => (
                   <TableRow key={order.itemId}>
                     <TableCell variant="body" className={classes.tableCell}>
-                      {order.dateInsert}
+                      {format(new Date(order.dateInsert), 'dd/MM/yyyy')}
                     </TableCell>
                     <TableCell variant="body">{order.client}</TableCell>
                     <TableCell variant="body">{order.signature}</TableCell>
