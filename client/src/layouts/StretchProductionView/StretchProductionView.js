@@ -75,11 +75,11 @@ class StretchProductionView extends Component {
                         {stretch.order.quantity} {stretch.order.unit}
                       </TableCell>
                       <TableCell variant="body" className={classes.tableCell}>
-                        {stretch.netWeight}
+                        {stretch.netWeight} kg
                       </TableCell>
-                      <TableCell variant="body">{stretch.sleeve}</TableCell>
+                      <TableCell variant="body">{stretch.sleeve} g</TableCell>
                       <TableCell variant="body" className={classes.tableCell}>
-                        {stretch.grossWeight}
+                        {stretch.grossWeight} kg
                       </TableCell>
                       <TableCell variant="body">
                         {stretch.stretchColor}

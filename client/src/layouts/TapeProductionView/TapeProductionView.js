@@ -66,7 +66,7 @@ class TapeProductionView extends Component {
                     <TableRow key={tape.id}>
                       <TableCell variant="body">{'img'}</TableCell>
                       <TableCell variant="body">{tape.printName}</TableCell>
-                      <TableCell variant="body">{tape.roller}</TableCell>
+                      <TableCell variant="body">{tape.roller} mm</TableCell>
                       <TableCell variant="body">{'seg'}</TableCell>
                       <TableCell variant="body">{'projectNR'}</TableCell>
                       <TableCell variant="body" className={classes.tableCell}>
@@ -79,8 +79,8 @@ class TapeProductionView extends Component {
                       <TableCell variant="body" className={classes.tableCell}>
                         {tape.order.quantity} {tape.order.unit}
                       </TableCell>
-                      <TableCell variant="body">{tape.tapeLong}</TableCell>
-                      <TableCell variant="body">{tape.tapeWidth}</TableCell>
+                      <TableCell variant="body">{tape.tapeLong} mm</TableCell>
+                      <TableCell variant="body">{tape.tapeWidth} mm</TableCell>
                       <TableCell variant="body">{tape.glue}</TableCell>
                       <TableCell variant="body">{tape.tapeColor}</TableCell>
                       <TableCell variant="body">
