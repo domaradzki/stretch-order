@@ -309,7 +309,6 @@ function Checkout(props) {
     }
     setActiveStep(activeStep + 1);
   };
-  console.log(props);
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
