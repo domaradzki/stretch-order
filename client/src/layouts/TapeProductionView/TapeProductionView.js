@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,99 +18,97 @@ import { withStyles } from '@material-ui/styles';
 import { changePage, setRowsPerPage } from '../../ducks/interfaceMenu';
 import getOrdersTapeQuery from '../../graphql/queries/getOrdersTapeQuery';
 
-class TapeProductionView extends Component {
-  componentDidMount() {
-    this.props.changePage(0);
-  }
+function TapeProductionView(props) {
+  useEffect(() => {
+    props.changePage(0);
+  }, []);
 
-  handlePageChange = (event, newPage) => {
-    this.props.changePage(newPage);
+  const handlePageChange = (event, newPage) => {
+    props.changePage(newPage);
   };
 
-  handleChangeRowsPerPage = (event) => {
-    this.props.setRowsPerPage(+event.target.value);
+  const handleChangeRowsPerPage = (event) => {
+    props.setRowsPerPage(+event.target.value);
   };
 
-  handleClick = (event) => {
+  const handleClick = (event) => {
     console.log(event.currentTarget);
   };
 
-  render() {
-    const tapeOrders = this.props.data.tapes;
-    const { page, rowsPerPage, classes } = this.props;
-    return (
-      <Paper>
-        {!this.props.data.loading && (
-          <>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell variant="head">Miniatura</TableCell>
-                  <TableCell variant="head">Nadruk</TableCell>
-                  <TableCell variant="head">Wałek</TableCell>
-                  <TableCell variant="head">Segregator</TableCell>
-                  <TableCell variant="head">Projekt</TableCell>
-                  <TableCell variant="head">Termin</TableCell>
-                  <TableCell variant="head">Ilość</TableCell>
-                  <TableCell variant="head">Długość</TableCell>
-                  <TableCell variant="head">Szerokość</TableCell>
-                  <TableCell variant="head">Klej</TableCell>
-                  <TableCell variant="head">Taśma</TableCell>
-                  <TableCell variant="head">Reszta</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tapeOrders
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((tape) => (
-                    <TableRow key={tape.id}>
-                      <TableCell variant="body">{'img'}</TableCell>
-                      <TableCell variant="body">{tape.printName}</TableCell>
-                      <TableCell variant="body">{tape.roller} mm</TableCell>
-                      <TableCell variant="body">{'seg'}</TableCell>
-                      <TableCell variant="body">{'projectNR'}</TableCell>
-                      <TableCell variant="body" className={classes.tableCell}>
-                        {tape.order.document.dateOfRealisation &&
-                          format(
-                            new Date(tape.order.document.dateOfRealisation),
-                            'dd/MM/yyyy'
-                          )}
-                      </TableCell>
-                      <TableCell variant="body" className={classes.tableCell}>
-                        {tape.order.quantity} {tape.order.unit}
-                      </TableCell>
-                      <TableCell variant="body">{tape.tapeLong} mm</TableCell>
-                      <TableCell variant="body">{tape.tapeWidth} mm</TableCell>
-                      <TableCell variant="body">{tape.glue}</TableCell>
-                      <TableCell variant="body">{tape.tapeColor}</TableCell>
-                      <TableCell variant="body">
-                        <Button
-                          onClick={this.handleClick}
-                          variant="contained"
-                          color="primary"
-                        >
-                          Pokaż
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25, 100]}
-              labelRowsPerPage="Pozycji na stronie"
-              component="div"
-              count={tapeOrders.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={this.handlePageChange}
-              onChangeRowsPerPage={this.handleChangeRowsPerPage}
-            />
-          </>
-        )}
-      </Paper>
-    );
-  }
+  const tapeOrders = props.data.tapes;
+  const { page, rowsPerPage, classes } = props;
+  return (
+    <Paper>
+      {!props.data.loading && (
+        <>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell variant="head">Miniatura</TableCell>
+                <TableCell variant="head">Nadruk</TableCell>
+                <TableCell variant="head">Wałek</TableCell>
+                <TableCell variant="head">Segregator</TableCell>
+                <TableCell variant="head">Projekt</TableCell>
+                <TableCell variant="head">Termin</TableCell>
+                <TableCell variant="head">Ilość</TableCell>
+                <TableCell variant="head">Długość</TableCell>
+                <TableCell variant="head">Szerokość</TableCell>
+                <TableCell variant="head">Klej</TableCell>
+                <TableCell variant="head">Taśma</TableCell>
+                <TableCell variant="head">Reszta</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tapeOrders
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((tape) => (
+                  <TableRow key={tape.id}>
+                    <TableCell variant="body">{'img'}</TableCell>
+                    <TableCell variant="body">{tape.printName}</TableCell>
+                    <TableCell variant="body">{tape.roller} mm</TableCell>
+                    <TableCell variant="body">{'seg'}</TableCell>
+                    <TableCell variant="body">{'projectNR'}</TableCell>
+                    <TableCell variant="body" className={classes.tableCell}>
+                      {tape.order.document.dateOfRealisation &&
+                        format(
+                          new Date(tape.order.document.dateOfRealisation),
+                          'dd/MM/yyyy'
+                        )}
+                    </TableCell>
+                    <TableCell variant="body" className={classes.tableCell}>
+                      {tape.order.quantity} {tape.order.unit}
+                    </TableCell>
+                    <TableCell variant="body">{tape.tapeLong} mm</TableCell>
+                    <TableCell variant="body">{tape.tapeWidth} mm</TableCell>
+                    <TableCell variant="body">{tape.glue}</TableCell>
+                    <TableCell variant="body">{tape.tapeColor}</TableCell>
+                    <TableCell variant="body">
+                      <Button
+                        onClick={handleClick}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Pokaż
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 100]}
+            labelRowsPerPage="Pozycji na stronie"
+            component="div"
+            count={tapeOrders.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </>
+      )}
+    </Paper>
+  );
 }
 
 const mapStateToProps = (state) => {
