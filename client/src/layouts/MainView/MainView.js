@@ -84,7 +84,6 @@ function MainView(props) {
                         id={order.itemId}
                         name={order.type}
                         kind={order.kind}
-                        // onClick={handleClick}
                         variant="contained"
                         color="primary"
                       >

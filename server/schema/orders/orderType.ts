@@ -24,6 +24,7 @@ const OrderType = new GraphQLObjectType({
     unit: { type: GraphQLString },
     price: { type: GraphQLFloat },
     netValue: { type: GraphQLFloat },
+    margin: { type: GraphQLFloat },
     documentId: { type: GraphQLID },
     productId: { type: GraphQLID },
     document: {

@@ -14,8 +14,8 @@ const orderQueries = {
   order: {
     type: OrderType,
     args: { id: { type: GraphQLID } },
-    resolve(parent, args: OrderInterface) {
-      return Order.findById(args.id);
+    async resolve(parent, args: OrderInterface) {
+      return await Order.findById(args.id);
     }
   }
 };

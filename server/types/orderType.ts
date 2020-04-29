@@ -10,6 +10,7 @@ export interface OrderInterface extends Document {
   unit: String;
   price: Number;
   netValue: Number;
+  margin:Number;
   documentId: String;
   productId: String;
 }

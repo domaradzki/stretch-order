@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -29,10 +30,6 @@ function AcceptedOrderView(props) {
 
   const handleChangeRowsPerPage = (event) => {
     props.setRowsPerPage(+event.target.value);
-  };
-
-  const handleClick = (event) => {
-    console.log(event.currentTarget);
   };
 
   const userOrders = props.data.orders;
@@ -95,13 +92,11 @@ function AcceptedOrderView(props) {
                     </TableCell>
                     <TableCell variant="body">{'status'}</TableCell>
                     <TableCell variant="body">
-                      <Button
-                        onClick={handleClick}
-                        variant="contained"
-                        color="primary"
-                      >
-                        Zadysponuj
-                      </Button>
+                      <Link to={`/orders/${order.id}`}>
+                        <Button variant="contained" color="primary">
+                          Zadysponuj
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}
