@@ -296,7 +296,6 @@ function Checkout(props) {
 
       Promise.all([promiseIfNoClient(), promiseIfNoUser(), addingProduct])
         .then((result) => {
-          console.log('result', result);
           return {
             clientId: result[0],
             userId: result[1],

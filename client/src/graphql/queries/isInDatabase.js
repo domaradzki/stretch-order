@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost-upload";
+import gql from 'graphql-tag';
 
 const isInDatabase = gql`
   query($documentId: Int!, $companyId: Int!, $name: String!) {

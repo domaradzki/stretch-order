@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost-upload';
+import gql from 'graphql-tag';
 
 const getOrdersById = gql`
   query($id: ID!) {
