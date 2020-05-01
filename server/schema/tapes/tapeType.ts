@@ -36,7 +36,7 @@ const TapeType = new GraphQLObjectType({
     project: {
       type: FileType,
       resolve(parent, args) {
-        return File.findOne({ id: parent.projectId });
+        return File.findById(parent.projectId);
       }
     }
   })
