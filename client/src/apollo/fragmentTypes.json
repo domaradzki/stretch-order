@@ -1,0 +1,11 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "UNION",
+        "name": "Product",
+        "possibleTypes": [{ "name": "Tape" }, { "name": "Stretch" }]
+      }
+    ]
+  }
+}

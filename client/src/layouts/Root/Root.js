@@ -1,6 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from 'apollo-cache-inmemory';
+import { onError } from 'apollo-link-error';
+import { ApolloLink } from 'apollo-link';
+import { createUploadLink } from 'apollo-upload-client';
+
 import Dashboard from '../Dashboard/Dashboard';
 import MainContainer from '../MainContainer/MainContainer';
 import MainView from '../MainView/MainView';
@@ -9,13 +18,17 @@ import TapeProductionView from '../TapeProductionView/TapeProductionView';
 import StretchProductionView from '../StretchProductionView/StretchProductionView';
 import Checkout from '../Checkout/Checkout';
 import EditOrder from '../EditOrder/EditOrder';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { onError } from 'apollo-link-error';
-import { ApolloLink } from 'apollo-link';
-const { createUploadLink } = require('apollo-upload-client');
+
+import introspectionQueryResultData from '../../apollo/fragmentTypes.json';
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData,
+});
+
+const cache = new InMemoryCache({ fragmentMatcher });
 
 const client = new ApolloClient({
+  cache,
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors)
@@ -31,7 +44,6 @@ const client = new ApolloClient({
       credentials: 'same-origin',
     }),
   ]),
-  cache: new InMemoryCache(),
 });
 
 function Root() {

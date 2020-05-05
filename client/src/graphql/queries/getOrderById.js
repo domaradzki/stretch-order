@@ -33,29 +33,29 @@ const getOrdersById = gql`
       }
       product {
         __typename
-        # ... on Tape {
-        #   printName
-        #   dateOfAcceptation
-        #   numberOfColors
-        #   color2
-        #   color3
-        #   glue
-        #   roller
-        #   tapeColor
-        #   tapeLong
-        #   tapeThickness
-        #   tapeWidth
-        #   project {
-        #     filename
-        #   }
-        # }
-        # ... on Stretch {
-        #   grossWeight
-        #   netWeight
-        #   sleeve
-        #   stretchColor
-        #   stretchThickness
-        # }
+        ... on Tape {
+          printName
+          dateOfAcceptation
+          numberOfColors
+          color2
+          color3
+          glue
+          roller
+          tapeColor
+          tapeLong
+          tapeThickness
+          tapeWidth
+          project {
+            filename
+          }
+        }
+        ... on Stretch {
+          grossWeight
+          netWeight
+          sleeve
+          stretchColor
+          stretchThickness
+        }
       }
     }
   }
