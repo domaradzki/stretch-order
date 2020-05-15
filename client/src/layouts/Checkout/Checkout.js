@@ -123,6 +123,7 @@ function Checkout(props) {
       quantity,
       price,
       netValue,
+      margin,
       details,
       dateInsert,
       invoice,
@@ -245,6 +246,7 @@ function Checkout(props) {
             unit,
             price,
             netValue,
+            margin: +margin,
             documentId: idDoc,
             productId: idProduct,
           },
@@ -294,7 +296,6 @@ function Checkout(props) {
 
       Promise.all([promiseIfNoClient(), promiseIfNoUser(), addingProduct])
         .then((result) => {
-          console.log('result', result);
           return {
             clientId: result[0],
             userId: result[1],
@@ -309,7 +310,6 @@ function Checkout(props) {
     }
     setActiveStep(activeStep + 1);
   };
-  console.log(props);
   return (
     <React.Fragment>
       <Paper className={classes.paper}>

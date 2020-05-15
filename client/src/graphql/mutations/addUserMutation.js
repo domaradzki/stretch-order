@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost-upload";
+import gql from 'graphql-tag';
 
 const addUserMutation = gql`
   mutation($name: String!, $email: String, $login: String, $password: String) {

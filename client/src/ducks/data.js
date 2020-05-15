@@ -103,9 +103,9 @@ export const activeOrder = (state, orderId) => {
         order = {
           sleeve: +size[1],
           stretchThickness: +size[0].slice(3),
-          netWeight: +size[0].slice(0, 3),
+          netWeight: +size[0].slice(0, 3) / 100,
           grossWeight: function () {
-            return this.sleeve + this.netWeight;
+            return this.netWeight + this.sleeve / 1000;
           },
           stretchColor: function () {
             if (colors.hasOwnProperty(productArray[2])) {

@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost-upload";
+import gql from 'graphql-tag';
 
 const addOrderMutation = gql`
   mutation(
@@ -11,6 +11,7 @@ const addOrderMutation = gql`
     $unit: String!
     $price: Float!
     $netValue: Float!
+    $margin: Float!
     $documentId: ID!
     $productId: ID
   ) {
@@ -24,6 +25,7 @@ const addOrderMutation = gql`
       unit: $unit
       price: $price
       netValue: $netValue
+      margin: $margin
       documentId: $documentId
       productId: $productId
     ) {
@@ -37,6 +39,7 @@ const addOrderMutation = gql`
       unit
       price
       netValue
+      margin
       documentId
       productId
     }

@@ -1,27 +1,27 @@
-import React from "react";
-import { format } from "date-fns";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Grid from "@material-ui/core/Grid";
-import { Box } from "@material-ui/core";
+import React from 'react';
+import { format } from 'date-fns';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Grid from '@material-ui/core/Grid';
+import { Box } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
-    margin: "10px 0"
+    width: '100%',
+    margin: '10px 0',
   },
   listItem: {
-    padding: theme.spacing(1, 0)
+    padding: theme.spacing(1, 0),
   },
   dividerFullWidth: {
-    margin: `5px 0 0 ${theme.spacing(2)}px`
+    margin: `5px 0 0 ${theme.spacing(2)}px`,
   },
   box: {
-    padding: "2px",
-    height: "100%"
-  }
+    padding: '2px',
+    height: '100%',
+  },
 }));
 
 export default function Review({ input, data }) {
@@ -45,7 +45,7 @@ export default function Review({ input, data }) {
             </Typography>
             <ListItem>
               <ListItemText
-                primary={format(new Date(input.dateInsert), "dd/MM/yyyy")}
+                primary={format(new Date(input.dateInsert), 'dd/MM/yyyy')}
               />
             </ListItem>
           </Box>
@@ -64,7 +64,7 @@ export default function Review({ input, data }) {
               <ListItemText
                 primary={format(
                   new Date(input.dateOfRealisation),
-                  "dd/MM/yyyy"
+                  'dd/MM/yyyy'
                 )}
               />
             </ListItem>
@@ -82,7 +82,7 @@ export default function Review({ input, data }) {
             </Typography>
             <ListItem>
               <ListItemText
-                primary={format(new Date(input.dateOfPay), "dd/MM/yyyy")}
+                primary={format(new Date(input.dateOfPay), 'dd/MM/yyyy')}
               />
             </ListItem>
           </Box>
@@ -130,7 +130,7 @@ export default function Review({ input, data }) {
             <ListItem>
               <ListItemText
                 primary={`${input.price.toFixed(2)}${
-                  data.currency === "PLN" ? "zł" : data.currency
+                  data.currency === 'PLN' ? 'zł' : data.currency
                 }`}
               />
             </ListItem>
@@ -149,7 +149,7 @@ export default function Review({ input, data }) {
             <ListItem>
               <ListItemText
                 primary={`${input.netValue.toFixed(2)}${
-                  data.currency === "PLN" ? "zł" : data.currency
+                  data.currency === 'PLN' ? 'zł' : data.currency
                 }`}
               />
             </ListItem>
@@ -216,12 +216,12 @@ export default function Review({ input, data }) {
           </Box>
         </Grid>
       </Grid>
-      {data.kind === "KT" && (
+      {data.kind === 'KT' && (
         <Typography variant="h6" gutterBottom>
           Szczegóły produktu
         </Typography>
       )}
-      {data.kind === "KT" && data.type === "TPD" && (
+      {data.kind === 'KT' && data.type === 'TPD' && (
         <Grid container mt={2} spacing={2} className={classes.root}>
           <Grid item xs={12} sm={4}>
             <Box className={classes.box} boxShadow={2}>
@@ -312,7 +312,7 @@ export default function Review({ input, data }) {
                 <ListItemText
                   primary={format(
                     new Date(input.dateOfAcceptation),
-                    "dd/MM/yyyy"
+                    'dd/MM/yyyy'
                   )}
                 />
               </ListItem>
@@ -414,7 +414,7 @@ export default function Review({ input, data }) {
           )}
         </Grid>
       )}
-      {data.kind === "KT" && data.type === "FS" && (
+      {data.kind === 'KT' && data.type === 'FS' && (
         <Grid container mt={2} spacing={2} className={classes.root}>
           <Grid item xs={12} sm={2}>
             <Box className={classes.box} boxShadow={2}>

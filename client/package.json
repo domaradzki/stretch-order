@@ -8,11 +8,18 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/pickers": "^3.2.8",
     "apollo-boost-upload": "^1.0.1",
+    "apollo-cache-inmemory": "^1.6.5",
+    "apollo-client": "^2.6.8",
+    "apollo-link": "^1.2.14",
+    "apollo-link-error": "^1.1.13",
+    "apollo-link-http": "^1.5.17",
+    "apollo-upload-client": "^13.0.0",
     "body-parser": "^1.18.3",
     "clsx": "^1.0.4",
     "date-fns": "^2.8.1",
     "express": "^4.17.1",
     "graphql": "^14.6.0",
+    "graphql-tag": "^2.10.3",
     "joi": "^14.3.1",
     "mssql": "^6.0.1",
     "nodemon": "^2.0.1",
@@ -32,6 +39,7 @@
     "typeface-roboto": "^0.0.75"
   },
   "devDependencies": {
+    "@graphql-codegen/fragment-matcher": "^1.13.5",
     "react-scripts": "2.1.5"
   },
   "scripts": {
@@ -39,7 +47,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "build-fragment" : "node src/schemaQuery.js"
   },
   "eslintConfig": {
     "extends": "react-app"

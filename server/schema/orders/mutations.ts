@@ -22,6 +22,7 @@ const orderMutations = {
       unit: { type: new GraphQLNonNull(GraphQLString) },
       price: { type: new GraphQLNonNull(GraphQLFloat) },
       netValue: { type: new GraphQLNonNull(GraphQLFloat) },
+      margin: { type: new GraphQLNonNull(GraphQLFloat) },
       documentId: { type: new GraphQLNonNull(GraphQLID) },
       productId: { type: GraphQLID }
     },
@@ -36,6 +37,7 @@ const orderMutations = {
         unit: args.unit,
         price: args.price,
         netValue: args.netValue,
+        margin: args.margin,
         documentId: args.documentId,
         productId: args.productId
       });
@@ -55,6 +57,7 @@ const orderMutations = {
       unit: { type: GraphQLString },
       price: { type: GraphQLFloat },
       netValue: { type: GraphQLFloat },
+       margin: { type: GraphQLFloat },
       documentId: { type: GraphQLID },
       productId: { type: GraphQLID }
     },
@@ -72,6 +75,7 @@ const orderMutations = {
             unit: args.unit,
             price: args.price,
             netValue: args.netValue,
+            margin:args.margin,
             documentId: args.documentId,
             productId: args.productId
           }
